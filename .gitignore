@@ -28,3 +28,4 @@ claude-conversations/
 
 # Claude conversation logs
 .claude-conversations/
+.vercel

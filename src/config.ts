@@ -17,20 +17,19 @@ export interface SiteConfig {
 }
 
 export const config: SiteConfig = {
-  title: "Volks-Typo",
-  description: "A blog exploring the intersection of design, typography, and history",
+  title: "Swanage Traffic Alliance",
+  description: "Demanding accountability from local authorities. The democratic process has been warped for personal gain.",
   author: {
-    name: "Your Name",
-    bio: "Writer, designer, and explorer of aesthetic tensions between past and present.",
+    name: "Swanage Traffic Alliance",
+    bio: "A collective of residents demanding transparency and accountability in local traffic management decisions.",
     // avatar: "/images/avatar.jpg" // Uncomment and add your avatar image to public/images/
   },
   social: {
-    github: "https://github.com/yourusername",
-    twitter: "https://twitter.com/yourusername",
-    linkedin: "https://linkedin.com/in/yourusername",
-    email: "your.email@example.com"
+    // github: "", // Removed as per spec
+    // twitter: "", // Removed as per spec
+    email: "contact@swanagetraffic.co.uk"
   },
-  siteUrl: "https://volks-typo.example.com"
+  siteUrl: "https://www.swanagetraffic.co.uk"
 };
 
 // Export constants for SEO component

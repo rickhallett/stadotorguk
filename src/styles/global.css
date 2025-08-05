@@ -10,7 +10,7 @@
   --color-black: #000000;
   
   /* Accent Color */
-  --color-accent-red: #dc2626;
+  --color-accent: #3498db;
   
   /* Semantic Colors */
   --color-background: var(--color-white);
@@ -19,7 +19,7 @@
   --color-text-secondary: var(--color-dark-gray);
   --color-text-muted: var(--color-medium-gray);
   --color-border: var(--color-medium-gray);
-  --color-accent: var(--color-accent-red);
+  /* Using direct value instead of variable reference */
   
   /* Typography */
   --font-heading-primary: 'Oswald', sans-serif;
@@ -43,7 +43,7 @@
   --color-text-secondary: #b8b8b8;
   --color-text-muted: #888888;
   --color-border: #333333;
-  --color-accent: #ff3333; /* Slightly brighter red for dark mode */
+  --color-accent: #5dade2; /* Slightly brighter blue for dark mode */
 }
 
 /* Smooth theme transitions */

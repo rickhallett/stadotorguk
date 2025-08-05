@@ -1,0 +1,124 @@
+---
+---
+
+<section class="feeds-hero">
+  <div class="hero-container">
+    <h1 class="page-title">Community Voices</h1>
+    <p class="page-subtitle">Real-time feedback from residents affected by traffic decisions</p>
+    
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value" id="total-participants">0</div>
+        <div class="stat-label">Total Participants</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="joined-today">0</div>
+        <div class="stat-label">Joined Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="this-week">0</div>
+        <div class="stat-label">This Week</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.feeds-hero {
+  padding: calc(var(--grid-unit) * 8) 0;
+  background: linear-gradient(135deg, var(--color-accent) 0%, color-mix(in srgb, var(--color-accent) 70%, black) 100%);
+  color: white;
+}
+
+.hero-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 calc(var(--grid-unit) * 3);
+  text-align: center;
+}
+
+.page-title {
+  font-family: var(--font-heading-primary);
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: calc(var(--grid-unit) * 2);
+}
+
+.page-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.95;
+  margin-bottom: calc(var(--grid-unit) * 6);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: calc(var(--grid-unit) * 3);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: calc(var(--grid-unit) * 3);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-value {
+  font-family: var(--font-heading-primary);
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: calc(var(--grid-unit) * 1);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<script>
+  async function fetchParticipantStats() {
+    try {
+      // In production, fetch from API
+      // const response = await fetch('/api/get-all-participants');
+      // const data = await response.json();
+      
+      // Mock data for now
+      const mockData = {
+        total: 1247,
+        today: 23,
+        thisWeek: 156
+      };
+      
+      // Update DOM
+      const totalEl = document.getElementById('total-participants');
+      const todayEl = document.getElementById('joined-today');
+      const weekEl = document.getElementById('this-week');
+      
+      if (totalEl) totalEl.textContent = mockData.total.toLocaleString();
+      if (todayEl) todayEl.textContent = mockData.today.toLocaleString();
+      if (weekEl) weekEl.textContent = mockData.thisWeek.toLocaleString();
+      
+    } catch (error) {
+      console.error('Error fetching participant stats:', error);
+    }
+  }
+  
+  document.addEventListener('DOMContentLoaded', fetchParticipantStats);
+</script>

@@ -1,0 +1,254 @@
+---
+---
+
+<section class="momentum-section">
+  <div class="momentum-container">
+    <h2 class="section-title">Community Momentum</h2>
+    <p class="section-description">
+      Watch our movement grow as more residents join the call for accountability
+    </p>
+    
+    <div class="graph-wrapper">
+      <canvas id="momentum-chart"></canvas>
+    </div>
+  </div>
+</section>
+
+<style>
+.momentum-section {
+  padding: calc(var(--grid-unit) * 10) 0;
+  background-color: var(--color-surface);
+}
+
+.momentum-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 calc(var(--grid-unit) * 3);
+}
+
+.section-title {
+  font-family: var(--font-heading-primary);
+  font-size: 2.5rem;
+  text-align: center;
+  color: var(--color-accent);
+  margin-bottom: calc(var(--grid-unit) * 2);
+}
+
+.section-description {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--color-text-secondary);
+  margin-bottom: calc(var(--grid-unit) * 6);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.graph-wrapper {
+  background-color: var(--color-background);
+  padding: calc(var(--grid-unit) * 4);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+#momentum-chart {
+  max-height: 400px;
+}
+
+@media (max-width: 768px) {
+  .graph-wrapper {
+    padding: calc(var(--grid-unit) * 2);
+  }
+  
+  #momentum-chart {
+    max-height: 300px;
+  }
+}
+</style>
+
+<script>
+  import Chart from 'chart.js/auto';
+  
+  async function fetchParticipantData() {
+    try {
+      // In production, fetch from API
+      // const response = await fetch('/api/get-all-participants');
+      // const data = await response.json();
+      
+      // Mock data for demonstration
+      const mockData = generateMockData();
+      return mockData;
+    } catch (error) {
+      console.error('Error fetching participant data:', error);
+      return [];
+    }
+  }
+  
+  function generateMockData() {
+    const data = [];
+    const today = new Date();
+    let cumulative = 0;
+    
+    // Generate data for the last 30 days
+    for (let i = 29; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      
+      // Random daily participants (increasing trend)
+      const daily = Math.floor(Math.random() * 30) + 10 + (30 - i) * 2;
+      cumulative += daily;
+      
+      data.push({
+        date: date.toISOString().split('T')[0],
+        daily: daily,
+        cumulative: cumulative
+      });
+    }
+    
+    return data;
+  }
+  
+  async function initMomentumChart() {
+    const canvas = document.getElementById('momentum-chart') as HTMLCanvasElement;
+    if (!canvas) return;
+    
+    const data = await fetchParticipantData();
+    
+    // Prepare chart data
+    const labels = data.map(d => {
+      const date = new Date(d.date);
+      return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    });
+    
+    const cumulativeData = data.map(d => d.cumulative);
+    const dailyData = data.map(d => d.daily);
+    
+    // Get CSS variable value for accent color
+    const styles = getComputedStyle(document.documentElement);
+    const accentColor = styles.getPropertyValue('--color-accent').trim();
+    
+    new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Total Participants',
+            data: cumulativeData,
+            borderColor: accentColor,
+            backgroundColor: `${accentColor}20`,
+            fill: true,
+            tension: 0.4,
+            pointRadius: 3,
+            pointHoverRadius: 6,
+            borderWidth: 3
+          },
+          {
+            label: 'Daily Joins',
+            data: dailyData,
+            borderColor: '#95a5a6',
+            backgroundColor: '#95a5a620',
+            fill: false,
+            tension: 0.4,
+            pointRadius: 2,
+            pointHoverRadius: 5,
+            borderWidth: 2,
+            yAxisID: 'y1'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          mode: 'index',
+          intersect: false
+        },
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            labels: {
+              usePointStyle: true,
+              padding: 20,
+              font: {
+                size: 12,
+                family: "'Work Sans', sans-serif"
+              }
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            padding: 12,
+            cornerRadius: 8,
+            titleFont: {
+              size: 14,
+              weight: 'bold'
+            },
+            bodyFont: {
+              size: 13
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: {
+              display: false
+            },
+            ticks: {
+              maxRotation: 45,
+              minRotation: 45,
+              font: {
+                size: 11
+              }
+            }
+          },
+          y: {
+            type: 'linear',
+            display: true,
+            position: 'left',
+            title: {
+              display: true,
+              text: 'Total Participants',
+              font: {
+                size: 12
+              }
+            },
+            ticks: {
+              font: {
+                size: 11
+              }
+            }
+          },
+          y1: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+            title: {
+              display: true,
+              text: 'Daily Joins',
+              font: {
+                size: 12
+              }
+            },
+            grid: {
+              drawOnChartArea: false
+            },
+            ticks: {
+              font: {
+                size: 11
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+  
+  // Initialize when DOM is ready
+  if (typeof window !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', initMomentumChart);
+  }
+</script>

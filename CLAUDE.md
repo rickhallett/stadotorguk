@@ -1,101 +1,84 @@
-# Volks-Typo Astro Theme
+# CLAUDE.md
 
-## Project Overview
-A minimalist Astro blog theme with bold typography and a strong geometric design system. The theme emphasizes clarity, readability, and modern web aesthetics while maintaining a distinctive industrial character.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Core Design Philosophy
-- **Minimalist Foundation**: Clean, uncluttered aesthetic with generous white space
-- **Bold Typography**: Strong typographic hierarchy with uppercase headings
-- **Geometric Structure**: Consistent 8-point grid system for layout harmony
-- **High Contrast**: Clear visual separation between elements
+## Essential Commands
 
-## Color Palette
-
-### Monotone Base
-- `#ffffff` (White) - Primary background
-- `#f5f5f5` (Light Gray) - Surface backgrounds (header, footer, sidebar)
-- `#888888` (Medium Gray) - Muted text, borders
-- `#333333` (Dark Gray) - Secondary text
-- `#000000` (Black) - Primary text
-
-### Accent Color
-- `#dc2626` (Red) - Primary accent for headings, links, and interactive elements
-
-### Special Usage
-- `#e8a100` (Ochre Yellow) - Category tags in search results (interactive state)
-- `#c13127` (Dark Red) - Category tag hover state in search results
-- `#000000` (Black) - Code block backgrounds with syntax highlighting
-
-## Typography
-
-### Headings - Industrial Strength
-- **H1**: Oswald - 700 weight, uppercase, 0.15em letter-spacing
-- **H2**: Roboto Condensed - 700 weight, uppercase, 0.1em letter-spacing  
-- **H3**: Roboto Condensed - 600 weight, uppercase, 0.08em letter-spacing
-- **Color**: Red accent (#dc2626) for all headings
-
-### Body Text - Clean & Readable
-- **Font**: Work Sans - 400 weight
-- **Size**: 18px (1.125rem)
-- **Line Height**: 1.6
-- **Color**: Black (#000000)
-
-### Monospace/Code
-- **Font**: JetBrains Mono
-- **Inline Code**: Light gray background with border
-- **Code Blocks**: Black background with custom syntax highlighting
-
-### Site Title
-- **Implementation**: Custom SVG with Fraktur-style lettering
-- **Height**: 48px (desktop), 36px (mobile)
-
-## Layout Architecture
-
-### Responsive Design
-- Mobile/Tablet: Single column with hamburger menu
-- Desktop (1024px+): Two-column with left sidebar (320px width)
-
-### Core Components
-1. **Layout.astro** - Main wrapper with CSS grid system
-2. **Header.astro** - Sticky header with navigation, search, and RSS
-3. **Sidebar.astro** - Author bio, recent posts, and categories
-4. **Footer.astro** - Social links and copyright
-5. **[...slug].astro** - Blog post template with thick red divider
-
-## Interactive Features
-
-### Search Functionality
-- Full-text search overlay
-- Real-time filtering of blog posts
-- Highlighted categories with interactive color states
-
-### Mobile Navigation
-- Hamburger menu with slide-in navigation
-- Separate mobile controls for RSS and search
-- Touch-optimized interface
-
-## Technical Implementation
-- **Styling**: Astro Scoped CSS with CSS Variables
-- **Colors**: CSS custom properties for theming
-- **Fonts**: Self-hosted via @fontsource
-- **Configuration**: Central src/config.ts file
-- **Social Links**: GitHub, X, Instagram, LinkedIn, Email
-- **Grid System**: 8-point grid unit for consistent spacing
-
-## Development Commands
+### Development
 ```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Run linting
-npm run lint
-
-# Run type checking
-npm run check
+npm run dev          # Start dev server at http://localhost:4321
+npm run build        # Build for production
+npm run preview      # Preview production build
 ```
+
+### Code Quality
+```bash
+npm run lint         # Run ESLint on .js,.ts,.astro files
+npm run check        # Run Astro type checking
+npm run format       # Format code with Prettier
+```
+
+### Testing
+```bash
+npm run test:features    # Run Playwright tests
+```
+
+## Architecture Overview
+
+### Core Technology Stack
+- **Framework**: Astro 5.x with MDX support
+- **Styling**: Scoped CSS with CSS Variables
+- **Typography**: Self-hosted fonts via @fontsource
+- **Content**: Markdown/MDX files in `src/content/blog/`
+
+### Page & Component Structure
+
+The site follows a two-column layout architecture:
+
+1. **Layout.astro** - Main wrapper that orchestrates:
+   - Font imports (Oswald, Roboto Condensed, Work Sans, JetBrains Mono)
+   - Grid system with optional sidebar
+   - SEO component integration
+   - Theme persistence via inline script
+
+2. **Blog Post Template** (`pages/blog/[...slug].astro`):
+   - Dynamic routing using `getStaticPaths()` with import.meta.glob
+   - Extracts reading time and headings during build
+   - Table of contents generation from H2/H3 headings
+   - Monumental red divider (6px thick) after header
+
+3. **Content Processing**:
+   - Blog posts live in `src/content/blog/` as .md or .mdx files
+   - Frontmatter required: title, date, categories (optional: excerpt, tags)
+   - Reading time calculated from extracted plain text
+   - TOC generated from markdown headings
+
+### Key Design System Elements
+
+- **8-point grid system** (`--grid-unit: 8px`)
+- **Accent color**: `#dc2626` (red) for headings and interactive elements
+- **Typography hierarchy**: Uppercase headings with letter-spacing
+- **Code blocks**: Black background with custom syntax highlighting
+
+### Configuration
+
+Central configuration in `src/config.ts`:
+- Site metadata (title, description, author)
+- Social links
+- Site URL for production
+
+### Build Configuration
+
+The `astro.config.mjs` handles:
+- Site URL from `process.env.SITE`
+- Optional base path from `process.env.BASE_PATH` (for GitHub Pages)
+- MDX integration
+- Shiki syntax highlighting with github-dark theme
+
+### Theme System
+
+Dark mode support with:
+- Theme persistence in localStorage
+- Inline script prevents flash on load
+- CSS custom properties for theming
+- Special handling for category tags in dark mode
