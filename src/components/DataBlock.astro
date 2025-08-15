@@ -1,0 +1,23 @@
+---
+export interface Props {
+    label: string;
+    stat: string;
+    description?: string;
+}
+
+const { label, stat, description } = Astro.props;
+---
+
+<div class="data-block fade-in">
+    <div class="data-label">{label}</div>
+    <div class="data-stat">{stat}</div>
+    {description && <p class="data-description">{description}</p>}
+</div>
+
+<style>
+    .data-description {
+        margin-top: 1rem;
+        font-size: 1.125rem;
+        line-height: 1.4;
+    }
+</style>

@@ -1,0 +1,28 @@
+---
+export interface Props {
+    title?: string;
+    background?: 'white' | 'concrete' | 'black';
+}
+
+const { title, background = 'white' } = Astro.props;
+---
+
+<section class={`brutal-section brutal-section--${background}`}>
+    {title && <h2 class="brutal-subhead">{title}</h2>}
+    <slot />
+</section>
+
+<style>
+    .brutal-section--concrete {
+        background: var(--brutal-concrete);
+    }
+
+    .brutal-section--black {
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+    }
+
+    .brutal-section h2 {
+        margin-bottom: 2rem;
+    }
+</style>

@@ -2,83 +2,84 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Essential Commands
+## Project Overview
 
-### Development
+This is the Swanage Traffic Alliance website - a brutalist-design activism site built with Astro. The project has two main directories:
+
+- `sta-blocki/` - Original HTML prototype with inline CSS and JavaScript
+- `site/` - Production Astro site with component-based architecture
+
+## Development Commands
+
+All commands run from the `site/` directory:
+
 ```bash
-npm run dev          # Start dev server at http://localhost:4321
-npm run build        # Build for production
-npm run preview      # Preview production build
+# Install dependencies
+npm install
+
+# Start development server (runs on http://localhost:4321)
+npm run dev
+
+# Build for production (outputs to ./dist/)
+npm run build
+
+# Preview production build locally
+npm run preview
 ```
 
-### Code Quality
-```bash
-npm run lint         # Run ESLint on .js,.ts,.astro files
-npm run check        # Run Astro type checking
-npm run format       # Format code with Prettier
+## Architecture
+
+### Page Structure
+The site consists of three main pages:
+- **Home** (`src/pages/index.astro`) - Landing page with data visualizations, impact analysis, and signup form
+- **Feed** (`src/pages/feed.astro`) - Community voices with user counter and comment feed
+- **News** (`src/pages/news.astro`) - Timeline of updates with alternating left/right layout
+
+### Component System
+Located in `src/components/`:
+- **Layout Components**: `Header.astro`, `Footer.astro` - Site-wide navigation and branding
+- **Data Components**: `DataBlock.astro`, `ImpactCard.astro` - Statistical displays
+- **Container Components**: `BrutalSection.astro` - Consistent brutal design containers
+
+### Styling Approach
+- Global styles in `src/styles/global.css` define CSS variables and base typography
+- Component-scoped styles within each `.astro` file
+- Brutalist design system using:
+  - Heavy borders (8px solid black)
+  - Box shadows (15px offsets)
+  - Limited color palette (black, white, red, gray, concrete)
+  - Bold typography (Arial Black, uppercase, tight letter-spacing)
+
+### Key Design Patterns
+
+**Brutalist Containers**: All sections use 8px borders with heavy shadows:
+```css
+border: 8px solid var(--brutal-black);
+box-shadow: 15px 15px 0 var(--brutal-shadow);
 ```
 
-### Testing
-```bash
-npm run test:features    # Run Playwright tests
-```
+**Timeline Layout**: News page uses alternating left/right positioning:
+- Desktop: Items alternate sides with center timeline
+- Mobile: All items align left with timeline on left edge
 
-## Architecture Overview
+**Form Handling**: Contact forms use client-side JavaScript for immediate feedback with 5-second confirmation display
 
-### Core Technology Stack
-- **Framework**: Astro 5.x with MDX support
-- **Styling**: Scoped CSS with CSS Variables
-- **Typography**: Self-hosted fonts via @fontsource
-- **Content**: Markdown/MDX files in `src/content/blog/`
+**Animation Strategy**: 
+- Intersection Observer for scroll-triggered animations
+- Counter animations on Feed page
+- Staggered delays for sequential content reveal
 
-### Page & Component Structure
+## Data Management
 
-The site follows a two-column layout architecture:
+Currently uses mock data arrays in page frontmatter. When implementing backend:
+- Feed items in `feed.astro` should connect to user submission database
+- News items in `news.astro` should be managed through CMS or markdown files
+- User counters should pull from authentication system
 
-1. **Layout.astro** - Main wrapper that orchestrates:
-   - Font imports (Oswald, Roboto Condensed, Work Sans, JetBrains Mono)
-   - Grid system with optional sidebar
-   - SEO component integration
-   - Theme persistence via inline script
+## Mobile Responsiveness
 
-2. **Blog Post Template** (`pages/blog/[...slug].astro`):
-   - Dynamic routing using `getStaticPaths()` with import.meta.glob
-   - Extracts reading time and headings during build
-   - Table of contents generation from H2/H3 headings
-   - Monumental red divider (6px thick) after header
-
-3. **Content Processing**:
-   - Blog posts live in `src/content/blog/` as .md or .mdx files
-   - Frontmatter required: title, date, categories (optional: excerpt, tags)
-   - Reading time calculated from extracted plain text
-   - TOC generated from markdown headings
-
-### Key Design System Elements
-
-- **8-point grid system** (`--grid-unit: 8px`)
-- **Accent color**: `#dc2626` (red) for headings and interactive elements
-- **Typography hierarchy**: Uppercase headings with letter-spacing
-- **Code blocks**: Black background with custom syntax highlighting
-
-### Configuration
-
-Central configuration in `src/config.ts`:
-- Site metadata (title, description, author)
-- Social links
-- Site URL for production
-
-### Build Configuration
-
-The `astro.config.mjs` handles:
-- Site URL from `process.env.SITE`
-- Optional base path from `process.env.BASE_PATH` (for GitHub Pages)
-- MDX integration
-- Shiki syntax highlighting with github-dark theme
-
-### Theme System
-
-Dark mode support with:
-- Theme persistence in localStorage
-- Inline script prevents flash on load
-- CSS custom properties for theming
-- Special handling for category tags in dark mode
+Breakpoint at 768px with specific adjustments:
+- Timeline collapses to single column
+- Grid layouts switch to single column
+- Typography scales with clamp() functions
+- Navigation header stacks vertically

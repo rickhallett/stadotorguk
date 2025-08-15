@@ -1,56 +1,14 @@
 {
-  "name": "stadotcouk",
+  "name": "site",
   "type": "module",
-  "version": "1.1.2",
-  "description": "An Astro blog theme exploring the aesthetic tension between Bauhaus modernism and WW2-era monumental design",
+  "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "check": "astro check",
-    "lint": "eslint . --ext .js,.ts,.astro",
-    "format": "prettier --write .",
-    "generate-screenshots": "node generate-screenshots.js",
-    "test:features": "playwright test"
+    "astro": "astro"
   },
-  "author": "@jdrhyne",
-  "license": "MIT",
-  "homepage": "https://github.com/jdrhyne/volks-typo",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jdrhyne/volks-typo.git"
-  },
-  "bugs": {
-    "url": "https://github.com/jdrhyne/volks-typo/issues"
-  },
-  "keywords": [
-    "astro",
-    "blog",
-    "theme",
-    "minimal",
-    "typography"
-  ],
   "dependencies": {
-    "@astrojs/mdx": "^4.3.0",
-    "@astrojs/rss": "^4.0.12",
-    "@fontsource/jetbrains-mono": "^5.0.0",
-    "@fontsource/oswald": "^5.2.6",
-    "@fontsource/roboto-condensed": "^5.2.6",
-    "@fontsource/work-sans": "^5.2.6",
-    "astro": "^5.9.1",
-    "chart.js": "^4.5.0"
-  },
-  "devDependencies": {
-    "@astrojs/check": "^0.9.3",
-    "@playwright/test": "^1.54.1",
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.0.0",
-    "eslint": "^9.0.0",
-    "eslint-plugin-astro": "^1.2.0",
-    "playwright": "^1.54.1",
-    "prettier": "^3.3.0",
-    "prettier-plugin-astro": "^0.14.0",
-    "typescript": "^5.6.0"
+    "astro": "^5.13.0"
   }
 }

@@ -1,0 +1,45 @@
+---
+export interface Props {
+    stat: string;
+    description: string;
+}
+
+const { stat, description } = Astro.props;
+---
+
+<div class="impact-card fade-in">
+    <div class="data-stat">{stat}</div>
+    <p>{description}</p>
+</div>
+
+<style>
+    .impact-card {
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        padding: 2rem;
+        text-align: center;
+        border: 4px solid var(--brutal-black);
+        transform: rotate(-2deg);
+        transition: all 0.3s ease;
+    }
+
+    .impact-card:nth-child(even) {
+        transform: rotate(2deg);
+    }
+
+    .impact-card:hover {
+        transform: rotate(0deg) scale(1.05);
+        box-shadow: 10px 10px 0 var(--brutal-red);
+    }
+
+    .impact-card .data-stat {
+        color: var(--brutal-white);
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .impact-card p {
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+</style>

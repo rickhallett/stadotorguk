@@ -1,0 +1,277 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BrutalSection from '../components/BrutalSection.astro';
+
+// Mock data for demonstration
+const activeUsers = 1234;
+const todayUsers = 42;
+const weekUsers = 189;
+const monthUsers = 567;
+
+// Mock feed data
+const feedItems = [
+    {
+        id: 1,
+        username: "Sarah M.",
+        location: "High Street",
+        timestamp: "2 hours ago",
+        comment: "Stuck in traffic for 45 minutes trying to get to the doctor's surgery. This is becoming unbearable."
+    },
+    {
+        id: 2,
+        username: "John D.",
+        location: "Shore Road",
+        timestamp: "3 hours ago",
+        comment: "Emergency vehicles couldn't get through again today. When will the council listen to us?"
+    },
+    {
+        id: 3,
+        username: "Emma W.",
+        location: "Town Centre",
+        timestamp: "5 hours ago",
+        comment: "My business has lost 30% of customers since the parking spaces were removed. We're struggling to survive."
+    },
+    {
+        id: 4,
+        username: "David R.",
+        location: "Victoria Avenue",
+        timestamp: "Yesterday",
+        comment: "The pollution levels are getting worse every day. My children can't play outside anymore."
+    },
+    {
+        id: 5,
+        username: "Mary T.",
+        location: "Kings Road",
+        timestamp: "Yesterday",
+        comment: "Elderly residents like myself can't walk the extra distance from the new parking areas. This is discrimination."
+    },
+    {
+        id: 6,
+        username: "Tom B.",
+        location: "Station Road",
+        timestamp: "2 days ago",
+        comment: "Delivery trucks blocking residential streets because they have nowhere else to go. Complete chaos."
+    },
+    {
+        id: 7,
+        username: "Lisa K.",
+        location: "Church Hill",
+        timestamp: "3 days ago",
+        comment: "Tourists are avoiding Swanage because of the traffic. This will destroy our economy."
+    },
+    {
+        id: 8,
+        username: "Robert H.",
+        location: "Prospect Place",
+        timestamp: "3 days ago",
+        comment: "I've lived here 40 years and never seen such poor planning. The data clearly shows this won't work."
+    }
+];
+---
+
+<Layout title="Feed">
+    <!-- HERO SECTION -->
+    <section class="feed-hero">
+        <h1 class="brutal-headline" style="font-size: clamp(3rem, 8vw, 6rem);">
+            COMMUNITY<br/>VOICES
+        </h1>
+        <p class="brutal-subhead" style="font-size: clamp(1.2rem, 3vw, 2rem);">
+            REAL STORIES FROM REAL RESIDENTS
+        </p>
+    </section>
+
+    <!-- USER COUNTER -->
+    <BrutalSection title="ACTIVE RESISTANCE">
+        <div class="user-counter">
+            <div class="counter-block counter-total">
+                <div class="data-stat">{activeUsers}</div>
+                <div class="counter-label">Total Active Members</div>
+            </div>
+            <div class="counter-block">
+                <div class="data-stat">{todayUsers}</div>
+                <div class="counter-label">Joined Today</div>
+            </div>
+            <div class="counter-block">
+                <div class="data-stat">{weekUsers}</div>
+                <div class="counter-label">Joined This Week</div>
+            </div>
+            <div class="counter-block">
+                <div class="data-stat">{monthUsers}</div>
+                <div class="counter-label">Joined This Month</div>
+            </div>
+        </div>
+    </BrutalSection>
+
+    <!-- FEED -->
+    <BrutalSection title="LATEST REPORTS">
+        <p style="margin-bottom: 2rem; font-size: 1.125rem;">
+            These are the voices of your neighbors. Every story matters. Every complaint is documented.
+        </p>
+        <div class="feed-container">
+            {feedItems.map((item) => (
+                <div class="feed-item fade-in" data-id={item.id}>
+                    <div class="feed-meta">
+                        <span class="feed-user">{item.username} • {item.location}</span>
+                        <span class="feed-time">{item.timestamp}</span>
+                    </div>
+                    <div class="feed-content">
+                        "{item.comment}"
+                    </div>
+                </div>
+            ))}
+        </div>
+        
+        <div class="load-more-container">
+            <button class="submit-btn" id="loadMore">
+                LOAD MORE VOICES
+            </button>
+        </div>
+    </BrutalSection>
+
+    <!-- JOIN CTA -->
+    <BrutalSection background="black">
+        <h2 class="brutal-subhead" style="color: var(--brutal-red); margin-bottom: 2rem;">
+            ADD YOUR VOICE
+        </h2>
+        <p style="font-size: 1.25rem; margin-bottom: 2rem;">
+            Your experience matters. Document the crisis. Join the resistance.
+        </p>
+        <a href="/" class="submit-btn" style="display: inline-block; text-decoration: none;">
+            SHARE YOUR STORY
+        </a>
+    </BrutalSection>
+</Layout>
+
+<style>
+    .feed-hero {
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        padding: 6rem 2rem;
+        text-align: center;
+        border-bottom: 8px solid var(--brutal-red);
+    }
+
+    .feed-hero .brutal-headline {
+        margin-bottom: 1rem;
+    }
+
+    .counter-total {
+        grid-column: 1 / -1;
+        background: var(--brutal-red) !important;
+        transform: scale(1.1);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .load-more-container {
+        text-align: center;
+        margin-top: 3rem;
+    }
+
+    /* Additional animations for feed items */
+    .feed-item {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .feed-item:nth-child(1) { animation-delay: 0.1s; }
+    .feed-item:nth-child(2) { animation-delay: 0.2s; }
+    .feed-item:nth-child(3) { animation-delay: 0.3s; }
+    .feed-item:nth-child(4) { animation-delay: 0.4s; }
+    .feed-item:nth-child(5) { animation-delay: 0.5s; }
+    .feed-item:nth-child(6) { animation-delay: 0.6s; }
+    .feed-item:nth-child(7) { animation-delay: 0.7s; }
+    .feed-item:nth-child(8) { animation-delay: 0.8s; }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .feed-hero {
+            padding: 4rem 1rem;
+        }
+    }
+</style>
+
+<script>
+    // Simulate loading more items
+    document.getElementById('loadMore')?.addEventListener('click', function() {
+        const container = document.querySelector('.feed-container');
+        const button = this as HTMLButtonElement;
+        
+        // Disable button temporarily
+        button.disabled = true;
+        button.textContent = 'LOADING...';
+        
+        // Simulate API call
+        setTimeout(() => {
+            // Mock new items
+            const newItems = [
+                {
+                    username: "Alex P.",
+                    location: "Durlston Road",
+                    timestamp: "4 days ago",
+                    comment: "The noise pollution at night is unbearable. Trucks using residential streets as shortcuts."
+                },
+                {
+                    username: "Claire S.",
+                    location: "Northbrook Road",
+                    timestamp: "5 days ago",
+                    comment: "My disabled mother can't access the shops anymore. This is a disaster for accessibility."
+                }
+            ];
+            
+            // Add new items to feed
+            newItems.forEach((item, index) => {
+                const feedItem = document.createElement('div');
+                feedItem.className = 'feed-item';
+                feedItem.style.animationDelay = `${(index + 1) * 0.1}s`;
+                feedItem.innerHTML = `
+                    <div class="feed-meta">
+                        <span class="feed-user">${item.username} • ${item.location}</span>
+                        <span class="feed-time">${item.timestamp}</span>
+                    </div>
+                    <div class="feed-content">
+                        "${item.comment}"
+                    </div>
+                `;
+                container?.appendChild(feedItem);
+            });
+            
+            // Re-enable button
+            button.disabled = false;
+            button.textContent = 'LOAD MORE VOICES';
+        }, 1000);
+    });
+
+    // Counter animation
+    function animateCounter(element: HTMLElement, target: number) {
+        const duration = 2000;
+        const start = 0;
+        const increment = target / (duration / 16);
+        let current = start;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                element.textContent = target.toString();
+                clearInterval(timer);
+            } else {
+                element.textContent = Math.floor(current).toString();
+            }
+        }, 16);
+    }
+
+    // Animate counters on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        const counters = document.querySelectorAll('.counter-block .data-stat');
+        counters.forEach((counter) => {
+            const target = parseInt(counter.textContent || '0');
+            animateCounter(counter as HTMLElement, target);
+        });
+    });
+</script>

@@ -1,0 +1,368 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BrutalSection from '../components/BrutalSection.astro';
+
+// News items - to be added manually in chronological order
+const newsItems = [
+    {
+        id: 1,
+        date: "JAN 15, 2024",
+        title: "COUNCIL IGNORES 1,200 SIGNATURES",
+        content: "Despite overwhelming opposition from residents, the council voted 7-3 to proceed with the Shore Road closure. The petition, signed by over 1,200 residents, was dismissed without proper consideration. Councillor Smith stated 'the decision has been made' before public comments even began."
+    },
+    {
+        id: 2,
+        date: "JAN 22, 2024",
+        title: "EMERGENCY SERVICES SOUND ALARM",
+        content: "Dorset Fire and Rescue issued an unprecedented warning about response times doubling in the event of Shore Road closure. Ambulance services confirmed that critical golden hour responses would be impossible during peak traffic. The council's response: 'We'll monitor the situation.'"
+    },
+    {
+        id: 3,
+        date: "FEB 01, 2024",
+        title: "LOCAL BUSINESSES UNITE IN OPPOSITION",
+        content: "89 local businesses signed a joint statement warning of economic catastrophe. The Swanage Business Association predicts £2.3 million in annual losses and potential closure of 15-20 shops within the first year. Three major employers are already considering relocation."
+    },
+    {
+        id: 4,
+        date: "FEB 08, 2024",
+        title: "TRAFFIC DATA EXPOSES THE TRUTH",
+        content: "Independent traffic analysis reveals council's projections were based on winter data, ignoring summer tourist peaks. Real numbers show 8,000+ vehicles daily in summer versus council's claimed 2,500. The margin of error? A catastrophic 220%."
+    },
+    {
+        id: 5,
+        date: "FEB 15, 2024",
+        title: "RESIDENTS LAUNCH LEGAL CHALLENGE",
+        content: "The Swanage Traffic Alliance has retained legal counsel to challenge the council's decision. Grounds include failure to conduct proper environmental impact assessment, discrimination against disabled residents, and violation of emergency service access requirements."
+    },
+    {
+        id: 6,
+        date: "FEB 20, 2024",
+        title: "MEDIA SPOTLIGHT INTENSIFIES",
+        content: "BBC South Today featured our campaign, interviewing affected residents and business owners. National newspapers are picking up the story. The council's response? They've stopped answering media queries. The silence speaks volumes."
+    },
+    {
+        id: 7,
+        date: "FEB 28, 2024",
+        title: "ALTERNATIVE PLAN SUBMITTED",
+        content: "Traffic engineers from the Alliance presented a comprehensive alternative plan that addresses safety concerns without road closure. The plan includes traffic calming measures, improved pedestrian crossings, and enhanced cycling infrastructure. Cost: 60% less than the closure plan."
+    },
+    {
+        id: 8,
+        date: "MAR 05, 2024",
+        title: "PROTEST MARCH DRAWS HUNDREDS",
+        content: "Over 500 residents marched from the pier to the town hall in peaceful protest. Ages ranged from schoolchildren to 90-year-old lifetime residents. The message was clear: 'Save Our Swanage.' The council held their meeting behind locked doors."
+    }
+];
+---
+
+<Layout title="News">
+    <!-- HERO SECTION -->
+    <section class="news-hero">
+        <h1 class="brutal-headline" style="font-size: clamp(3rem, 8vw, 6rem);">
+            BREAKING<br/>UPDATES
+        </h1>
+        <p class="brutal-subhead" style="font-size: clamp(1.2rem, 3vw, 2rem);">
+            THE FIGHT DOCUMENTED IN REAL TIME
+        </p>
+    </section>
+
+    <!-- TIMELINE -->
+    <BrutalSection>
+        <div class="timeline">
+            {newsItems.map((item, index) => (
+                <div class={`timeline-item fade-in ${index % 2 === 0 ? 'timeline-left' : 'timeline-right'}`}>
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">{item.date}</div>
+                        <h3 class="timeline-title">{item.title}</h3>
+                        <p class="timeline-text">{item.content}</p>
+                    </div>
+                </div>
+            ))}
+            
+            <!-- Ongoing indicator -->
+            <div class="timeline-ongoing">
+                <div class="timeline-marker ongoing-marker"></div>
+                <div class="ongoing-text">THE FIGHT CONTINUES...</div>
+            </div>
+        </div>
+    </BrutalSection>
+
+    <!-- STAY INFORMED -->
+    <BrutalSection background="concrete">
+        <h2 class="brutal-subhead">STAY INFORMED</h2>
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>NEXT MEETING</h3>
+                <p class="info-detail">THURSDAY 7PM</p>
+                <p>Community Center, High Street</p>
+            </div>
+            <div class="info-card">
+                <h3>COUNCIL SESSION</h3>
+                <p class="info-detail">MARCH 15, 2024</p>
+                <p>Public comments at 6PM</p>
+            </div>
+            <div class="info-card">
+                <h3>LEGAL UPDATE</h3>
+                <p class="info-detail">HEARING PENDING</p>
+                <p>High Court review requested</p>
+            </div>
+        </div>
+    </BrutalSection>
+
+    <!-- URGENT ACTION -->
+    <BrutalSection background="black">
+        <h2 class="brutal-headline" style="font-size: clamp(2.5rem, 6vw, 4rem); color: var(--brutal-red); text-align: center;">
+            TIME IS<br/>RUNNING OUT
+        </h2>
+        <p style="font-size: 1.25rem; text-align: center; margin: 2rem 0;">
+            Every day of delay brings us closer to traffic catastrophe. Act now.
+        </p>
+        <div style="text-align: center;">
+            <a href="/" class="submit-btn" style="display: inline-block; text-decoration: none; margin: 0 1rem;">
+                JOIN THE ALLIANCE
+            </a>
+            <a href="/feed" class="submit-btn" style="display: inline-block; text-decoration: none; margin: 0 1rem; background: var(--brutal-red);">
+                SHARE YOUR STORY
+            </a>
+        </div>
+    </BrutalSection>
+</Layout>
+
+<style>
+    .news-hero {
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        padding: 6rem 2rem;
+        text-align: center;
+        border-bottom: 8px solid var(--brutal-red);
+    }
+
+    .news-hero .brutal-headline {
+        margin-bottom: 1rem;
+    }
+
+    /* Enhanced Timeline Styles */
+    .timeline {
+        position: relative;
+        padding: 3rem 0;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 8px;
+        background: var(--brutal-black);
+        transform: translateX(-50%);
+    }
+
+    .timeline-item {
+        position: relative;
+        width: calc(50% - 60px);
+        margin-bottom: 4rem;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+    .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+    .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+    .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+    .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+    .timeline-item:nth-child(6) { animation-delay: 0.6s; }
+    .timeline-item:nth-child(7) { animation-delay: 0.7s; }
+    .timeline-item:nth-child(8) { animation-delay: 0.8s; }
+
+    .timeline-left {
+        margin-right: auto;
+        padding-right: 60px;
+        text-align: right;
+    }
+
+    .timeline-right {
+        margin-left: auto;
+        padding-left: 60px;
+        text-align: left;
+    }
+
+    .timeline-marker {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        background: var(--brutal-red);
+        border: 8px solid var(--brutal-black);
+        top: 0;
+        z-index: 1;
+    }
+
+    .timeline-left .timeline-marker {
+        right: -20px;
+    }
+
+    .timeline-right .timeline-marker {
+        left: -20px;
+    }
+
+    .timeline-content {
+        background: var(--brutal-white);
+        border: 4px solid var(--brutal-black);
+        padding: 2rem;
+        box-shadow: 10px 10px 0 var(--brutal-shadow);
+        transition: all 0.3s ease;
+    }
+
+    .timeline-content:hover {
+        transform: translate(-5px, -5px);
+        box-shadow: 15px 15px 0 var(--brutal-shadow);
+    }
+
+    .timeline-date {
+        font-size: 0.875rem;
+        font-weight: 900;
+        letter-spacing: 0.2em;
+        color: var(--brutal-red);
+        margin-bottom: 1rem;
+    }
+
+    .timeline-title {
+        font-size: 1.5rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+
+    .timeline-text {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    /* Ongoing indicator */
+    .timeline-ongoing {
+        position: relative;
+        text-align: center;
+        padding-top: 2rem;
+    }
+
+    .ongoing-marker {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: pulse 2s infinite;
+    }
+
+    .ongoing-text {
+        font-size: 1.5rem;
+        font-weight: 900;
+        letter-spacing: 0.2em;
+        margin-top: 4rem;
+        color: var(--brutal-red);
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: translateX(-50%) scale(1); }
+        50% { transform: translateX(-50%) scale(1.2); }
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Info Grid */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .info-card {
+        background: var(--brutal-white);
+        border: 4px solid var(--brutal-black);
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .info-card h3 {
+        font-size: 1rem;
+        font-weight: 900;
+        letter-spacing: 0.2em;
+        color: var(--brutal-red);
+        margin-bottom: 1rem;
+    }
+
+    .info-detail {
+        font-size: 1.5rem;
+        font-weight: 900;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .news-hero {
+            padding: 4rem 1rem;
+        }
+
+        .timeline::before {
+            left: 40px;
+        }
+
+        .timeline-item {
+            width: calc(100% - 80px);
+            margin-left: 80px !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            text-align: left !important;
+        }
+
+        .timeline-marker {
+            left: -60px !important;
+            right: auto !important;
+        }
+
+        .timeline-content {
+            padding: 1.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.25rem;
+        }
+
+        .ongoing-marker {
+            left: 40px;
+            transform: translateX(-50%);
+        }
+    }
+</style>
+
+<script>
+    // Intersection Observer for timeline animations
+    const observerOptions = {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    // Observe timeline items
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.timeline-item').forEach(el => {
+            observer.observe(el);
+        });
+    });
+</script>

@@ -1,91 +1,43 @@
-# Swanage Traffic Alliance
+# Astro Starter Kit: Minimal
 
-[![Built with Astro](https://astro.badg.es/v2/built-with-astro/small.svg)](https://astro.build)
-
-## 📣 Demanding Accountability
-
-The Swanage Traffic Alliance is a community-driven initiative demanding transparency and accountability from local authorities regarding traffic management decisions. We believe the democratic process has been warped for personal gain, and we're here to present evidence and amplify community voices.
-
-## 🎯 Project Purpose
-
-This website serves as a platform for:
-- **Community Voice Amplification** - Collecting and presenting resident concerns about traffic issues
-- **Evidence Presentation** - Documenting the impact of traffic decisions on our community
-- **Accountability Tracking** - Monitoring local authority responses and actions
-- **Community Mobilization** - Building momentum for positive change
-
-## 🛠️ Technical Stack
-
-Built with modern web technologies:
-- **Framework**: Astro 5.x
-- **Styling**: Scoped CSS with CSS Variables
-- **Content**: Dynamic community feeds and impact visualization
-- **APIs**: Serverless endpoints for real-time data
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js 18+
-- npm or yarn
-
-### Installation
-```bash
-# Clone the repository
-git clone https://github.com/swanage-traffic/alliance-website.git
-
-# Install dependencies
-npm install
-
-# Create environment file
-cp .env.example .env
-# Add your API keys to .env
+```sh
+bun create astro@latest -- --template minimal
 ```
 
-### Development
-```bash
-# Start development server
-npm run dev
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
-# Build for production
-npm run build
+## 🚀 Project Structure
 
-# Preview production build
-npm run preview
-```
+Inside of your Astro project, you'll see the following folders and files:
 
-## 🔑 Environment Variables
-
-Create a `.env` file with:
-```
-NOTION_TOKEN=your_notion_token
-NOTION_DATABASE_ID=your_database_id
-ANTHROPIC_API_KEY=your_anthropic_key
-```
-
-## 📁 Project Structure
-
-```
+```text
+/
+├── public/
 ├── src/
-│   ├── components/
-│   │   ├── home/         # Homepage components
-│   │   └── feeds/        # Feeds page components
-│   ├── pages/
-│   │   ├── api/          # Serverless API endpoints
-│   │   ├── index.astro   # Homepage
-│   │   └── feeds.astro   # Community feeds
-│   └── config.ts         # Site configuration
-├── public/               # Static assets
-└── .env                  # Environment variables
+│   └── pages/
+│       └── index.astro
+└── package.json
 ```
 
-## 🤝 Contributing
+Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
 
-We welcome contributions from the community. Please feel free to submit issues, feature requests, or pull requests.
+There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
 
-## 📧 Contact
+Any static assets, like images, can be placed in the `public/` directory.
 
-For inquiries: contact@swanagetraffic.co.uk
+## 🧞 Commands
 
----
+All commands are run from the root of the project, from a terminal:
 
-*Built by the community, for the community.*
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `bun install`             | Installs dependencies                            |
+| `bun dev`             | Starts local dev server at `localhost:4321`      |
+| `bun build`           | Build your production site to `./dist/`          |
+| `bun preview`         | Preview your build locally, before deploying     |
+| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `bun astro -- --help` | Get help using the Astro CLI                     |
+
+## 👀 Want to learn more?
+
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWANAGE TRAFFIC ALLIANCE | DATA REVEALS THE CRISIS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --brutal-black: #000000;
+            --brutal-white: #FFFFFF;
+            --brutal-red: #FF0000;
+            --brutal-gray: #808080;
+            --brutal-concrete: #E8E8E8;
+            --brutal-shadow: rgba(0,0,0,0.9);
+        }
+
+        body {
+            font-family: 'Arial Black', 'Helvetica Neue', sans-serif;
+            background: var(--brutal-white);
+            color: var(--brutal-black);
+            overflow-x: hidden;
+            line-height: 1.2;
+        }
+
+        /* BRUTALIST TYPOGRAPHY */
+        .brutal-headline {
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            line-height: 0.9;
+            text-transform: uppercase;
+        }
+
+        .brutal-subhead {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+        }
+
+        .data-stat {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            color: var(--brutal-red);
+        }
+
+        /* BRUTAL CONTAINERS */
+        .brutal-section {
+            border: 8px solid var(--brutal-black);
+            margin: 2rem;
+            padding: 3rem;
+            background: var(--brutal-white);
+            box-shadow: 15px 15px 0 var(--brutal-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brutal-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: var(--brutal-black);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: var(--brutal-black);
+            color: var(--brutal-white);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            position: absolute;
+            inset: 0;
+            opacity: 0.1;
+        }
+
+        .grid-cell {
+            background: var(--brutal-white);
+            border: 1px solid var(--brutal-white);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero .brutal-headline {
+            margin-bottom: 2rem;
+            transform: translateX(-100%);
+            animation: slideInBrutal 1s ease-out forwards;
+        }
+
+        @keyframes slideInBrutal {
+            to { transform: translateX(0); }
+        }
+
+        /* DATA JOURNALISM ELEMENTS */
+        .data-block {
+            background: var(--brutal-concrete);
+            border-left: 20px solid var(--brutal-red);
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            transform: translateX(-50px);
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .data-block.visible {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .data-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 0.5rem;
+            opacity: 0.7;
+        }
+
+        /* SCROLLYTELLING SECTIONS */
+        .story-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 4rem 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .story-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .story-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        /* DATA VISUALIZATIONS */
+        .chart-container {
+            position: relative;
+            padding: 2rem;
+            background: var(--brutal-black);
+            border: 4px solid var(--brutal-black);
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            height: 300px;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--brutal-white);
+        }
+
+        .bar {
+            flex: 1;
+            background: var(--brutal-red);
+            position: relative;
+            opacity: 0;
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: all 0.8s ease-out;
+        }
+
+        .bar.visible {
+            opacity: 1;
+            transform: scaleY(1);
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: 900;
+            font-size: 1.25rem;
+        }
+
+        /* IMPACT VISUALIZATION */
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .impact-card {
+            background: var(--brutal-black);
+            color: var(--brutal-white);
+            padding: 2rem;
+            text-align: center;
+            border: 4px solid var(--brutal-black);
+            transform: rotate(-2deg);
+            transition: all 0.3s ease;
+        }
+
+        .impact-card:nth-child(even) {
+            transform: rotate(2deg);
+        }
+
+        .impact-card:hover {
+            transform: rotate(0deg) scale(1.05);
+            box-shadow: 10px 10px 0 var(--brutal-red);
+        }
+
+        /* PULL QUOTES */
+        .pull-quote {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 900;
+            border-left: 10px solid var(--brutal-red);
+            padding-left: 2rem;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .pull-quote::before {
+            content: '"';
+            position: absolute;
+            left: -20px;
+            top: -20px;
+            font-size: 8rem;
+            color: var(--brutal-red);
+            opacity: 0.2;
+        }
+
+        /* EVIDENCE SECTION */
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .evidence-card {
+            background: var(--brutal-concrete);
+            border: 4px solid var(--brutal-black);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .evidence-number {
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            font-size: 6rem;
+            font-weight: 900;
+            color: var(--brutal-red);
+            opacity: 0.2;
+        }
+
+        /* FORM STYLING */
+        .action-form {
+            background: var(--brutal-red);
+            color: var(--brutal-white);
+            padding: 3rem;
+            margin: 3rem 0;
+            position: relative;
+            transform: skewY(-2deg);
+        }
+
+        .action-form > * {
+            transform: skewY(2deg);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.1em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 4px solid var(--brutal-black);
+            background: var(--brutal-white);
+            color: var(--brutal-black);
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            box-shadow: 8px 8px 0 var(--brutal-black);
+        }
+
+        .submit-btn {
+            background: var(--brutal-black);
+            color: var(--brutal-white);
+            border: none;
+            padding: 1.5rem 3rem;
+            font-family: inherit;
+            font-weight: 900;
+            font-size: 1.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translate(-5px, -5px);
+            box-shadow: 5px 5px 0 var(--brutal-white);
+        }
+
+        .form-confirmation {
+            display: none;
+            background: var(--brutal-black);
+            color: var(--brutal-white);
+            padding: 2rem;
+            text-align: center;
+            font-weight: 900;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            margin-top: 2rem;
+        }
+
+        /* SOLUTIONS TIMELINE */
+        .timeline {
+            position: relative;
+            padding: 3rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 8px;
+            background: var(--brutal-black);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 2rem;
+            width: calc(50% - 40px);
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item:nth-child(odd) {
+            margin-left: auto;
+            text-align: left;
+        }
+
+        .timeline-item:nth-child(even) {
+            margin-right: auto;
+            text-align: right;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: var(--brutal-red);
+            border: 8px solid var(--brutal-black);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-marker {
+            left: -60px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-marker {
+            right: -60px;
+        }
+
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 768px) {
+            .brutal-section {
+                margin: 1rem;
+                padding: 2rem;
+            }
+
+            .story-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .timeline::before {
+                left: 40px;
+            }
+
+            .timeline-item {
+                width: calc(100% - 80px);
+                margin-left: 80px !important;
+                text-align: left !important;
+            }
+
+            .timeline-marker {
+                left: -60px !important;
+            }
+
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bar-chart {
+                height: 200px;
+            }
+        }
+
+        /* SCROLL INDICATOR */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 60px;
+            border: 4px solid var(--brutal-black);
+            background: var(--brutal-white);
+            opacity: 0.8;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--brutal-black);
+            animation: scrollDot 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        @keyframes scrollDot {
+            0% { top: 10px; }
+            50% { top: 30px; }
+            100% { top: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-grid">
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+        </div>
+        <div class="hero-content">
+            <h1 class="brutal-headline">SWANAGE<br>TRAFFIC<br>ALLIANCE</h1>
+            <p class="brutal-subhead">DATA REVEALS THE CRISIS</p>
+            <div class="data-block" style="opacity: 1; transform: none;">
+                <div class="data-label">RESIDENTS AT RISK</div>
+                <div class="data-stat">12,000+</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCROLL INDICATOR -->
+    <div class="scroll-indicator"></div>
+
+    <!-- INTRODUCTION STORY -->
+    <section class="story-section">
+        <div class="story-content">
+            <div>
+                <h2 class="brutal-subhead">THE ORGANIZATION</h2>
+                <p style="font-size: 1.25rem; margin: 2rem 0; line-height: 1.6;">
+                    The Swanage Traffic Alliance emerged from a community in crisis. We are residents, business owners, and concerned citizens united by data-driven evidence of an impending traffic catastrophe.
+                </p>
+                <div class="pull-quote">
+                    "When facts are ignored, communities must act"
+                </div>
+            </div>
+            <div class="data-block">
+                <div class="data-label">ACTIVE MEMBERS</div>
+                <div class="data-stat">500+</div>
+                <p style="margin-top: 1rem;">Growing daily as awareness spreads</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROBLEM VISUALIZATION -->
+    <section class="brutal-section">
+        <h2 class="brutal-headline" style="font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 3rem;">
+            THE SHORE ROAD CRISIS
+        </h2>
+        
+        <div class="story-section visible" style="min-height: auto; padding: 0;">
+            <div class="story-content">
+                <div>
+                    <h3 class="brutal-subhead">TRAFFIC SURGE PROJECTION</h3>
+                    <div class="chart-container">
+                        <div class="bar-chart">
+                            <div class="bar" style="height: 30%;" data-value="100%">
+                                <span class="bar-value">100%</span>
+                                <span class="bar-label">Current</span>
+                            </div>
+                            <div class="bar" style="height: 60%;" data-value="200%">
+                                <span class="bar-value">200%</span>
+                                <span class="bar-label">Year 1</span>
+                            </div>
+                            <div class="bar" style="height: 90%;" data-value="300%">
+                                <span class="bar-value">300%</span>
+                                <span class="bar-label">Summer Peak</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="data-block visible">
+                        <div class="data-label">SHORE ROAD CLOSURE MEANS</div>
+                        <ul style="font-size: 1.25rem; margin-top: 1rem; list-style: none;">
+                            <li style="margin-bottom: 1rem;">▪ 100% traffic diverted through town</li>
+                            <li style="margin-bottom: 1rem;">▪ Emergency vehicle delays</li>
+                            <li style="margin-bottom: 1rem;">▪ Pedestrian safety compromised</li>
+                            <li>▪ Economic isolation of businesses</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IMPACT ANALYSIS -->
+    <section class="story-section">
+        <div class="brutal-section" style="width: 100%; max-width: 1200px; margin: 0 auto;">
+            <h2 class="brutal-subhead">COMMUNITY IMPACT ANALYSIS</h2>
+            
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <div class="data-stat" style="color: var(--brutal-white);">45min</div>
+                    <p>Additional commute time during peak hours</p>
+                </div>
+                <div class="impact-card">
+                    <div class="data-stat" style="color: var(--brutal-white);">£2.3M</div>
+                    <p>Projected annual economic loss</p>
+                </div>
+                <div class="impact-card">
+                    <div class="data-stat" style="color: var(--brutal-white);">78%</div>
+                    <p>Residents opposing closure</p>
+                </div>
+                <div class="impact-card">
+                    <div class="data-stat" style="color: var(--brutal-white);">3x</div>
+                    <p>Increase in traffic accidents predicted</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARKING CRISIS -->
+    <section class="brutal-section">
+        <h2 class="brutal-headline" style="font-size: clamp(2.5rem, 6vw, 4rem);">
+            PARKING ELIMINATION DATA
+        </h2>
+        
+        <div class="evidence-grid">
+            <div class="evidence-card">
+                <div class="evidence-number">1</div>
+                <h3 class="brutal-subhead" style="font-size: 1.5rem; margin-bottom: 1rem;">SPACES LOST</h3>
+                <div class="data-stat" style="font-size: 3rem;">150+</div>
+                <p style="margin-top: 1rem;">Critical parking spaces eliminated from town center</p>
+            </div>
+            <div class="evidence-card">
+                <div class="evidence-number">2</div>
+                <h3 class="brutal-subhead" style="font-size: 1.5rem; margin-bottom: 1rem;">BUSINESS IMPACT</h3>
+                <div class="data-stat" style="font-size: 3rem;">40%</div>
+                <p style="margin-top: 1rem;">Expected drop in retail footfall</p>
+            </div>
+            <div class="evidence-card">
+                <div class="evidence-number">3</div>
+                <h3 class="brutal-subhead" style="font-size: 1.5rem; margin-bottom: 1rem;">RESIDENT ACCESS</h3>
+                <div class="data-stat" style="font-size: 3rem;">0</div>
+                <p style="margin-top: 1rem;">Alternative parking solutions provided</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUMMER TOURISM -->
+    <section class="story-section">
+        <div class="story-content">
+            <div>
+                <h2 class="brutal-subhead">SUMMER CHAOS FORECAST</h2>
+                <div class="pull-quote">
+                    "30,000 daily visitors. One road. Zero planning."
+                </div>
+                <p style="font-size: 1.25rem; margin: 2rem 0; line-height: 1.6;">
+                    Our traffic modeling reveals catastrophic congestion during peak tourist season. Emergency services confirm response times will triple. The data doesn't lie—this plan endangers lives.
+                </p>
+            </div>
+            <div class="data-block">
+                <div class="data-label">PEAK DAY VEHICLE COUNT</div>
+                <div class="data-stat">8,000+</div>
+                <div class="data-label" style="margin-top: 2rem;">CURRENT ROAD CAPACITY</div>
+                <div class="data-stat">2,500</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EVIDENCE & DOCUMENTATION -->
+    <section class="brutal-section">
+        <h2 class="brutal-headline" style="font-size: clamp(2.5rem, 6vw, 4rem);">
+            EVIDENCE DOCUMENTED
+        </h2>
+        
+        <div class="evidence-grid">
+            <div class="evidence-card">
+                <h3 class="brutal-subhead" style="font-size: 1.5rem;">TRAFFIC STUDIES</h3>
+                <ul style="margin-top: 1rem; list-style: none; font-size: 1.125rem;">
+                    <li style="margin-bottom: 0.5rem;">▪ Independent analysis (2024)</li>
+                    <li style="margin-bottom: 0.5rem;">▪ Historical traffic patterns</li>
+                    <li style="margin-bottom: 0.5rem;">▪ Congestion modeling</li>
+                    <li>▪ Emergency service reports</li>
+                </ul>
+            </div>
+            <div class="evidence-card">
+                <h3 class="brutal-subhead" style="font-size: 1.5rem;">COMMUNITY FEEDBACK</h3>
+                <ul style="margin-top: 1rem; list-style: none; font-size: 1.125rem;">
+                    <li style="margin-bottom: 0.5rem;">▪ 1,200+ survey responses</li>
+                    <li style="margin-bottom: 0.5rem;">▪ 89 business impact statements</li>
+                    <li style="margin-bottom: 0.5rem;">▪ Medical professional warnings</li>
+                    <li>▪ Resident testimonials</li>
+                </ul>
+            </div>
+            <div class="evidence-card">
+                <h3 class="brutal-subhead" style="font-size: 1.5rem;">ECONOMIC ANALYSIS</h3>
+                <ul style="margin-top: 1rem; list-style: none; font-size: 1.125rem;">
+                    <li style="margin-bottom: 0.5rem;">▪ Tourism revenue projections</li>
+                    <li style="margin-bottom: 0.5rem;">▪ Business closure risks</li>
+                    <li style="margin-bottom: 0.5rem;">▪ Property value impacts</li>
+                    <li>▪ Employment statistics</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOLUTIONS -->
+    <section class="brutal-section" style="background: var(--brutal-concrete);">
+        <h2 class="brutal-headline" style="font-size: clamp(2.5rem, 6vw, 4rem);">
+            DATA-DRIVEN SOLUTIONS
+        </h2>
+        
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <h3 class="brutal-subhead" style="font-size: 1.5rem;">IMMEDIATE</h3>
+                <p style="margin-top: 1rem;">Halt Shore Road closure pending comprehensive traffic study</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <h3 class="brutal-subhead" style="font-size: 1.5rem;">SHORT TERM</h3>
+                <p style="margin-top: 1rem;">Implement traffic calming measures without road closure</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <h3 class="brutal-subhead" style="font-size: 1.5rem;">LONG TERM</h3>
+                <p style="margin-top: 1rem;">Develop integrated transport strategy with community input</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <h3 class="brutal-subhead" style="font-size: 1.5rem;">SUSTAINABLE</h3>
+                <p style="margin-top: 1rem;">Create bypass routes and enhanced public transport</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CALL TO ACTION -->
+    <section class="story-section">
+        <div class="brutal-section" style="width: 100%; max-width: 800px; margin: 0 auto;">
+            <h2 class="brutal-headline" style="font-size: clamp(3rem, 8vw, 5rem); text-align: center;">
+                JOIN THE<br>RESISTANCE
+            </h2>
+            
+            <div class="action-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">NAME</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">EMAIL</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="postcode">POSTCODE</label>
+                        <input type="text" id="postcode" name="postcode" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">YOUR STORY (OPTIONAL)</label>
+                        <textarea id="message" name="message" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        STAND WITH US
+                    </button>
+                </form>
+                <div class="form-confirmation" id="formConfirmation">
+                    CONFIRMED: YOU ARE NOW PART OF THE ALLIANCE
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="brutal-section" style="background: var(--brutal-black); color: var(--brutal-white);">
+        <h2 class="brutal-subhead">CONTACT COMMAND CENTER</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+            <div>
+                <h3 style="margin-bottom: 1rem;">EMAIL</h3>
+                <p style="font-size: 1.25rem;">info@swanagetraffic.org</p>
+            </div>
+            <div>
+                <h3 style="margin-bottom: 1rem;">EMERGENCY LINE</h3>
+                <p style="font-size: 1.25rem;">07XXX XXXXXX</p>
+            </div>
+            <div>
+                <h3 style="margin-bottom: 1rem;">MEETINGS</h3>
+                <p style="font-size: 1.25rem;">Thursdays 7PM<br>Community Center</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Animate bars if they exist
+                    const bars = entry.target.querySelectorAll('.bar');
+                    bars.forEach((bar, index) => {
+                        setTimeout(() => {
+                            bar.classList.add('visible');
+                        }, index * 200);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animatable elements
+        document.querySelectorAll('.story-section, .data-block, .bar').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Form handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                postcode: document.getElementById('postcode').value,
+                message: document.getElementById('message').value,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Show confirmation
+            document.getElementById('formConfirmation').style.display = 'block';
+            
+            // Reset form
+            this.reset();
+            
+            // Log for demo (in production, this would send to server)
+            console.log('Alliance Member Registered:', formData);
+            
+            // Hide confirmation after 5 seconds
+            setTimeout(() => {
+                document.getElementById('formConfirmation').style.display = 'none';
+            }, 5000);
+        });
+
+        // Hide scroll indicator on scroll
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            const indicator = document.querySelector('.scroll-indicator');
+            if (window.scrollY > 100) {
+                indicator.style.opacity = '0';
+            } else {
+                indicator.style.opacity = '0.8';
+            }
+        });
+
+        // Parallax effect for hero grid
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const grid = document.querySelector('.hero-grid');
+            if (grid) {
+                grid.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
