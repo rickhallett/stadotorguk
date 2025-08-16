@@ -1,58 +1,49 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import BrutalSection from '../components/BrutalSection.astro';
+import { getCollection } from 'astro:content';
 
-// News items - to be added manually in chronological order
-const newsItems = [
+// Get all news items from content collection
+const newsEntries = await getCollection('news');
+
+// Sort by date (newest first) and format for display
+const newsItems = newsEntries
+    .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+    .map((entry, index) => {
+        const date = new Date(entry.data.date);
+        const formattedDate = date.toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: '2-digit', 
+            year: 'numeric' 
+        }).toUpperCase();
+        
+        return {
+            id: index + 1,
+            date: formattedDate,
+            title: entry.data.title,
+            content: entry.body || '',
+            slug: entry.slug
+        };
+    });
+
+// Fallback data if no content exists
+const fallbackItems = [
     {
         id: 1,
         date: "JAN 15, 2024",
         title: "COUNCIL IGNORES 1,200 SIGNATURES",
-        content: "Despite overwhelming opposition from residents, the council voted 7-3 to proceed with the Shore Road closure. The petition, signed by over 1,200 residents, was dismissed without proper consideration. Councillor Smith stated 'the decision has been made' before public comments even began."
+        content: "Despite overwhelming opposition from residents, the council voted 7-3 to proceed with the Shore Road closure."
     },
     {
         id: 2,
         date: "JAN 22, 2024",
         title: "EMERGENCY SERVICES SOUND ALARM",
-        content: "Dorset Fire and Rescue issued an unprecedented warning about response times doubling in the event of Shore Road closure. Ambulance services confirmed that critical golden hour responses would be impossible during peak traffic. The council's response: 'We'll monitor the situation.'"
-    },
-    {
-        id: 3,
-        date: "FEB 01, 2024",
-        title: "LOCAL BUSINESSES UNITE IN OPPOSITION",
-        content: "89 local businesses signed a joint statement warning of economic catastrophe. The Swanage Business Association predicts £2.3 million in annual losses and potential closure of 15-20 shops within the first year. Three major employers are already considering relocation."
-    },
-    {
-        id: 4,
-        date: "FEB 08, 2024",
-        title: "TRAFFIC DATA EXPOSES THE TRUTH",
-        content: "Independent traffic analysis reveals council's projections were based on winter data, ignoring summer tourist peaks. Real numbers show 8,000+ vehicles daily in summer versus council's claimed 2,500. The margin of error? A catastrophic 220%."
-    },
-    {
-        id: 5,
-        date: "FEB 15, 2024",
-        title: "RESIDENTS LAUNCH LEGAL CHALLENGE",
-        content: "The Swanage Traffic Alliance has retained legal counsel to challenge the council's decision. Grounds include failure to conduct proper environmental impact assessment, discrimination against disabled residents, and violation of emergency service access requirements."
-    },
-    {
-        id: 6,
-        date: "FEB 20, 2024",
-        title: "MEDIA SPOTLIGHT INTENSIFIES",
-        content: "BBC South Today featured our campaign, interviewing affected residents and business owners. National newspapers are picking up the story. The council's response? They've stopped answering media queries. The silence speaks volumes."
-    },
-    {
-        id: 7,
-        date: "FEB 28, 2024",
-        title: "ALTERNATIVE PLAN SUBMITTED",
-        content: "Traffic engineers from the Alliance presented a comprehensive alternative plan that addresses safety concerns without road closure. The plan includes traffic calming measures, improved pedestrian crossings, and enhanced cycling infrastructure. Cost: 60% less than the closure plan."
-    },
-    {
-        id: 8,
-        date: "MAR 05, 2024",
-        title: "PROTEST MARCH DRAWS HUNDREDS",
-        content: "Over 500 residents marched from the pier to the town hall in peaceful protest. Ages ranged from schoolchildren to 90-year-old lifetime residents. The message was clear: 'Save Our Swanage.' The council held their meeting behind locked doors."
+        content: "Dorset Fire and Rescue issued an unprecedented warning about response times doubling."
     }
 ];
+
+// Use content collection items if available, otherwise use fallback
+const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
 ---
 
 <Layout title="News">
@@ -69,7 +60,7 @@ const newsItems = [
     <!-- TIMELINE -->
     <BrutalSection>
         <div class="timeline">
-            {newsItems.map((item, index) => (
+            {displayItems.map((item, index) => (
                 <div class={`timeline-item fade-in ${index % 2 === 0 ? 'timeline-left' : 'timeline-right'}`}>
                     <div class="timeline-marker"></div>
                     <div class="timeline-content">
@@ -122,7 +113,7 @@ const newsItems = [
             <a href="/" class="submit-btn" style="display: inline-block; text-decoration: none; margin: 0 1rem;">
                 JOIN THE ALLIANCE
             </a>
-            <a href="/feed" class="submit-btn" style="display: inline-block; text-decoration: none; margin: 0 1rem; background: var(--brutal-red);">
+            <a href="/feed" class="submit-btn" style="display: inline-block; text-decoration: none; margin: 0 1rem; background: var(--brutal-gray); /* Green for action */">
                 SHARE YOUR STORY
             </a>
         </div>
@@ -135,7 +126,7 @@ const newsItems = [
         color: var(--brutal-white);
         padding: 6rem 2rem;
         text-align: center;
-        border-bottom: 8px solid var(--brutal-red);
+        border-bottom: 8px solid var(--brutal-gray); /* Green accent */
     }
 
     .news-hero .brutal-headline {
@@ -195,7 +186,7 @@ const newsItems = [
         position: absolute;
         width: 40px;
         height: 40px;
-        background: var(--brutal-red);
+        background: #FFD700; /* Golden yellow */
         border: 8px solid var(--brutal-black);
         top: 0;
         z-index: 1;
@@ -226,7 +217,7 @@ const newsItems = [
         font-size: 0.875rem;
         font-weight: 900;
         letter-spacing: 0.2em;
-        color: var(--brutal-red);
+        color: #FFD700; /* Golden yellow */
         margin-bottom: 1rem;
     }
 
@@ -262,7 +253,7 @@ const newsItems = [
         font-weight: 900;
         letter-spacing: 0.2em;
         margin-top: 4rem;
-        color: var(--brutal-red);
+        color: var(--brutal-red); /* Keep red for warning */
     }
 
     @keyframes pulse {
@@ -296,7 +287,7 @@ const newsItems = [
         font-size: 1rem;
         font-weight: 900;
         letter-spacing: 0.2em;
-        color: var(--brutal-red);
+        color: #FFD700; /* Golden yellow */
         margin-bottom: 1rem;
     }
 

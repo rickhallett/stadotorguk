@@ -5,12 +5,12 @@
 }
 
 :root {
-    --brutal-black: #000000;
+    --brutal-black: #0066CC; /* Primary Blue */
     --brutal-white: #FFFFFF;
-    --brutal-red: #FF0000;
-    --brutal-gray: #808080;
-    --brutal-concrete: #E8E8E8;
-    --brutal-shadow: rgba(0,0,0,0.9);
+    --brutal-red: #FF0000; /* Keep for warnings */
+    --brutal-gray: #4CAF50; /* Green accent */
+    --brutal-concrete: #FFF8DC; /* Light golden yellow */
+    --brutal-shadow: rgba(0, 102, 204, 0.3); /* Blue-tinted shadow */
 }
 
 body {
@@ -40,7 +40,7 @@ body {
 .data-stat {
     font-size: clamp(3rem, 8vw, 6rem);
     font-weight: 900;
-    color: var(--brutal-red);
+    color: #FFD700; /* Golden yellow for positive stats */
 }
 
 /* BRUTAL CONTAINERS */
@@ -67,7 +67,7 @@ body {
 /* DATA JOURNALISM ELEMENTS */
 .data-block {
     background: var(--brutal-concrete);
-    border-left: 20px solid var(--brutal-red);
+    border-left: 20px solid var(--brutal-gray); /* Green accent border */
     padding: 2rem;
     margin: 2rem 0;
     position: relative;
@@ -85,7 +85,7 @@ body {
 .pull-quote {
     font-size: clamp(1.5rem, 3vw, 2.5rem);
     font-weight: 900;
-    border-left: 10px solid var(--brutal-red);
+    border-left: 10px solid var(--brutal-gray); /* Green accent */
     padding-left: 2rem;
     margin: 3rem 0;
     position: relative;
@@ -97,7 +97,7 @@ body {
     left: -20px;
     top: -20px;
     font-size: 8rem;
-    color: var(--brutal-red);
+    color: #FFD700; /* Golden yellow */
     opacity: 0.2;
 }
 
@@ -139,7 +139,7 @@ body {
     position: absolute;
     width: 40px;
     height: 40px;
-    background: var(--brutal-red);
+    background: #FFD700; /* Golden yellow */
     border: 8px solid var(--brutal-black);
     top: 50%;
     transform: translateY(-50%);
@@ -155,7 +155,7 @@ body {
 
 /* FORM STYLING */
 .action-form {
-    background: var(--brutal-red);
+    background: var(--brutal-gray); /* Green for positive actions */
     color: var(--brutal-white);
     padding: 3rem;
     margin: 3rem 0;
@@ -258,7 +258,7 @@ body {
 
 .feed-item:hover {
     transform: translateX(10px);
-    box-shadow: -10px 10px 0 var(--brutal-red);
+    box-shadow: -10px 10px 0 var(--brutal-gray); /* Green shadow */
 }
 
 .feed-meta {

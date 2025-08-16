@@ -1,0 +1,46 @@
+backend:
+  name: git-gateway
+  branch: main # Your branch name
+
+# Media files will be stored in the repo under public/uploads
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  # News Updates Collection
+  - name: "news"
+    label: "News Updates"
+    folder: "src/content/news"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD"}
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Content", name: "body", widget: "markdown"}
+      
+  # Community Feed Collection
+  - name: "feed"
+    label: "Community Feed"
+    folder: "src/content/feed"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}-{{slug}}"
+    fields:
+      - {label: "Username", name: "username", widget: "string"}
+      - {label: "Location", name: "location", widget: "string"}
+      - {label: "Timestamp", name: "timestamp", widget: "datetime"}
+      - {label: "Comment", name: "comment", widget: "text"}
+      - {label: "Published", name: "published", widget: "boolean", default: true}
+
+  # Site Settings (optional)
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - name: "general"
+        label: "General Settings"
+        file: "src/content/settings/general.json"
+        fields:
+          - {label: "Site Title", name: "title", widget: "string"}
+          - {label: "Site Description", name: "description", widget: "text"}
+          - {label: "Emergency Contact", name: "emergency_contact", widget: "string"}
+          - {label: "Meeting Time", name: "meeting_time", widget: "string"}
+          - {label: "Meeting Location", name: "meeting_location", widget: "string"}

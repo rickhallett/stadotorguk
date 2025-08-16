@@ -18,6 +18,8 @@ const { title, description = 'Swanage Traffic Alliance - Data-driven community r
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content={description}>
     <title>{title} | SWANAGE TRAFFIC ALLIANCE</title>
+    <!-- Netlify Identity Widget for Decap CMS -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
     <Header />
@@ -47,6 +49,17 @@ const { title, description = 'Swanage Traffic Alliance - Data-driven community r
                 observer.observe(el);
             });
         });
+
+        // Netlify Identity redirect handling
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => {
+                        document.location.href = "/admin/";
+                    });
+                }
+            });
+        }
     </script>
 </body>
 </html>
