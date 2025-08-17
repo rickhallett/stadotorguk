@@ -14,11 +14,13 @@ pnpm-debug.log*
 
 
 # environment variables
-.env
-.env.production
+.env*
 
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+
+# Generated CMS file (copied from node_modules)
+public/admin/decap-cms.js

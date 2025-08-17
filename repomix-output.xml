@@ -1,0 +1,4598 @@
+This file is a merged representation of a subset of the codebase, containing files not matching ignore patterns, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of a subset of the repository's contents that is considered the most important context.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching these patterns are excluded: public/admin/decap-cms-standalone.js
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.claude/
+  settings.local.json
+.vercel/
+  project.json
+  README.txt
+api/
+  auth.js
+public/
+  admin/
+    config.yml
+    index.html
+  cms/
+    previews/
+      FeedPreview.js
+      NewsPreview.js
+    auth.js
+  favicon.svg
+src/
+  cms/
+    previews/
+      FeedPreview.js
+      NewsPreview.js
+    auth.js
+  components/
+    BrutalSection.astro
+    DataBlock.astro
+    Footer.astro
+    Header.astro
+    ImpactCard.astro
+  content/
+    feed/
+      2024-03-01-1300-john-emergency.md
+      2024-03-01-1400-sarah-traffic.md
+    news/
+      2024-01-15-council-ignores-signatures.md
+      2024-01-22-emergency-services-alarm.md
+    config.ts
+  layouts/
+    Layout.astro
+  pages/
+    feed.astro
+    index.astro
+    news.astro
+  styles/
+    global.css
+sta-blocki/
+  index.html
+.gitignore
+astro.config.mjs
+CLAUDE.md
+package.json
+README.md
+tsconfig.json
+vercel.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path=".claude/settings.local.json">
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:decapcms.org)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(cp:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
+</file>
+
+<file path="api/auth.js">
+// netlify/functions/auth.js (or api/auth.js for Vercel)
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  const { password } = req.body;
+  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+  if (password === ADMIN_PASSWORD) {
+    // Simple JWT-like token (or just a success flag)
+    const token = Buffer.from(`admin:${Date.now()}`).toString("base64");
+    return res.status(200).json({
+      token,
+      user: { name: "admin", email: "admin@swanagetraffic.org.uk" },
+    });
+  }
+
+  return res.status(401).json({ error: "Invalid password" });
+}
+</file>
+
+<file path="public/cms/previews/FeedPreview.js">
+// src/cms/previews/FeedPreview.js
+import { h } from "https://esm.sh/preact@10.23.2";
+import { format } from "https://esm.sh/date-fns@3.6.0";
+
+const FeedPreview = ({ entry }) => {
+  const username = entry.getIn(["data", "username"]);
+  const location = entry.getIn(["data", "location"]);
+  const timestamp = entry.getIn(["data", "timestamp"]);
+  const comment = entry.getIn(["data", "comment"]);
+  const published = entry.getIn(["data", "published"]);
+
+  return h(
+    "div",
+    {
+      style: {
+        fontFamily: "'Arial Black', 'Helvetica Neue', sans-serif",
+        background: "#FFFFFF",
+        color: "#0066CC",
+        padding: "2rem",
+        maxWidth: "600px",
+        margin: "0 auto",
+      },
+    },
+    [
+      // Feed item container with brutalist styling
+      h(
+        "div",
+        {
+          style: {
+            border: "6px solid #0066CC",
+            padding: "1.5rem",
+            background: published ? "#FFFFFF" : "#f0f0f0",
+            boxShadow: "10px 10px 0 rgba(0, 102, 204, 0.3)",
+            position: "relative",
+            opacity: published ? "1" : "0.7",
+          },
+        },
+        [
+          // Status indicator
+          h(
+            "div",
+            {
+              style: {
+                position: "absolute",
+                top: "-3px",
+                right: "-3px",
+                background: published ? "#4CAF50" : "#FF0000",
+                color: "#FFFFFF",
+                padding: "0.25rem 0.5rem",
+                fontSize: "0.75rem",
+                fontWeight: "700",
+                textTransform: "uppercase",
+              },
+            },
+            published ? "LIVE" : "DRAFT"
+          ),
+
+          // Header with user info
+          h(
+            "div",
+            {
+              style: {
+                background: "#FFF8DC",
+                borderLeft: "15px solid #4CAF50",
+                padding: "1rem",
+                marginBottom: "1rem",
+              },
+            },
+            [
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: "0.75rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.2em",
+                    marginBottom: "0.5rem",
+                    opacity: "0.7",
+                  },
+                },
+                "COMMUNITY VOICE"
+              ),
+
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: "1.25rem",
+                    fontWeight: "700",
+                    textTransform: "uppercase",
+                    marginBottom: "0.5rem",
+                  },
+                },
+                username || "Anonymous"
+              ),
+
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: "0.875rem",
+                    opacity: "0.8",
+                  },
+                },
+                [h("strong", {}, "Location: "), location || "Not specified"]
+              ),
+
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: "0.875rem",
+                    opacity: "0.8",
+                    marginTop: "0.25rem",
+                  },
+                },
+                [
+                  h("strong", {}, "Time: "),
+                  timestamp
+                    ? format(new Date(timestamp), "MMM dd, yyyy - HH:mm")
+                    : "Not set",
+                ]
+              ),
+            ]
+          ),
+
+          // Comment content
+          h(
+            "div",
+            {
+              style: {
+                border: "3px solid #0066CC",
+                padding: "1.5rem",
+                background: "#FFFFFF",
+                minHeight: "80px",
+              },
+            },
+            [
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: "0.875rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.2em",
+                    marginBottom: "1rem",
+                    opacity: "0.7",
+                    borderBottom: "2px solid #4CAF50",
+                    paddingBottom: "0.5rem",
+                  },
+                },
+                "MESSAGE"
+              ),
+
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: "1.125rem",
+                    lineHeight: "1.6",
+                    whiteSpace: "pre-wrap",
+                  },
+                },
+                comment || "Start typing your message..."
+              ),
+            ]
+          ),
+        ]
+      ),
+    ]
+  );
+};
+
+export default FeedPreview;
+</file>
+
+<file path="public/cms/previews/NewsPreview.js">
+// src/cms/previews/NewsPreview.js
+import { h } from "https://esm.sh/preact@10.23.2";
+import { format } from "https://esm.sh/date-fns@3.6.0";
+
+const NewsPreview = ({ entry, widgetFor }) => {
+  const title = entry.getIn(["data", "title"]);
+  const date = entry.getIn(["data", "date"]);
+  const body = widgetFor("body");
+
+  return h(
+    "div",
+    {
+      style: {
+        fontFamily: "'Arial Black', 'Helvetica Neue', sans-serif",
+        background: "#FFFFFF",
+        color: "#0066CC",
+        padding: "2rem",
+        maxWidth: "800px",
+        margin: "0 auto",
+      },
+    },
+    [
+      // Header with brutalist styling
+      h(
+        "div",
+        {
+          style: {
+            border: "8px solid #0066CC",
+            padding: "2rem",
+            background: "#FFFFFF",
+            boxShadow: "15px 15px 0 rgba(0, 102, 204, 0.3)",
+            marginBottom: "2rem",
+            position: "relative",
+          },
+        },
+        [
+          h(
+            "div",
+            {
+              style: {
+                fontSize: "0.875rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.2em",
+                marginBottom: "1rem",
+                opacity: "0.7",
+              },
+            },
+            "NEWS UPDATE"
+          ),
+
+          h(
+            "h1",
+            {
+              style: {
+                fontSize: "clamp(1.5rem, 4vw, 3rem)",
+                fontWeight: "700",
+                letterSpacing: "-0.02em",
+                textTransform: "uppercase",
+                lineHeight: "1.1",
+                marginBottom: "1rem",
+              },
+            },
+            title
+          ),
+
+          h(
+            "div",
+            {
+              style: {
+                background: "#FFF8DC",
+                borderLeft: "20px solid #4CAF50",
+                padding: "1rem",
+                margin: "1rem 0",
+              },
+            },
+            [
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: "0.875rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.2em",
+                    marginBottom: "0.5rem",
+                    opacity: "0.7",
+                  },
+                },
+                "PUBLISHED"
+              ),
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: "1.125rem",
+                    fontWeight: "600",
+                  },
+                },
+                date ? format(new Date(date), "MMMM dd, yyyy") : "No date set"
+              ),
+            ]
+          ),
+        ]
+      ),
+
+      // Content area
+      h(
+        "div",
+        {
+          style: {
+            border: "4px solid #0066CC",
+            padding: "2rem",
+            background: "#FFFFFF",
+            lineHeight: "1.6",
+            fontSize: "1.125rem",
+          },
+        },
+        [
+          h(
+            "div",
+            {
+              style: {
+                fontSize: "0.875rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.2em",
+                marginBottom: "1.5rem",
+                opacity: "0.7",
+                borderBottom: "2px solid #4CAF50",
+                paddingBottom: "0.5rem",
+              },
+            },
+            "CONTENT"
+          ),
+
+          body ||
+            h(
+              "p",
+              {
+                style: {
+                  fontStyle: "italic",
+                  color: "#666",
+                  textAlign: "center",
+                  padding: "2rem",
+                },
+              },
+              "Start typing to see your content here..."
+            ),
+        ]
+      ),
+    ]
+  );
+};
+
+export default NewsPreview;
+</file>
+
+<file path="public/cms/auth.js">
+// src/cms/auth.js
+class SimplePasswordAuth {
+  constructor(config) {
+    this.config = config;
+  }
+
+  authenticate() {
+    return new Promise((resolve, reject) => {
+      // Store resolve/reject for use in form handler
+      this.authResolve = resolve;
+      this.authReject = reject;
+
+      // Show login form if not already shown
+      const overlay = document.getElementById("sta-login-overlay");
+      if (overlay) {
+        overlay.style.display = "flex";
+      }
+    });
+  }
+
+  async submitLogin(password) {
+    try {
+      const response = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+
+      const data = await response.json();
+
+      if (data.token) {
+        localStorage.setItem("sta-auth-token", data.token);
+
+        // Hide login form and show success
+        const overlay = document.getElementById("sta-login-overlay");
+        const container = overlay?.querySelector(".login-container");
+        if (container) {
+          container.classList.add("login-success");
+          setTimeout(() => {
+            overlay.style.display = "none";
+            document.getElementById("cms-container").style.display = "block";
+          }, 500);
+        }
+
+        if (this.authResolve) {
+          this.authResolve(data.user);
+        }
+      } else {
+        throw new Error("Invalid password");
+      }
+    } catch (error) {
+      this.showError(error.message);
+      if (this.authReject) {
+        this.authReject(error);
+      }
+    }
+  }
+
+  showError(message) {
+    const errorEl = document.getElementById("login-error");
+    if (errorEl) {
+      errorEl.textContent = message.toUpperCase();
+      errorEl.classList.add("show");
+      setTimeout(() => {
+        errorEl.classList.remove("show");
+      }, 3000);
+    }
+  }
+
+  logout() {
+    localStorage.removeItem("sta-auth-token");
+    return Promise.resolve();
+  }
+
+  getUser() {
+    const token = localStorage.getItem("sta-auth-token");
+    if (token) {
+      return Promise.resolve({
+        name: "admin",
+        email: "admin@swanagetraffic.org.uk",
+      });
+    }
+    return Promise.resolve(null);
+  }
+}
+
+export default SimplePasswordAuth;
+</file>
+
+<file path="src/cms/previews/FeedPreview.js">
+// src/cms/previews/FeedPreview.js
+import { h } from "preact";
+import { format } from "date-fns";
+
+const FeedPreview = ({ entry }) => {
+  const username = entry.getIn(["data", "username"]);
+  const location = entry.getIn(["data", "location"]);
+  const timestamp = entry.getIn(["data", "timestamp"]);
+  const comment = entry.getIn(["data", "comment"]);
+  const published = entry.getIn(["data", "published"]);
+
+  return h(
+    "div",
+    {
+      style: {
+        fontFamily: "'Arial Black', 'Helvetica Neue', sans-serif",
+        background: "#FFFFFF",
+        color: "#0066CC",
+        padding: "2rem",
+        maxWidth: "600px",
+        margin: "0 auto",
+      },
+    },
+    [
+      // Feed item container with brutalist styling
+      h(
+        "div",
+        {
+          style: {
+            border: "6px solid #0066CC",
+            padding: "1.5rem",
+            background: published ? "#FFFFFF" : "#f0f0f0",
+            boxShadow: "10px 10px 0 rgba(0, 102, 204, 0.3)",
+            position: "relative",
+            opacity: published ? "1" : "0.7",
+          },
+        },
+        [
+          // Status indicator
+          h(
+            "div",
+            {
+              style: {
+                position: "absolute",
+                top: "-3px",
+                right: "-3px",
+                background: published ? "#4CAF50" : "#FF0000",
+                color: "#FFFFFF",
+                padding: "0.25rem 0.5rem",
+                fontSize: "0.75rem",
+                fontWeight: "700",
+                textTransform: "uppercase",
+              },
+            },
+            published ? "LIVE" : "DRAFT"
+          ),
+
+          // Header with user info
+          h(
+            "div",
+            {
+              style: {
+                background: "#FFF8DC",
+                borderLeft: "15px solid #4CAF50",
+                padding: "1rem",
+                marginBottom: "1rem",
+              },
+            },
+            [
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: "0.75rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.2em",
+                    marginBottom: "0.5rem",
+                    opacity: "0.7",
+                  },
+                },
+                "COMMUNITY VOICE"
+              ),
+
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: "1.25rem",
+                    fontWeight: "700",
+                    textTransform: "uppercase",
+                    marginBottom: "0.5rem",
+                  },
+                },
+                username || "Anonymous"
+              ),
+
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: "0.875rem",
+                    opacity: "0.8",
+                  },
+                },
+                [h("strong", {}, "Location: "), location || "Not specified"]
+              ),
+
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: "0.875rem",
+                    opacity: "0.8",
+                    marginTop: "0.25rem",
+                  },
+                },
+                [
+                  h("strong", {}, "Time: "),
+                  timestamp
+                    ? format(new Date(timestamp), "MMM dd, yyyy - HH:mm")
+                    : "Not set",
+                ]
+              ),
+            ]
+          ),
+
+          // Comment content
+          h(
+            "div",
+            {
+              style: {
+                border: "3px solid #0066CC",
+                padding: "1.5rem",
+                background: "#FFFFFF",
+                minHeight: "80px",
+              },
+            },
+            [
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: "0.875rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.2em",
+                    marginBottom: "1rem",
+                    opacity: "0.7",
+                    borderBottom: "2px solid #4CAF50",
+                    paddingBottom: "0.5rem",
+                  },
+                },
+                "MESSAGE"
+              ),
+
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: "1.125rem",
+                    lineHeight: "1.6",
+                    whiteSpace: "pre-wrap",
+                  },
+                },
+                comment || "Start typing your message..."
+              ),
+            ]
+          ),
+        ]
+      ),
+    ]
+  );
+};
+
+export default FeedPreview;
+</file>
+
+<file path="src/cms/previews/NewsPreview.js">
+// src/cms/previews/NewsPreview.js
+import { h } from "preact";
+import { format } from "date-fns";
+
+const NewsPreview = ({ entry, widgetFor }) => {
+  const title = entry.getIn(["data", "title"]);
+  const date = entry.getIn(["data", "date"]);
+  const body = widgetFor("body");
+
+  return h(
+    "div",
+    {
+      style: {
+        fontFamily: "'Arial Black', 'Helvetica Neue', sans-serif",
+        background: "#FFFFFF",
+        color: "#0066CC",
+        padding: "2rem",
+        maxWidth: "800px",
+        margin: "0 auto",
+      },
+    },
+    [
+      // Header with brutalist styling
+      h(
+        "div",
+        {
+          style: {
+            border: "8px solid #0066CC",
+            padding: "2rem",
+            background: "#FFFFFF",
+            boxShadow: "15px 15px 0 rgba(0, 102, 204, 0.3)",
+            marginBottom: "2rem",
+            position: "relative",
+          },
+        },
+        [
+          h(
+            "div",
+            {
+              style: {
+                fontSize: "0.875rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.2em",
+                marginBottom: "1rem",
+                opacity: "0.7",
+              },
+            },
+            "NEWS UPDATE"
+          ),
+
+          h(
+            "h1",
+            {
+              style: {
+                fontSize: "clamp(1.5rem, 4vw, 3rem)",
+                fontWeight: "700",
+                letterSpacing: "-0.02em",
+                textTransform: "uppercase",
+                lineHeight: "1.1",
+                marginBottom: "1rem",
+              },
+            },
+            title
+          ),
+
+          h(
+            "div",
+            {
+              style: {
+                background: "#FFF8DC",
+                borderLeft: "20px solid #4CAF50",
+                padding: "1rem",
+                margin: "1rem 0",
+              },
+            },
+            [
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: "0.875rem",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.2em",
+                    marginBottom: "0.5rem",
+                    opacity: "0.7",
+                  },
+                },
+                "PUBLISHED"
+              ),
+              h(
+                "div",
+                {
+                  style: {
+                    fontSize: "1.125rem",
+                    fontWeight: "600",
+                  },
+                },
+                date ? format(new Date(date), "MMMM dd, yyyy") : "No date set"
+              ),
+            ]
+          ),
+        ]
+      ),
+
+      // Content area
+      h(
+        "div",
+        {
+          style: {
+            border: "4px solid #0066CC",
+            padding: "2rem",
+            background: "#FFFFFF",
+            lineHeight: "1.6",
+            fontSize: "1.125rem",
+          },
+        },
+        [
+          h(
+            "div",
+            {
+              style: {
+                fontSize: "0.875rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.2em",
+                marginBottom: "1.5rem",
+                opacity: "0.7",
+                borderBottom: "2px solid #4CAF50",
+                paddingBottom: "0.5rem",
+              },
+            },
+            "CONTENT"
+          ),
+
+          body ||
+            h(
+              "p",
+              {
+                style: {
+                  fontStyle: "italic",
+                  color: "#666",
+                  textAlign: "center",
+                  padding: "2rem",
+                },
+              },
+              "Start typing to see your content here..."
+            ),
+        ]
+      ),
+    ]
+  );
+};
+
+export default NewsPreview;
+</file>
+
+<file path="src/cms/auth.js">
+// src/cms/auth.js
+class SimplePasswordAuth {
+  constructor(config) {
+    this.config = config;
+  }
+
+  authenticate() {
+    return new Promise((resolve, reject) => {
+      // Store resolve/reject for use in form handler
+      this.authResolve = resolve;
+      this.authReject = reject;
+
+      // Show login form if not already shown
+      const overlay = document.getElementById("sta-login-overlay");
+      if (overlay) {
+        overlay.style.display = "flex";
+      }
+    });
+  }
+
+  async submitLogin(password) {
+    try {
+      const response = await fetch("/api/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+
+      const data = await response.json();
+
+      if (data.token) {
+        localStorage.setItem("sta-auth-token", data.token);
+
+        // Hide login form and show success
+        const overlay = document.getElementById("sta-login-overlay");
+        const container = overlay?.querySelector(".login-container");
+        if (container) {
+          container.classList.add("login-success");
+          setTimeout(() => {
+            overlay.style.display = "none";
+            document.getElementById("cms-container").style.display = "block";
+          }, 500);
+        }
+
+        if (this.authResolve) {
+          this.authResolve(data.user);
+        }
+      } else {
+        throw new Error("Invalid password");
+      }
+    } catch (error) {
+      this.showError(error.message);
+      if (this.authReject) {
+        this.authReject(error);
+      }
+    }
+  }
+
+  showError(message) {
+    const errorEl = document.getElementById("login-error");
+    if (errorEl) {
+      errorEl.textContent = message.toUpperCase();
+      errorEl.classList.add("show");
+      setTimeout(() => {
+        errorEl.classList.remove("show");
+      }, 3000);
+    }
+  }
+
+  logout() {
+    localStorage.removeItem("sta-auth-token");
+    return Promise.resolve();
+  }
+
+  getUser() {
+    const token = localStorage.getItem("sta-auth-token");
+    if (token) {
+      return Promise.resolve({
+        name: "admin",
+        email: "admin@swanagetraffic.org.uk",
+      });
+    }
+    return Promise.resolve(null);
+  }
+}
+
+export default SimplePasswordAuth;
+</file>
+
+<file path="vercel.json">
+{
+  "rewrites": [
+    {
+      "source": "/admin",
+      "destination": "/admin/"
+    }
+  ],
+  "functions": {
+    "api/auth.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "headers": [
+    {
+      "source": "/admin/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
+    }
+  ]
+}
+</file>
+
+<file path=".vercel/project.json">
+{"projectId":"prj_Lox8UO3hVuFNqYk4vh9fnVmD4bdo","orgId":"team_OnRhYT9YIEipDIeZwJEjbXD2"}
+</file>
+
+<file path=".vercel/README.txt">
+> Why do I have a folder named ".vercel" in my project?
+The ".vercel" folder is created when you link a directory to a Vercel project.
+
+> What does the "project.json" file contain?
+The "project.json" file contains:
+- The ID of the Vercel project that you linked ("projectId")
+- The ID of the user or team your Vercel project is owned by ("orgId")
+
+> Should I commit the ".vercel" folder?
+No, you should not share the ".vercel" folder with anyone.
+Upon creation, it will be automatically added to your ".gitignore" file.
+</file>
+
+<file path="public/admin/config.yml">
+backend:
+  name: custom
+  auth_url: "/api/auth"
+  # branch: main # Your branch name
+
+# Media files will be stored in the repo under public/uploads
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  # News Updates Collection
+  - name: "news"
+    label: "News Updates"
+    folder: "src/content/news"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD"}
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Content", name: "body", widget: "markdown"}
+      
+  # Community Feed Collection
+  - name: "feed"
+    label: "Community Feed"
+    folder: "src/content/feed"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}-{{slug}}"
+    fields:
+      - {label: "Username", name: "username", widget: "string"}
+      - {label: "Location", name: "location", widget: "string"}
+      - {label: "Timestamp", name: "timestamp", widget: "datetime"}
+      - {label: "Comment", name: "comment", widget: "text"}
+      - {label: "Published", name: "published", widget: "boolean", default: true}
+
+  # Site Settings (optional)
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - name: "general"
+        label: "General Settings"
+        file: "src/content/settings/general.json"
+        fields:
+          - {label: "Site Title", name: "title", widget: "string"}
+          - {label: "Site Description", name: "description", widget: "text"}
+          - {label: "Emergency Contact", name: "emergency_contact", widget: "string"}
+          - {label: "Meeting Time", name: "meeting_time", widget: "string"}
+          - {label: "Meeting Location", name: "meeting_location", widget: "string"}
+</file>
+
+<file path="public/admin/index.html">
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Content Manager</title>
+
+    <style>
+      /* Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial Black", "Helvetica Neue", sans-serif;
+        background: #ffffff;
+        color: #0066cc;
+        overflow-x: hidden;
+      }
+
+      /* Login Overlay */
+      .login-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #0066cc 0%, #4caf50 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+      }
+
+      .login-container {
+        background: #ffffff;
+        border: 12px solid #0066cc;
+        box-shadow: 25px 25px 0 rgba(0, 102, 204, 0.4);
+        padding: 3rem;
+        max-width: 500px;
+        width: 90%;
+        position: relative;
+      }
+
+      .login-container::before {
+        content: "";
+        position: absolute;
+        top: -6px;
+        left: -6px;
+        right: -6px;
+        height: 12px;
+        background: #4caf50;
+      }
+
+      /* Header Styling */
+      .login-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        border-bottom: 4px solid #4caf50;
+        padding-bottom: 2rem;
+      }
+
+      .brutal-title {
+        font-size: clamp(2rem, 6vw, 3.5rem);
+        font-weight: 900;
+        letter-spacing: -0.05em;
+        line-height: 0.9;
+        text-transform: uppercase;
+        color: #0066cc;
+        margin-bottom: 1rem;
+      }
+
+      .access-label {
+        background: #fff8dc;
+        border: 3px solid #0066cc;
+        padding: 0.75rem 1.5rem;
+        font-size: 0.875rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        display: inline-block;
+        position: relative;
+      }
+
+      .access-label::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        width: 100%;
+        height: 100%;
+        background: #4caf50;
+        z-index: -1;
+      }
+
+      /* Form Styling */
+      .login-form {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .field-label {
+        font-size: 0.875rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: #0066cc;
+      }
+
+      .brutal-input {
+        border: 4px solid #0066cc;
+        background: #ffffff;
+        padding: 1.25rem 1rem;
+        font-family: "Arial Black", "Helvetica Neue", sans-serif;
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #0066cc;
+        outline: none;
+        transition: all 0.2s ease;
+        box-shadow: 5px 5px 0 rgba(0, 102, 204, 0.2);
+      }
+
+      .brutal-input:focus {
+        border-color: #4caf50;
+        box-shadow: 8px 8px 0 rgba(76, 175, 80, 0.3);
+        transform: translate(-2px, -2px);
+      }
+
+      .brutal-input::placeholder {
+        color: #999;
+        font-weight: 400;
+      }
+
+      /* Button Styling */
+      .brutal-button {
+        background: #4caf50;
+        border: 4px solid #0066cc;
+        color: #ffffff;
+        padding: 1.25rem 2rem;
+        font-family: "Arial Black", "Helvetica Neue", sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.2s ease;
+        box-shadow: 8px 8px 0 #0066cc;
+      }
+
+      .brutal-button:hover {
+        background: #45a049;
+        transform: translate(-2px, -2px);
+        box-shadow: 12px 12px 0 #0066cc;
+      }
+
+      .brutal-button:active {
+        transform: translate(2px, 2px);
+        box-shadow: 4px 4px 0 #0066cc;
+      }
+
+      .brutal-button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      /* Error Message */
+      .error-message {
+        background: #ff0000;
+        color: #ffffff;
+        border: 3px solid #0066cc;
+        padding: 1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.875rem;
+        letter-spacing: 0.1em;
+        text-align: center;
+        display: none;
+        position: relative;
+      }
+
+      .error-message.show {
+        display: block;
+        animation: shake 0.5s ease-in-out;
+      }
+
+      .error-message::before {
+        content: "⚠ ";
+        font-size: 1.2em;
+      }
+
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-5px);
+        }
+        75% {
+          transform: translateX(5px);
+        }
+      }
+
+      /* Success State */
+      .login-success {
+        animation: slideUp 0.5s ease-out forwards;
+      }
+
+      @keyframes slideUp {
+        to {
+          transform: translateY(-100%);
+          opacity: 0;
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 600px) {
+        .login-container {
+          margin: 1rem;
+          padding: 2rem;
+        }
+
+        .brutal-title {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Custom Login Interface -->
+    <div id="sta-login-overlay" class="login-overlay">
+      <div class="login-container">
+        <div class="login-header">
+          <h1 class="brutal-title">SWANAGE<br />TRAFFIC<br />ALLIANCE</h1>
+          <div class="access-label">ADMIN ACCESS</div>
+        </div>
+        <form id="sta-login-form" class="login-form" onsubmit="return false;">
+          <div class="input-group">
+            <label for="password" class="field-label">AUTHORIZATION CODE</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="brutal-input"
+              placeholder="Enter admin password"
+              required
+              autocomplete="current-password"
+            />
+          </div>
+          <button type="button" id="auth-button" class="brutal-button">
+            <span>AUTHENTICATE</span>
+          </button>
+          <div id="login-error" class="error-message"></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- CMS Container (Decap expects #nc-root) -->
+    <div id="nc-root" style="display: none"></div>
+
+    <!-- Ensure manual init to avoid auto-initialization conflicts -->
+    <script>
+      window.CMS_MANUAL_INIT = true;
+    </script>
+    <!-- Include the script that builds the page and powers Decap CMS (served locally) -->
+    <script src="./decap-cms-standalone.js"></script>
+    <script>
+      console.log("🚀 Admin script starting...");
+      console.log("📦 CMS available:", typeof CMS !== "undefined");
+
+      // Complete backend implementation for Decap CMS
+      class SimplePasswordAuth {
+        constructor(config) {
+          this.config = config;
+          this.branch = config?.backend?.branch || "main";
+          this.repo = config?.backend?.repo || "";
+        }
+
+        // Required: Initialize the backend (static, returns an instance)
+        static init(config, options = {}) {
+          console.log("🔧 Backend init called with:", { config, options });
+          const instance = new SimplePasswordAuth(config);
+          instance.options = options;
+          return instance;
+        }
+        // Required by Decap: return a React component TYPE (not an element)
+        // We return a no-op component to prevent Decap from rendering its own UI
+        authComponent() {
+          const Auth = () => null;
+          Auth.displayName = "SimplePasswordAuthAuthentication";
+          return Auth;
+        }
+
+        // Required: Check backend status
+        status() {
+          console.log("📊 Backend status check");
+          return Promise.resolve({
+            auth: { status: true },
+            api: { status: true, statusPage: "" },
+          });
+        }
+
+        // Required: Restore user session
+        restoreUser() {
+          console.log("🔍 Checking for existing user session");
+          const token = localStorage.getItem("sta-auth-token");
+          if (token) {
+            return this.getUser();
+          }
+          return Promise.resolve(null);
+        }
+
+        // Required: Authenticate user
+        authenticate(credentials) {
+          console.log("🔐 Authenticate called with:", credentials);
+
+          // If we already have a token, return the user immediately
+          const existingToken = localStorage.getItem("sta-auth-token");
+          if (existingToken) {
+            return this.getUser();
+          }
+
+          return new Promise((resolve, reject) => {
+            // Store resolve/reject for use in form handler
+            this.authResolve = resolve;
+            this.authReject = reject;
+
+            // Show login form
+            const overlay = document.getElementById("sta-login-overlay");
+            if (overlay) {
+              overlay.style.display = "flex";
+            }
+
+            // For automatic/programmatic auth attempts, reject immediately
+            // This tells Decap CMS that manual intervention is needed
+            if (!credentials || credentials.token === "NETLIFY-") {
+              console.log("📝 Manual authentication required");
+              // Don't reject - just wait for user interaction
+            }
+          });
+        }
+
+        // Required: Get authentication token
+        getToken() {
+          const token = localStorage.getItem("sta-auth-token");
+          console.log("🎫 getToken called, token exists:", !!token);
+          return token || "";
+        }
+
+        // Required: Logout user
+        logout() {
+          console.log("👋 Logout called");
+          localStorage.removeItem("sta-auth-token");
+          return Promise.resolve();
+        }
+
+        // Required: Get current user
+        getUser() {
+          console.log("👤 getUser called");
+          const token = localStorage.getItem("sta-auth-token");
+          if (token) {
+            return Promise.resolve({
+              name: "admin",
+              email: "admin@swanagetraffic.org.uk",
+              login: "admin",
+              token: token,
+            });
+          }
+          return Promise.resolve(null);
+        }
+
+        // Required: Get entry by path
+        getEntry(collection, slug, path) {
+          console.log("📄 getEntry called:", { collection, slug, path });
+          // For local testing, return empty/mock data
+          return Promise.resolve({
+            file: { path },
+            data: "",
+          });
+        }
+
+        // Required: Get entries by folder
+        entriesByFolder(folder, extension, depth) {
+          console.log("📁 entriesByFolder called:", {
+            folder,
+            extension,
+            depth,
+          });
+          // Return empty array for now
+          return Promise.resolve([]);
+        }
+
+        // Required: Get entries by files
+        entriesByFiles(files) {
+          console.log("📚 entriesByFiles called:", files);
+          return Promise.resolve([]);
+        }
+
+        // Required: Persist entry
+        persistEntry(entry, options = {}) {
+          console.log("💾 persistEntry called:", { entry, options });
+          // For local testing, just log and resolve
+          console.warn(
+            "⚠️ Content persistence not implemented for local testing"
+          );
+          return Promise.resolve();
+        }
+
+        // Required: Delete files
+        deleteFiles(paths, commitMessage) {
+          console.log("🗑️ deleteFiles called:", { paths, commitMessage });
+          console.warn("⚠️ File deletion not implemented for local testing");
+          return Promise.resolve();
+        }
+
+        // Required: Get media files
+        getMedia(folder) {
+          console.log("🖼️ getMedia called:", folder);
+          return Promise.resolve([]);
+        }
+
+        // Required: Get specific media file
+        getMediaFile(path) {
+          console.log("🖼️ getMediaFile called:", path);
+          return Promise.resolve({
+            id: path,
+            path: path,
+            url: path,
+            name: path.split("/").pop(),
+          });
+        }
+
+        // Required: Persist media
+        persistMedia(file, options = {}) {
+          console.log("💾 persistMedia called:", { file, options });
+          console.warn(
+            "⚠️ Media persistence not implemented for local testing"
+          );
+          return Promise.resolve({
+            id: file.name,
+            path: file.name,
+            url: file.name,
+            name: file.name,
+          });
+        }
+
+        // Required: Get display URL for media
+        getMediaDisplayURL(displayURL) {
+          console.log("🔗 getMediaDisplayURL called:", displayURL);
+          return Promise.resolve(displayURL?.url || displayURL);
+        }
+
+        // Helper method for login form submission
+        async submitLogin(password) {
+          console.log(
+            "🔐 submitLogin called with password:",
+            password ? "****" : "empty"
+          );
+          try {
+            // For local testing, accept any password
+            // In production, this would validate against a real API
+            const isValid = password && password.length > 0; // Simple validation for testing
+
+            if (isValid) {
+              const token = btoa(`local-auth-${Date.now()}`); // Generate simple token
+              localStorage.setItem("sta-auth-token", token);
+
+              // Hide login form and show success
+              const overlay = document.getElementById("sta-login-overlay");
+              const container = overlay?.querySelector(".login-container");
+              if (container) {
+                container.classList.add("login-success");
+                setTimeout(() => {
+                  overlay.style.display = "none";
+                  document.getElementById("nc-root").style.display = "block";
+                }, 500);
+              }
+
+              const user = {
+                name: "admin",
+                email: "admin@swanagetraffic.org.uk",
+                login: "admin",
+                token: token,
+              };
+
+              if (this.authResolve) {
+                this.authResolve(user);
+              }
+              return user;
+            } else {
+              throw new Error("Invalid password");
+            }
+          } catch (error) {
+            console.error("❌ Auth error:", error);
+            this.showError(error.message);
+            if (this.authReject) {
+              this.authReject(error);
+            }
+          }
+        }
+
+        showError(message) {
+          console.log("⚠️ Showing error:", message);
+          const errorEl = document.getElementById("login-error");
+          if (errorEl) {
+            errorEl.textContent = message.toUpperCase();
+            errorEl.classList.add("show");
+            setTimeout(() => {
+              errorEl.classList.remove("show");
+            }, 3000);
+          }
+        }
+      }
+
+      // Wait for DOM and CMS to be ready
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("📄 DOM loaded");
+
+        // Create auth instance
+        const authInstance = new SimplePasswordAuth();
+        console.log("✅ Auth instance created:", authInstance);
+
+        // Register the custom auth backend
+        CMS.registerBackend("custom", SimplePasswordAuth);
+        console.log("✅ Backend registered");
+
+        // Handle login button click
+        console.log("🔗 Setting up event listeners...");
+        const authButton = document.getElementById("auth-button");
+        console.log("🎯 Auth button found:", authButton);
+
+        if (!authButton) {
+          console.error("❌ Auth button not found!");
+          return;
+        }
+
+        authButton.addEventListener("click", async (e) => {
+          console.log("🔒 Login button clicked!", e);
+          e.preventDefault();
+
+          const submitButton = e.target;
+          const passwordInput = document.getElementById("password");
+          const password = passwordInput.value;
+
+          if (!password) {
+            authInstance.showError("Password required");
+            return;
+          }
+
+          // Disable form during submission
+          submitButton.disabled = true;
+          submitButton.innerHTML = "<span>AUTHENTICATING...</span>";
+
+          try {
+            await authInstance.submitLogin(password);
+            // On success, show CMS container; CMS is already initialized below
+            setTimeout(() => {
+              const container = document.getElementById("nc-root");
+              if (container) container.innerHTML = "";
+            }, 600);
+          } catch (error) {
+            // Error handling is done in submitLogin
+          } finally {
+            // Re-enable form
+            submitButton.disabled = false;
+            submitButton.innerHTML = "<span>AUTHENTICATE</span>";
+            passwordInput.value = "";
+          }
+        });
+
+        // Handle Enter key in password field
+        const passwordInput = document.getElementById("password");
+        console.log("⌨️ Password input found:", passwordInput);
+
+        if (passwordInput) {
+          passwordInput.addEventListener("keypress", (e) => {
+            console.log("⌨️ Key pressed:", e.key);
+            if (e.key === "Enter") {
+              e.preventDefault();
+              console.log("↩️ Enter pressed, triggering click");
+              authButton.click();
+            }
+          });
+        }
+
+        // Initialize CMS with custom config
+        console.log("🔑 Initializing CMS with custom backend...");
+
+        // Check if already authenticated
+        const token = localStorage.getItem("sta-auth-token");
+        if (token) {
+          console.log("✅ Already authenticated, initializing CMS");
+          // Hide login overlay and show CMS
+          document.getElementById("sta-login-overlay").style.display = "none";
+          document.getElementById("nc-root").style.display = "block";
+        }
+
+        // Always initialize CMS - it will call our backend methods
+        CMS.init({
+          config: {
+            backend: {
+              name: "custom",
+            },
+          },
+        });
+      });
+    </script>
+  </body>
+</html>
+</file>
+
+<file path="src/components/BrutalSection.astro">
+---
+export interface Props {
+    title?: string;
+    background?: 'white' | 'concrete' | 'black';
+}
+
+const { title, background = 'white' } = Astro.props;
+---
+
+<section class={`brutal-section brutal-section--${background}`}>
+    {title && <h2 class="brutal-subhead">{title}</h2>}
+    <slot />
+</section>
+
+<style>
+    .brutal-section--concrete {
+        background: var(--brutal-concrete);
+    }
+
+    .brutal-section--black {
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+    }
+
+    .brutal-section h2 {
+        margin-bottom: 2rem;
+    }
+</style>
+</file>
+
+<file path="src/components/DataBlock.astro">
+---
+export interface Props {
+    label: string;
+    stat: string;
+    description?: string;
+}
+
+const { label, stat, description } = Astro.props;
+---
+
+<div class="data-block fade-in">
+    <div class="data-label">{label}</div>
+    <div class="data-stat">{stat}</div>
+    {description && <p class="data-description">{description}</p>}
+</div>
+
+<style>
+    .data-description {
+        margin-top: 1rem;
+        font-size: 1.125rem;
+        line-height: 1.4;
+    }
+</style>
+</file>
+
+<file path="src/content/feed/2024-03-01-1300-john-emergency.md">
+---
+username: "John D."
+location: "Shore Road"
+timestamp: 2024-03-01T13:00:00Z
+comment: "Emergency vehicles couldn't get through again today. When will the council listen to us?"
+published: true
+---
+</file>
+
+<file path="src/content/feed/2024-03-01-1400-sarah-traffic.md">
+---
+username: "Sarah M."
+location: "High Street"
+timestamp: 2024-03-01T14:00:00Z
+comment: "Stuck in traffic for 45 minutes trying to get to the doctor's surgery. This is becoming unbearable."
+published: true
+---
+</file>
+
+<file path="src/content/news/2024-01-15-council-ignores-signatures.md">
+---
+date: 2024-01-15
+title: "COUNCIL IGNORES 1,200 SIGNATURES"
+---
+Despite overwhelming opposition from residents, the council voted 7-3 to proceed with the Shore Road closure. The petition, signed by over 1,200 residents, was dismissed without proper consideration. Councillor Smith stated 'the decision has been made' before public comments even began.
+</file>
+
+<file path="src/content/news/2024-01-22-emergency-services-alarm.md">
+---
+date: 2024-01-22
+title: "EMERGENCY SERVICES SOUND ALARM"
+---
+Dorset Fire and Rescue issued an unprecedented warning about response times doubling in the event of Shore Road closure. Ambulance services confirmed that critical golden hour responses would be impossible during peak traffic. The council's response: 'We'll monitor the situation.'
+</file>
+
+<file path="sta-blocki/index.html">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SWANAGE TRAFFIC ALLIANCE | DATA REVEALS THE CRISIS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --brutal-black: #000000;
+            --brutal-white: #FFFFFF;
+            --brutal-red: #FF0000;
+            --brutal-gray: #808080;
+            --brutal-concrete: #E8E8E8;
+            --brutal-shadow: rgba(0,0,0,0.9);
+        }
+
+        body {
+            font-family: 'Arial Black', 'Helvetica Neue', sans-serif;
+            background: var(--brutal-white);
+            color: var(--brutal-black);
+            overflow-x: hidden;
+            line-height: 1.2;
+        }
+
+        /* BRUTALIST TYPOGRAPHY */
+        .brutal-headline {
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            line-height: 0.9;
+            text-transform: uppercase;
+        }
+
+        .brutal-subhead {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+        }
+
+        .data-stat {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            color: var(--brutal-red);
+        }
+
+        /* BRUTAL CONTAINERS */
+        .brutal-section {
+            border: 8px solid var(--brutal-black);
+            margin: 2rem;
+            padding: 3rem;
+            background: var(--brutal-white);
+            box-shadow: 15px 15px 0 var(--brutal-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brutal-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: var(--brutal-black);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: var(--brutal-black);
+            color: var(--brutal-white);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            position: absolute;
+            inset: 0;
+            opacity: 0.1;
+        }
+
+        .grid-cell {
+            background: var(--brutal-white);
+            border: 1px solid var(--brutal-white);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero .brutal-headline {
+            margin-bottom: 2rem;
+            transform: translateX(-100%);
+            animation: slideInBrutal 1s ease-out forwards;
+        }
+
+        @keyframes slideInBrutal {
+            to { transform: translateX(0); }
+        }
+
+        /* DATA JOURNALISM ELEMENTS */
+        .data-block {
+            background: var(--brutal-concrete);
+            border-left: 20px solid var(--brutal-red);
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            transform: translateX(-50px);
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .data-block.visible {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .data-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 0.5rem;
+            opacity: 0.7;
+        }
+
+        /* SCROLLYTELLING SECTIONS */
+        .story-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 4rem 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .story-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .story-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        /* DATA VISUALIZATIONS */
+        .chart-container {
+            position: relative;
+            padding: 2rem;
+            background: var(--brutal-black);
+            border: 4px solid var(--brutal-black);
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            height: 300px;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--brutal-white);
+        }
+
+        .bar {
+            flex: 1;
+            background: var(--brutal-red);
+            position: relative;
+            opacity: 0;
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: all 0.8s ease-out;
+        }
+
+        .bar.visible {
+            opacity: 1;
+            transform: scaleY(1);
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: 900;
+            font-size: 1.25rem;
+        }
+
+        /* IMPACT VISUALIZATION */
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .impact-card {
+            background: var(--brutal-black);
+            color: var(--brutal-white);
+            padding: 2rem;
+            text-align: center;
+            border: 4px solid var(--brutal-black);
+            transform: rotate(-2deg);
+            transition: all 0.3s ease;
+        }
+
+        .impact-card:nth-child(even) {
+            transform: rotate(2deg);
+        }
+
+        .impact-card:hover {
+            transform: rotate(0deg) scale(1.05);
+            box-shadow: 10px 10px 0 var(--brutal-red);
+        }
+
+        /* PULL QUOTES */
+        .pull-quote {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-weight: 900;
+            border-left: 10px solid var(--brutal-red);
+            padding-left: 2rem;
+            margin: 3rem 0;
+            position: relative;
+        }
+
+        .pull-quote::before {
+            content: '"';
+            position: absolute;
+            left: -20px;
+            top: -20px;
+            font-size: 8rem;
+            color: var(--brutal-red);
+            opacity: 0.2;
+        }
+
+        /* EVIDENCE SECTION */
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .evidence-card {
+            background: var(--brutal-concrete);
+            border: 4px solid var(--brutal-black);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .evidence-number {
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            font-size: 6rem;
+            font-weight: 900;
+            color: var(--brutal-red);
+            opacity: 0.2;
+        }
+
+        /* FORM STYLING */
+        .action-form {
+            background: var(--brutal-red);
+            color: var(--brutal-white);
+            padding: 3rem;
+            margin: 3rem 0;
+            position: relative;
+            transform: skewY(-2deg);
+        }
+
+        .action-form > * {
+            transform: skewY(2deg);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.1em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 4px solid var(--brutal-black);
+            background: var(--brutal-white);
+            color: var(--brutal-black);
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            box-shadow: 8px 8px 0 var(--brutal-black);
+        }
+
+        .submit-btn {
+            background: var(--brutal-black);
+            color: var(--brutal-white);
+            border: none;
+            padding: 1.5rem 3rem;
+            font-family: inherit;
+            font-weight: 900;
+            font-size: 1.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translate(-5px, -5px);
+            box-shadow: 5px 5px 0 var(--brutal-white);
+        }
+
+        .form-confirmation {
+            display: none;
+            background: var(--brutal-black);
+            color: var(--brutal-white);
+            padding: 2rem;
+            text-align: center;
+            font-weight: 900;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            margin-top: 2rem;
+        }
+
+        /* SOLUTIONS TIMELINE */
+        .timeline {
+            position: relative;
+            padding: 3rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 8px;
+            background: var(--brutal-black);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 2rem;
+            width: calc(50% - 40px);
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item:nth-child(odd) {
+            margin-left: auto;
+            text-align: left;
+        }
+
+        .timeline-item:nth-child(even) {
+            margin-right: auto;
+            text-align: right;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: var(--brutal-red);
+            border: 8px solid var(--brutal-black);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-marker {
+            left: -60px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-marker {
+            right: -60px;
+        }
+
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 768px) {
+            .brutal-section {
+                margin: 1rem;
+                padding: 2rem;
+            }
+
+            .story-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .timeline::before {
+                left: 40px;
+            }
+
+            .timeline-item {
+                width: calc(100% - 80px);
+                margin-left: 80px !important;
+                text-align: left !important;
+            }
+
+            .timeline-marker {
+                left: -60px !important;
+            }
+
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bar-chart {
+                height: 200px;
+            }
+        }
+
+        /* SCROLL INDICATOR */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 60px;
+            border: 4px solid var(--brutal-black);
+            background: var(--brutal-white);
+            opacity: 0.8;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--brutal-black);
+            animation: scrollDot 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        @keyframes scrollDot {
+            0% { top: 10px; }
+            50% { top: 30px; }
+            100% { top: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-grid">
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+            <div class="grid-cell"></div>
+        </div>
+        <div class="hero-content">
+            <h1 class="brutal-headline">SWANAGE<br>TRAFFIC<br>ALLIANCE</h1>
+            <p class="brutal-subhead">DATA REVEALS THE CRISIS</p>
+            <div class="data-block" style="opacity: 1; transform: none;">
+                <div class="data-label">RESIDENTS AT RISK</div>
+                <div class="data-stat">12,000+</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCROLL INDICATOR -->
+    <div class="scroll-indicator"></div>
+
+    <!-- INTRODUCTION STORY -->
+    <section class="story-section">
+        <div class="story-content">
+            <div>
+                <h2 class="brutal-subhead">THE ORGANIZATION</h2>
+                <p style="font-size: 1.25rem; margin: 2rem 0; line-height: 1.6;">
+                    The Swanage Traffic Alliance emerged from a community in crisis. We are residents, business owners, and concerned citizens united by data-driven evidence of an impending traffic catastrophe.
+                </p>
+                <div class="pull-quote">
+                    "When facts are ignored, communities must act"
+                </div>
+            </div>
+            <div class="data-block">
+                <div class="data-label">ACTIVE MEMBERS</div>
+                <div class="data-stat">500+</div>
+                <p style="margin-top: 1rem;">Growing daily as awareness spreads</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROBLEM VISUALIZATION -->
+    <section class="brutal-section">
+        <h2 class="brutal-headline" style="font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 3rem;">
+            THE SHORE ROAD CRISIS
+        </h2>
+        
+        <div class="story-section visible" style="min-height: auto; padding: 0;">
+            <div class="story-content">
+                <div>
+                    <h3 class="brutal-subhead">TRAFFIC SURGE PROJECTION</h3>
+                    <div class="chart-container">
+                        <div class="bar-chart">
+                            <div class="bar" style="height: 30%;" data-value="100%">
+                                <span class="bar-value">100%</span>
+                                <span class="bar-label">Current</span>
+                            </div>
+                            <div class="bar" style="height: 60%;" data-value="200%">
+                                <span class="bar-value">200%</span>
+                                <span class="bar-label">Year 1</span>
+                            </div>
+                            <div class="bar" style="height: 90%;" data-value="300%">
+                                <span class="bar-value">300%</span>
+                                <span class="bar-label">Summer Peak</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="data-block visible">
+                        <div class="data-label">SHORE ROAD CLOSURE MEANS</div>
+                        <ul style="font-size: 1.25rem; margin-top: 1rem; list-style: none;">
+                            <li style="margin-bottom: 1rem;">▪ 100% traffic diverted through town</li>
+                            <li style="margin-bottom: 1rem;">▪ Emergency vehicle delays</li>
+                            <li style="margin-bottom: 1rem;">▪ Pedestrian safety compromised</li>
+                            <li>▪ Economic isolation of businesses</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IMPACT ANALYSIS -->
+    <section class="story-section">
+        <div class="brutal-section" style="width: 100%; max-width: 1200px; margin: 0 auto;">
+            <h2 class="brutal-subhead">COMMUNITY IMPACT ANALYSIS</h2>
+            
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <div class="data-stat" style="color: var(--brutal-white);">45min</div>
+                    <p>Additional commute time during peak hours</p>
+                </div>
+                <div class="impact-card">
+                    <div class="data-stat" style="color: var(--brutal-white);">£2.3M</div>
+                    <p>Projected annual economic loss</p>
+                </div>
+                <div class="impact-card">
+                    <div class="data-stat" style="color: var(--brutal-white);">78%</div>
+                    <p>Residents opposing closure</p>
+                </div>
+                <div class="impact-card">
+                    <div class="data-stat" style="color: var(--brutal-white);">3x</div>
+                    <p>Increase in traffic accidents predicted</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PARKING CRISIS -->
+    <section class="brutal-section">
+        <h2 class="brutal-headline" style="font-size: clamp(2.5rem, 6vw, 4rem);">
+            PARKING ELIMINATION DATA
+        </h2>
+        
+        <div class="evidence-grid">
+            <div class="evidence-card">
+                <div class="evidence-number">1</div>
+                <h3 class="brutal-subhead" style="font-size: 1.5rem; margin-bottom: 1rem;">SPACES LOST</h3>
+                <div class="data-stat" style="font-size: 3rem;">150+</div>
+                <p style="margin-top: 1rem;">Critical parking spaces eliminated from town center</p>
+            </div>
+            <div class="evidence-card">
+                <div class="evidence-number">2</div>
+                <h3 class="brutal-subhead" style="font-size: 1.5rem; margin-bottom: 1rem;">BUSINESS IMPACT</h3>
+                <div class="data-stat" style="font-size: 3rem;">40%</div>
+                <p style="margin-top: 1rem;">Expected drop in retail footfall</p>
+            </div>
+            <div class="evidence-card">
+                <div class="evidence-number">3</div>
+                <h3 class="brutal-subhead" style="font-size: 1.5rem; margin-bottom: 1rem;">RESIDENT ACCESS</h3>
+                <div class="data-stat" style="font-size: 3rem;">0</div>
+                <p style="margin-top: 1rem;">Alternative parking solutions provided</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUMMER TOURISM -->
+    <section class="story-section">
+        <div class="story-content">
+            <div>
+                <h2 class="brutal-subhead">SUMMER CHAOS FORECAST</h2>
+                <div class="pull-quote">
+                    "30,000 daily visitors. One road. Zero planning."
+                </div>
+                <p style="font-size: 1.25rem; margin: 2rem 0; line-height: 1.6;">
+                    Our traffic modeling reveals catastrophic congestion during peak tourist season. Emergency services confirm response times will triple. The data doesn't lie—this plan endangers lives.
+                </p>
+            </div>
+            <div class="data-block">
+                <div class="data-label">PEAK DAY VEHICLE COUNT</div>
+                <div class="data-stat">8,000+</div>
+                <div class="data-label" style="margin-top: 2rem;">CURRENT ROAD CAPACITY</div>
+                <div class="data-stat">2,500</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EVIDENCE & DOCUMENTATION -->
+    <section class="brutal-section">
+        <h2 class="brutal-headline" style="font-size: clamp(2.5rem, 6vw, 4rem);">
+            EVIDENCE DOCUMENTED
+        </h2>
+        
+        <div class="evidence-grid">
+            <div class="evidence-card">
+                <h3 class="brutal-subhead" style="font-size: 1.5rem;">TRAFFIC STUDIES</h3>
+                <ul style="margin-top: 1rem; list-style: none; font-size: 1.125rem;">
+                    <li style="margin-bottom: 0.5rem;">▪ Independent analysis (2024)</li>
+                    <li style="margin-bottom: 0.5rem;">▪ Historical traffic patterns</li>
+                    <li style="margin-bottom: 0.5rem;">▪ Congestion modeling</li>
+                    <li>▪ Emergency service reports</li>
+                </ul>
+            </div>
+            <div class="evidence-card">
+                <h3 class="brutal-subhead" style="font-size: 1.5rem;">COMMUNITY FEEDBACK</h3>
+                <ul style="margin-top: 1rem; list-style: none; font-size: 1.125rem;">
+                    <li style="margin-bottom: 0.5rem;">▪ 1,200+ survey responses</li>
+                    <li style="margin-bottom: 0.5rem;">▪ 89 business impact statements</li>
+                    <li style="margin-bottom: 0.5rem;">▪ Medical professional warnings</li>
+                    <li>▪ Resident testimonials</li>
+                </ul>
+            </div>
+            <div class="evidence-card">
+                <h3 class="brutal-subhead" style="font-size: 1.5rem;">ECONOMIC ANALYSIS</h3>
+                <ul style="margin-top: 1rem; list-style: none; font-size: 1.125rem;">
+                    <li style="margin-bottom: 0.5rem;">▪ Tourism revenue projections</li>
+                    <li style="margin-bottom: 0.5rem;">▪ Business closure risks</li>
+                    <li style="margin-bottom: 0.5rem;">▪ Property value impacts</li>
+                    <li>▪ Employment statistics</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOLUTIONS -->
+    <section class="brutal-section" style="background: var(--brutal-concrete);">
+        <h2 class="brutal-headline" style="font-size: clamp(2.5rem, 6vw, 4rem);">
+            DATA-DRIVEN SOLUTIONS
+        </h2>
+        
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <h3 class="brutal-subhead" style="font-size: 1.5rem;">IMMEDIATE</h3>
+                <p style="margin-top: 1rem;">Halt Shore Road closure pending comprehensive traffic study</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <h3 class="brutal-subhead" style="font-size: 1.5rem;">SHORT TERM</h3>
+                <p style="margin-top: 1rem;">Implement traffic calming measures without road closure</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <h3 class="brutal-subhead" style="font-size: 1.5rem;">LONG TERM</h3>
+                <p style="margin-top: 1rem;">Develop integrated transport strategy with community input</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <h3 class="brutal-subhead" style="font-size: 1.5rem;">SUSTAINABLE</h3>
+                <p style="margin-top: 1rem;">Create bypass routes and enhanced public transport</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CALL TO ACTION -->
+    <section class="story-section">
+        <div class="brutal-section" style="width: 100%; max-width: 800px; margin: 0 auto;">
+            <h2 class="brutal-headline" style="font-size: clamp(3rem, 8vw, 5rem); text-align: center;">
+                JOIN THE<br>RESISTANCE
+            </h2>
+            
+            <div class="action-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">NAME</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">EMAIL</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="postcode">POSTCODE</label>
+                        <input type="text" id="postcode" name="postcode" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">YOUR STORY (OPTIONAL)</label>
+                        <textarea id="message" name="message" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        STAND WITH US
+                    </button>
+                </form>
+                <div class="form-confirmation" id="formConfirmation">
+                    CONFIRMED: YOU ARE NOW PART OF THE ALLIANCE
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="brutal-section" style="background: var(--brutal-black); color: var(--brutal-white);">
+        <h2 class="brutal-subhead">CONTACT COMMAND CENTER</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+            <div>
+                <h3 style="margin-bottom: 1rem;">EMAIL</h3>
+                <p style="font-size: 1.25rem;">info@swanagetraffic.org</p>
+            </div>
+            <div>
+                <h3 style="margin-bottom: 1rem;">EMERGENCY LINE</h3>
+                <p style="font-size: 1.25rem;">07XXX XXXXXX</p>
+            </div>
+            <div>
+                <h3 style="margin-bottom: 1rem;">MEETINGS</h3>
+                <p style="font-size: 1.25rem;">Thursdays 7PM<br>Community Center</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Animate bars if they exist
+                    const bars = entry.target.querySelectorAll('.bar');
+                    bars.forEach((bar, index) => {
+                        setTimeout(() => {
+                            bar.classList.add('visible');
+                        }, index * 200);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animatable elements
+        document.querySelectorAll('.story-section, .data-block, .bar').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Form handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                postcode: document.getElementById('postcode').value,
+                message: document.getElementById('message').value,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Show confirmation
+            document.getElementById('formConfirmation').style.display = 'block';
+            
+            // Reset form
+            this.reset();
+            
+            // Log for demo (in production, this would send to server)
+            console.log('Alliance Member Registered:', formData);
+            
+            // Hide confirmation after 5 seconds
+            setTimeout(() => {
+                document.getElementById('formConfirmation').style.display = 'none';
+            }, 5000);
+        });
+
+        // Hide scroll indicator on scroll
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            const indicator = document.querySelector('.scroll-indicator');
+            if (window.scrollY > 100) {
+                indicator.style.opacity = '0';
+            } else {
+                indicator.style.opacity = '0.8';
+            }
+        });
+
+        // Parallax effect for hero grid
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const grid = document.querySelector('.hero-grid');
+            if (grid) {
+                grid.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
+</file>
+
+<file path="tsconfig.json">
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"]
+}
+</file>
+
+<file path="src/components/ImpactCard.astro">
+---
+export interface Props {
+    stat: string;
+    description: string;
+}
+
+const { stat, description } = Astro.props;
+---
+
+<div class="impact-card fade-in">
+    <div class="data-stat">{stat}</div>
+    <p>{description}</p>
+</div>
+
+<style>
+    .impact-card {
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        padding: 2rem;
+        text-align: center;
+        border: 4px solid var(--brutal-black);
+        transform: rotate(-2deg);
+        transition: all 0.3s ease;
+    }
+
+    .impact-card:nth-child(even) {
+        transform: rotate(2deg);
+    }
+
+    .impact-card:hover {
+        transform: rotate(0deg) scale(1.05);
+        box-shadow: 10px 10px 0 var(--brutal-gray); /* Green shadow */
+    }
+
+    .impact-card .data-stat {
+        color: var(--brutal-white);
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .impact-card p {
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+</style>
+</file>
+
+<file path="src/layouts/Layout.astro">
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+export interface Props {
+    title: string;
+    description?: string;
+}
+
+const { title, description = 'Swanage Traffic Alliance - Data-driven community resistance' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content={description}>
+    <title>{title} | SWANAGE TRAFFIC ALLIANCE</title>
+    <!-- Netlify Identity Widget for Decap CMS -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+    <Header />
+    <main>
+        <slot />
+    </main>
+    <Footer />
+    
+    <script>
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        });
+
+        // Netlify Identity redirect handling
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => {
+                        document.location.href = "/admin/";
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
+<style>
+    main {
+        min-height: calc(100vh - 200px);
+    }
+</style>
+</file>
+
+<file path="src/pages/feed.astro">
+---
+import Layout from '../layouts/Layout.astro';
+import BrutalSection from '../components/BrutalSection.astro';
+import { getCollection } from 'astro:content';
+
+// Get all feed items from content collection
+const feedEntries = await getCollection('feed', ({ data }) => {
+    return data.published !== false; // Only show published items
+});
+
+// Sort by timestamp (newest first) and format for display
+const feedItems = feedEntries
+    .sort((a, b) => new Date(b.data.timestamp).getTime() - new Date(a.data.timestamp).getTime())
+    .map((entry, index) => {
+        const timestamp = new Date(entry.data.timestamp);
+        const now = new Date();
+        const diffInHours = Math.floor((now.getTime() - timestamp.getTime()) / (1000 * 60 * 60));
+        
+        let timeAgo;
+        if (diffInHours < 1) {
+            timeAgo = 'Just now';
+        } else if (diffInHours < 24) {
+            timeAgo = `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+        } else {
+            const diffInDays = Math.floor(diffInHours / 24);
+            if (diffInDays === 1) {
+                timeAgo = 'Yesterday';
+            } else {
+                timeAgo = `${diffInDays} days ago`;
+            }
+        }
+        
+        return {
+            id: index + 1,
+            username: entry.data.username,
+            location: entry.data.location,
+            timestamp: timeAgo,
+            comment: entry.data.comment
+        };
+    });
+
+// Mock data for demonstration (will be replaced with real data)
+const activeUsers = feedItems.length > 0 ? 1234 + feedItems.length : 1234;
+const todayUsers = 42;
+const weekUsers = 189;
+const monthUsers = 567;
+
+// Fallback data if no content exists
+const fallbackItems = [
+    {
+        id: 1,
+        username: "Sarah M.",
+        location: "High Street",
+        timestamp: "2 hours ago",
+        comment: "Stuck in traffic for 45 minutes trying to get to the doctor's surgery."
+    },
+    {
+        id: 2,
+        username: "John D.",
+        location: "Shore Road",
+        timestamp: "3 hours ago",
+        comment: "Emergency vehicles couldn't get through again today."
+    }
+];
+
+// Use content collection items if available, otherwise use fallback
+const displayItems = feedItems.length > 0 ? feedItems : fallbackItems;
+---
+
+<Layout title="Feed">
+    <!-- HERO SECTION -->
+    <section class="feed-hero">
+        <h1 class="brutal-headline" style="font-size: clamp(3rem, 8vw, 6rem);">
+            COMMUNITY<br/>VOICES
+        </h1>
+        <p class="brutal-subhead" style="font-size: clamp(1.2rem, 3vw, 2rem);">
+            REAL STORIES FROM REAL RESIDENTS
+        </p>
+    </section>
+
+    <!-- USER COUNTER -->
+    <BrutalSection title="ACTIVE RESISTANCE">
+        <div class="user-counter">
+            <div class="counter-block counter-total">
+                <div class="data-stat">{activeUsers}</div>
+                <div class="counter-label">Total Active Members</div>
+            </div>
+            <div class="counter-block">
+                <div class="data-stat">{todayUsers}</div>
+                <div class="counter-label">Joined Today</div>
+            </div>
+            <div class="counter-block">
+                <div class="data-stat">{weekUsers}</div>
+                <div class="counter-label">Joined This Week</div>
+            </div>
+            <div class="counter-block">
+                <div class="data-stat">{monthUsers}</div>
+                <div class="counter-label">Joined This Month</div>
+            </div>
+        </div>
+    </BrutalSection>
+
+    <!-- FEED -->
+    <BrutalSection title="LATEST REPORTS">
+        <p style="margin-bottom: 2rem; font-size: 1.125rem;">
+            These are the voices of your neighbors. Every story matters. Every complaint is documented.
+        </p>
+        <div class="feed-container">
+            {displayItems.map((item) => (
+                <div class="feed-item fade-in" data-id={item.id}>
+                    <div class="feed-meta">
+                        <span class="feed-user">{item.username} • {item.location}</span>
+                        <span class="feed-time">{item.timestamp}</span>
+                    </div>
+                    <div class="feed-content">
+                        "{item.comment}"
+                    </div>
+                </div>
+            ))}
+        </div>
+        
+        <div class="load-more-container">
+            <button class="submit-btn" id="loadMore">
+                LOAD MORE VOICES
+            </button>
+        </div>
+    </BrutalSection>
+
+    <!-- JOIN CTA -->
+    <BrutalSection background="black">
+        <h2 class="brutal-subhead" style="color: #FFD700; margin-bottom: 2rem;">
+            ADD YOUR VOICE
+        </h2>
+        <p style="font-size: 1.25rem; margin-bottom: 2rem;">
+            Your experience matters. Document the crisis. Join the resistance.
+        </p>
+        <a href="/" class="submit-btn" style="display: inline-block; text-decoration: none;">
+            SHARE YOUR STORY
+        </a>
+    </BrutalSection>
+</Layout>
+
+<style>
+    .feed-hero {
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        padding: 6rem 2rem;
+        text-align: center;
+        border-bottom: 8px solid var(--brutal-gray); /* Green accent */
+    }
+
+    .feed-hero .brutal-headline {
+        margin-bottom: 1rem;
+    }
+
+    .counter-total {
+        grid-column: 1 / -1;
+        background: #FFD700 !important; /* Golden yellow for main counter */
+        transform: scale(1.1);
+        box-shadow: 0 10px 30px rgba(0, 102, 204, 0.3); /* Blue-tinted shadow */
+    }
+
+    .load-more-container {
+        text-align: center;
+        margin-top: 3rem;
+    }
+
+    /* Additional animations for feed items */
+    .feed-item {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .feed-item:nth-child(1) { animation-delay: 0.1s; }
+    .feed-item:nth-child(2) { animation-delay: 0.2s; }
+    .feed-item:nth-child(3) { animation-delay: 0.3s; }
+    .feed-item:nth-child(4) { animation-delay: 0.4s; }
+    .feed-item:nth-child(5) { animation-delay: 0.5s; }
+    .feed-item:nth-child(6) { animation-delay: 0.6s; }
+    .feed-item:nth-child(7) { animation-delay: 0.7s; }
+    .feed-item:nth-child(8) { animation-delay: 0.8s; }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .feed-hero {
+            padding: 4rem 1rem;
+        }
+    }
+</style>
+
+<script>
+    // Simulate loading more items
+    document.getElementById('loadMore')?.addEventListener('click', function() {
+        const container = document.querySelector('.feed-container');
+        const button = this as HTMLButtonElement;
+        
+        // Disable button temporarily
+        button.disabled = true;
+        button.textContent = 'LOADING...';
+        
+        // Simulate API call
+        setTimeout(() => {
+            // Mock new items
+            const newItems = [
+                {
+                    username: "Alex P.",
+                    location: "Durlston Road",
+                    timestamp: "4 days ago",
+                    comment: "The noise pollution at night is unbearable. Trucks using residential streets as shortcuts."
+                },
+                {
+                    username: "Claire S.",
+                    location: "Northbrook Road",
+                    timestamp: "5 days ago",
+                    comment: "My disabled mother can't access the shops anymore. This is a disaster for accessibility."
+                }
+            ];
+            
+            // Add new items to feed
+            newItems.forEach((item, index) => {
+                const feedItem = document.createElement('div');
+                feedItem.className = 'feed-item';
+                feedItem.style.animationDelay = `${(index + 1) * 0.1}s`;
+                feedItem.innerHTML = `
+                    <div class="feed-meta">
+                        <span class="feed-user">${item.username} • ${item.location}</span>
+                        <span class="feed-time">${item.timestamp}</span>
+                    </div>
+                    <div class="feed-content">
+                        "${item.comment}"
+                    </div>
+                `;
+                container?.appendChild(feedItem);
+            });
+            
+            // Re-enable button
+            button.disabled = false;
+            button.textContent = 'LOAD MORE VOICES';
+        }, 1000);
+    });
+
+    // Counter animation
+    function animateCounter(element: HTMLElement, target: number) {
+        const duration = 2000;
+        const start = 0;
+        const increment = target / (duration / 16);
+        let current = start;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                element.textContent = target.toString();
+                clearInterval(timer);
+            } else {
+                element.textContent = Math.floor(current).toString();
+            }
+        }, 16);
+    }
+
+    // Animate counters on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        const counters = document.querySelectorAll('.counter-block .data-stat');
+        counters.forEach((counter) => {
+            const target = parseInt(counter.textContent || '0');
+            animateCounter(counter as HTMLElement, target);
+        });
+    });
+</script>
+</file>
+
+<file path="src/pages/news.astro">
+---
+import Layout from '../layouts/Layout.astro';
+import BrutalSection from '../components/BrutalSection.astro';
+import { getCollection } from 'astro:content';
+
+// Get all news items from content collection
+const newsEntries = await getCollection('news');
+
+// Sort by date (newest first) and format for display
+const newsItems = newsEntries
+    .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+    .map((entry, index) => {
+        const date = new Date(entry.data.date);
+        const formattedDate = date.toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: '2-digit', 
+            year: 'numeric' 
+        }).toUpperCase();
+        
+        return {
+            id: index + 1,
+            date: formattedDate,
+            title: entry.data.title,
+            content: entry.body || '',
+            slug: entry.slug
+        };
+    });
+
+// Fallback data if no content exists
+const fallbackItems = [
+    {
+        id: 1,
+        date: "JAN 15, 2024",
+        title: "COUNCIL IGNORES 1,200 SIGNATURES",
+        content: "Despite overwhelming opposition from residents, the council voted 7-3 to proceed with the Shore Road closure."
+    },
+    {
+        id: 2,
+        date: "JAN 22, 2024",
+        title: "EMERGENCY SERVICES SOUND ALARM",
+        content: "Dorset Fire and Rescue issued an unprecedented warning about response times doubling."
+    }
+];
+
+// Use content collection items if available, otherwise use fallback
+const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
+---
+
+<Layout title="News">
+    <!-- HERO SECTION -->
+    <section class="news-hero">
+        <h1 class="brutal-headline" style="font-size: clamp(3rem, 8vw, 6rem);">
+            BREAKING<br/>UPDATES
+        </h1>
+        <p class="brutal-subhead" style="font-size: clamp(1.2rem, 3vw, 2rem);">
+            THE FIGHT DOCUMENTED IN REAL TIME
+        </p>
+    </section>
+
+    <!-- TIMELINE -->
+    <BrutalSection>
+        <div class="timeline">
+            {displayItems.map((item, index) => (
+                <div class={`timeline-item fade-in ${index % 2 === 0 ? 'timeline-left' : 'timeline-right'}`}>
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">{item.date}</div>
+                        <h3 class="timeline-title">{item.title}</h3>
+                        <p class="timeline-text">{item.content}</p>
+                    </div>
+                </div>
+            ))}
+            
+            <!-- Ongoing indicator -->
+            <div class="timeline-ongoing">
+                <div class="timeline-marker ongoing-marker"></div>
+                <div class="ongoing-text">THE FIGHT CONTINUES...</div>
+            </div>
+        </div>
+    </BrutalSection>
+
+    <!-- STAY INFORMED -->
+    <BrutalSection background="concrete">
+        <h2 class="brutal-subhead">STAY INFORMED</h2>
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>NEXT MEETING</h3>
+                <p class="info-detail">THURSDAY 7PM</p>
+                <p>Community Center, High Street</p>
+            </div>
+            <div class="info-card">
+                <h3>COUNCIL SESSION</h3>
+                <p class="info-detail">MARCH 15, 2024</p>
+                <p>Public comments at 6PM</p>
+            </div>
+            <div class="info-card">
+                <h3>LEGAL UPDATE</h3>
+                <p class="info-detail">HEARING PENDING</p>
+                <p>High Court review requested</p>
+            </div>
+        </div>
+    </BrutalSection>
+
+    <!-- URGENT ACTION -->
+    <BrutalSection background="black">
+        <h2 class="brutal-headline" style="font-size: clamp(2.5rem, 6vw, 4rem); color: var(--brutal-red); text-align: center;">
+            TIME IS<br/>RUNNING OUT
+        </h2>
+        <p style="font-size: 1.25rem; text-align: center; margin: 2rem 0;">
+            Every day of delay brings us closer to traffic catastrophe. Act now.
+        </p>
+        <div style="text-align: center;">
+            <a href="/" class="submit-btn" style="display: inline-block; text-decoration: none; margin: 0 1rem;">
+                JOIN THE ALLIANCE
+            </a>
+            <a href="/feed" class="submit-btn" style="display: inline-block; text-decoration: none; margin: 0 1rem; background: var(--brutal-gray); /* Green for action */">
+                SHARE YOUR STORY
+            </a>
+        </div>
+    </BrutalSection>
+</Layout>
+
+<style>
+    .news-hero {
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        padding: 6rem 2rem;
+        text-align: center;
+        border-bottom: 8px solid var(--brutal-gray); /* Green accent */
+    }
+
+    .news-hero .brutal-headline {
+        margin-bottom: 1rem;
+    }
+
+    /* Enhanced Timeline Styles */
+    .timeline {
+        position: relative;
+        padding: 3rem 0;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 8px;
+        background: var(--brutal-black);
+        transform: translateX(-50%);
+    }
+
+    .timeline-item {
+        position: relative;
+        width: calc(50% - 60px);
+        margin-bottom: 4rem;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+    .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+    .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+    .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+    .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+    .timeline-item:nth-child(6) { animation-delay: 0.6s; }
+    .timeline-item:nth-child(7) { animation-delay: 0.7s; }
+    .timeline-item:nth-child(8) { animation-delay: 0.8s; }
+
+    .timeline-left {
+        margin-right: auto;
+        padding-right: 60px;
+        text-align: right;
+    }
+
+    .timeline-right {
+        margin-left: auto;
+        padding-left: 60px;
+        text-align: left;
+    }
+
+    .timeline-marker {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        background: #FFD700; /* Golden yellow */
+        border: 8px solid var(--brutal-black);
+        top: 0;
+        z-index: 1;
+    }
+
+    .timeline-left .timeline-marker {
+        right: -20px;
+    }
+
+    .timeline-right .timeline-marker {
+        left: -20px;
+    }
+
+    .timeline-content {
+        background: var(--brutal-white);
+        border: 4px solid var(--brutal-black);
+        padding: 2rem;
+        box-shadow: 10px 10px 0 var(--brutal-shadow);
+        transition: all 0.3s ease;
+    }
+
+    .timeline-content:hover {
+        transform: translate(-5px, -5px);
+        box-shadow: 15px 15px 0 var(--brutal-shadow);
+    }
+
+    .timeline-date {
+        font-size: 0.875rem;
+        font-weight: 900;
+        letter-spacing: 0.2em;
+        color: #FFD700; /* Golden yellow */
+        margin-bottom: 1rem;
+    }
+
+    .timeline-title {
+        font-size: 1.5rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+
+    .timeline-text {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    /* Ongoing indicator */
+    .timeline-ongoing {
+        position: relative;
+        text-align: center;
+        padding-top: 2rem;
+    }
+
+    .ongoing-marker {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: pulse 2s infinite;
+    }
+
+    .ongoing-text {
+        font-size: 1.5rem;
+        font-weight: 900;
+        letter-spacing: 0.2em;
+        margin-top: 4rem;
+        color: var(--brutal-red); /* Keep red for warning */
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: translateX(-50%) scale(1); }
+        50% { transform: translateX(-50%) scale(1.2); }
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Info Grid */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .info-card {
+        background: var(--brutal-white);
+        border: 4px solid var(--brutal-black);
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .info-card h3 {
+        font-size: 1rem;
+        font-weight: 900;
+        letter-spacing: 0.2em;
+        color: #FFD700; /* Golden yellow */
+        margin-bottom: 1rem;
+    }
+
+    .info-detail {
+        font-size: 1.5rem;
+        font-weight: 900;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .news-hero {
+            padding: 4rem 1rem;
+        }
+
+        .timeline::before {
+            left: 40px;
+        }
+
+        .timeline-item {
+            width: calc(100% - 80px);
+            margin-left: 80px !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            text-align: left !important;
+        }
+
+        .timeline-marker {
+            left: -60px !important;
+            right: auto !important;
+        }
+
+        .timeline-content {
+            padding: 1.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.25rem;
+        }
+
+        .ongoing-marker {
+            left: 40px;
+            transform: translateX(-50%);
+        }
+    }
+</style>
+
+<script>
+    // Intersection Observer for timeline animations
+    const observerOptions = {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    // Observe timeline items
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.timeline-item').forEach(el => {
+            observer.observe(el);
+        });
+    });
+</script>
+</file>
+
+<file path="public/favicon.svg">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 128 128">
+    <path d="M50.4 78.5a75.1 75.1 0 0 0-28.5 6.9l24.2-65.7c.7-2 1.9-3.2 3.4-3.2h29c1.5 0 2.7 1.2 3.4 3.2l24.2 65.7s-11.6-7-28.5-7L67 45.5c-.4-1.7-1.6-2.8-2.9-2.8-1.3 0-2.5 1.1-2.9 2.7L50.4 78.5Zm-1.1 28.2Zm-4.2-20.2c-2 6.6-.6 15.8 4.2 20.2a17.5 17.5 0 0 1 .2-.7 5.5 5.5 0 0 1 5.7-4.5c2.8.1 4.3 1.5 4.7 4.7.2 1.1.2 2.3.2 3.5v.4c0 2.7.7 5.2 2.2 7.4a13 13 0 0 0 5.7 4.9v-.3l-.2-.3c-1.8-5.6-.5-9.5 4.4-12.8l1.5-1a73 73 0 0 0 3.2-2.2 16 16 0 0 0 6.8-11.4c.3-2 .1-4-.6-6l-.8.6-1.6 1a37 37 0 0 1-22.4 2.7c-5-.7-9.7-2-13.2-6.2Z" />
+    <style>
+        path { fill: #000; }
+        @media (prefers-color-scheme: dark) {
+            path { fill: #FFF; }
+        }
+    </style>
+</svg>
+</file>
+
+<file path="src/components/Footer.astro">
+---
+---
+
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>CONTACT</h3>
+            <p>info@swanagetraffic.org</p>
+        </div>
+        <div class="footer-section">
+            <h3>EMERGENCY LINE</h3>
+            <p>07XXX XXXXXX</p>
+        </div>
+        <div class="footer-section">
+            <h3>MEETINGS</h3>
+            <p>Thursdays 7PM<br/>Community Center</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2024 Swanage Traffic Alliance. Data-driven resistance.</p>
+    </div>
+</footer>
+
+<style>
+    .site-footer {
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        padding: 3rem 2rem 1rem;
+        border-top: 8px solid var(--brutal-gray); /* Green accent */
+        margin-top: 4rem;
+    }
+
+    .footer-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .footer-section h3 {
+        font-size: 1rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        margin-bottom: 1rem;
+        color: #FFD700; /* Golden yellow */
+    }
+
+    .footer-section p {
+        font-size: 1.125rem;
+        line-height: 1.6;
+    }
+
+    .footer-bottom {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding-top: 2rem;
+        border-top: 2px solid var(--brutal-gray);
+        text-align: center;
+    }
+
+    .footer-bottom p {
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+        .footer-content {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+    }
+</style>
+</file>
+
+<file path="src/content/config.ts">
+import { defineCollection, z } from 'astro:content';
+
+// Define the schema for news articles
+const newsCollection = defineCollection({
+  schema: z.object({
+    date: z.string().or(z.date()).transform((val) => new Date(val)),
+    title: z.string(),
+  }),
+});
+
+// Define the schema for community feed items
+const feedCollection = defineCollection({
+  schema: z.object({
+    username: z.string(),
+    location: z.string(),
+    timestamp: z.string().or(z.date()).transform((val) => new Date(val)),
+    comment: z.string(),
+    published: z.boolean().default(true),
+  }),
+});
+
+// Export collections
+export const collections = {
+  'news': newsCollection,
+  'feed': feedCollection,
+};
+</file>
+
+<file path=".gitignore">
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+</file>
+
+<file path="astro.config.mjs">
+// @ts-check
+import { defineConfig } from "astro/config";
+
+// https://astro.build/config
+export default defineConfig({
+  server: {
+    allowedHosts: ["localhost", "127.0.0.1", "e1e39e607c51.ngrok-free.app"],
+  },
+});
+</file>
+
+<file path="CLAUDE.md">
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+This is the Swanage Traffic Alliance website - a brutalist-design activism site built with Astro. The project has two main directories:
+
+- `sta-blocki/` - Original HTML prototype with inline CSS and JavaScript
+- `site/` - Production Astro site with component-based architecture
+
+## Development Commands
+
+All commands run from the `site/` directory:
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server (runs on http://localhost:4321)
+npm run dev
+
+# Build for production (outputs to ./dist/)
+npm run build
+
+# Preview production build locally
+npm run preview
+```
+
+## Architecture
+
+### Page Structure
+The site consists of three main pages:
+- **Home** (`src/pages/index.astro`) - Landing page with data visualizations, impact analysis, and signup form
+- **Feed** (`src/pages/feed.astro`) - Community voices with user counter and comment feed
+- **News** (`src/pages/news.astro`) - Timeline of updates with alternating left/right layout
+
+### Component System
+Located in `src/components/`:
+- **Layout Components**: `Header.astro`, `Footer.astro` - Site-wide navigation and branding
+- **Data Components**: `DataBlock.astro`, `ImpactCard.astro` - Statistical displays
+- **Container Components**: `BrutalSection.astro` - Consistent brutal design containers
+
+### Styling Approach
+- Global styles in `src/styles/global.css` define CSS variables and base typography
+- Component-scoped styles within each `.astro` file
+- Brutalist design system using:
+  - Heavy borders (8px solid black)
+  - Box shadows (15px offsets)
+  - Limited color palette (black, white, red, gray, concrete)
+  - Bold typography (Arial Black, uppercase, tight letter-spacing)
+
+### Key Design Patterns
+
+**Brutalist Containers**: All sections use 8px borders with heavy shadows:
+```css
+border: 8px solid var(--brutal-black);
+box-shadow: 15px 15px 0 var(--brutal-shadow);
+```
+
+**Timeline Layout**: News page uses alternating left/right positioning:
+- Desktop: Items alternate sides with center timeline
+- Mobile: All items align left with timeline on left edge
+
+**Form Handling**: Contact forms use client-side JavaScript for immediate feedback with 5-second confirmation display
+
+**Animation Strategy**: 
+- Intersection Observer for scroll-triggered animations
+- Counter animations on Feed page
+- Staggered delays for sequential content reveal
+
+## Data Management
+
+Currently uses mock data arrays in page frontmatter. When implementing backend:
+- Feed items in `feed.astro` should connect to user submission database
+- News items in `news.astro` should be managed through CMS or markdown files
+- User counters should pull from authentication system
+
+## Mobile Responsiveness
+
+Breakpoint at 768px with specific adjustments:
+- Timeline collapses to single column
+- Grid layouts switch to single column
+- Typography scales with clamp() functions
+- Navigation header stacks vertically
+</file>
+
+<file path="README.md">
+# Astro Starter Kit: Minimal
+
+```sh
+bun create astro@latest -- --template minimal
+```
+
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+
+## 🚀 Project Structure
+
+Inside of your Astro project, you'll see the following folders and files:
+
+```text
+/
+├── public/
+├── src/
+│   └── pages/
+│       └── index.astro
+└── package.json
+```
+
+Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+
+There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+
+Any static assets, like images, can be placed in the `public/` directory.
+
+## 🧞 Commands
+
+All commands are run from the root of the project, from a terminal:
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `bun install`             | Installs dependencies                            |
+| `bun dev`             | Starts local dev server at `localhost:4321`      |
+| `bun build`           | Build your production site to `./dist/`          |
+| `bun preview`         | Preview your build locally, before deploying     |
+| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `bun astro -- --help` | Get help using the Astro CLI                     |
+
+## 👀 Want to learn more?
+
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+</file>
+
+<file path="src/components/Header.astro">
+---
+const currentPath = Astro.url.pathname;
+---
+
+<header class="site-header">
+    <div class="header-content">
+        <div class="logo">
+            <a href="/">STA</a>
+        </div>
+        <nav class="main-nav">
+            <a href="/" class={currentPath === '/' ? 'active' : ''}>Home</a>
+            <a href="/feed" class={currentPath === '/feed' ? 'active' : ''}>Feed</a>
+            <a href="/news" class={currentPath === '/news' ? 'active' : ''}>News</a>
+        </nav>
+    </div>
+</header>
+
+<style>
+    .site-header {
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        padding: 1.5rem 2rem;
+        border-bottom: 8px solid var(--brutal-gray); /* Green accent */
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo a {
+        font-size: 2rem;
+        font-weight: 900;
+        color: var(--brutal-white);
+        text-decoration: none;
+        letter-spacing: -0.05em;
+        transition: all 0.3s ease;
+    }
+
+    .logo a:hover {
+        color: #FFD700; /* Golden yellow */
+        transform: scale(1.1);
+    }
+
+    .main-nav {
+        display: flex;
+        gap: 2rem;
+    }
+
+    .main-nav a {
+        color: var(--brutal-white);
+        text-decoration: none;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.5rem 1rem;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+    .main-nav a:hover {
+        border-color: var(--brutal-gray); /* Green accent */
+        background: var(--brutal-gray);
+        transform: translateY(-2px);
+    }
+
+    .main-nav a.active {
+        background: var(--brutal-gray); /* Green for active */
+        border-color: var(--brutal-gray);
+    }
+
+    @media (max-width: 768px) {
+        .header-content {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .main-nav {
+            gap: 1rem;
+        }
+
+        .main-nav a {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.5rem;
+        }
+    }
+</style>
+</file>
+
+<file path="src/pages/index.astro">
+---
+import Layout from "../layouts/Layout.astro";
+import DataBlock from "../components/DataBlock.astro";
+import BrutalSection from "../components/BrutalSection.astro";
+import ImpactCard from "../components/ImpactCard.astro";
+---
+
+<Layout title="Home">
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-grid">
+      {[...Array(9)].map(() => <div class="grid-cell" />)}
+    </div>
+    <div class="hero-content">
+      <h1 class="brutal-headline">SWANAGE<br />TRAFFIC<br />ALLIANCE</h1>
+      <p class="brutal-subhead">DATA REVEALS THE CRISIS</p>
+      <div class="data-block" style="opacity: 1; transform: none;">
+        <div class="data-label">RESIDENTS AT RISK</div>
+        <div class="data-stat">12,000+</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCROLL INDICATOR -->
+  <div class="scroll-indicator"></div>
+
+  <!-- INTRODUCTION -->
+  <section class="story-section fade-in">
+    <div class="story-content">
+      <div>
+        <h2 class="brutal-subhead">THE ORGANIZATION</h2>
+        <p style="font-size: 1.25rem; margin: 2rem 0; line-height: 1.6;">
+          The Swanage Traffic Alliance emerged from a community in crisis. We
+          are residents, business owners, and concerned citizens united by
+          data-driven evidence of an impending traffic catastrophe.
+        </p>
+        <div class="pull-quote">
+          "When facts are ignored, communities must act"
+        </div>
+      </div>
+      <DataBlock
+        label="ACTIVE MEMBERS"
+        stat="500+"
+        description="Growing daily as awareness spreads"
+      />
+    </div>
+  </section>
+
+  <!-- TRAFFIC SURGE -->
+  <BrutalSection title="THE SHORE ROAD CRISIS">
+    <div class="chart-container">
+      <h3 class="brutal-subhead">TRAFFIC SURGE PROJECTION</h3>
+      <div class="bar-chart">
+        <div class="bar" style="height: 30%;" data-value="100%">
+          <span class="bar-value">100%</span>
+          <span class="bar-label">Current</span>
+        </div>
+        <div class="bar" style="height: 60%;" data-value="200%">
+          <span class="bar-value">200%</span>
+          <span class="bar-label">Year 1</span>
+        </div>
+        <div class="bar" style="height: 90%;" data-value="300%">
+          <span class="bar-value">300%</span>
+          <span class="bar-label">Summer Peak</span>
+        </div>
+      </div>
+    </div>
+    <div class="brutal-info-block">
+      <h3 class="brutal-subhead">SHORE ROAD CLOSURE MEANS</h3>
+      <ul style="font-size: 1.25rem; margin-top: 1rem; list-style: none;">
+        <li style="margin-bottom: 1rem;">
+          ▪ 100% traffic diverted through town
+        </li>
+        <li style="margin-bottom: 1rem;">▪ Emergency vehicle delays</li>
+        <li style="margin-bottom: 1rem;">▪ Pedestrian safety compromised</li>
+        <li>▪ Economic isolation of businesses</li>
+      </ul>
+    </div>
+  </BrutalSection>
+
+  <!-- IMPACT ANALYSIS -->
+  <BrutalSection title="COMMUNITY IMPACT ANALYSIS">
+    <div class="impact-grid">
+      <ImpactCard
+        stat="45min"
+        description="Additional commute time during peak hours"
+      />
+      <ImpactCard stat="£2.3M" description="Projected annual economic loss" />
+      <ImpactCard stat="78%" description="Residents opposing closure" />
+      <ImpactCard
+        stat="3x"
+        description="Increase in traffic accidents predicted"
+      />
+    </div>
+  </BrutalSection>
+
+  <!-- PARKING CRISIS -->
+  <BrutalSection title="PARKING ELIMINATION DATA">
+    <div class="evidence-grid">
+      <div class="evidence-card">
+        <div class="evidence-number">1</div>
+        <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">SPACES LOST</h3>
+        <div class="data-stat" style="font-size: 3rem;">150+</div>
+        <p style="margin-top: 1rem;">
+          Critical parking spaces eliminated from town center
+        </p>
+      </div>
+      <div class="evidence-card">
+        <div class="evidence-number">2</div>
+        <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">BUSINESS IMPACT</h3>
+        <div class="data-stat" style="font-size: 3rem;">40%</div>
+        <p style="margin-top: 1rem;">Expected drop in retail footfall</p>
+      </div>
+      <div class="evidence-card">
+        <div class="evidence-number">3</div>
+        <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">RESIDENT ACCESS</h3>
+        <div class="data-stat" style="font-size: 3rem;">0</div>
+        <p style="margin-top: 1rem;">Alternative parking solutions provided</p>
+      </div>
+    </div>
+  </BrutalSection>
+
+  <!-- CALL TO ACTION -->
+  <BrutalSection>
+    <h2
+      class="brutal-headline"
+      style="font-size: clamp(3rem, 8vw, 5rem); text-align: center;"
+    >
+      JOIN THE<br />RESISTANCE
+    </h2>
+
+    <div class="action-form">
+      <form id="contactForm">
+        <div class="form-group">
+          <label for="name">NAME</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label for="email">EMAIL</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="postcode">POSTCODE</label>
+          <input type="text" id="postcode" name="postcode" required />
+        </div>
+        <div class="form-group">
+          <label for="message">YOUR STORY (OPTIONAL)</label>
+          <textarea id="message" name="message" rows="4"></textarea>
+        </div>
+        <button type="submit" class="submit-btn"> STAND WITH US </button>
+      </form>
+      <div
+        class="form-confirmation"
+        id="formConfirmation"
+        style="display: none;"
+      >
+        CONFIRMED: YOU ARE NOW PART OF THE ALLIANCE
+      </div>
+    </div>
+  </BrutalSection>
+</Layout>
+
+<style>
+  /* HERO SECTION */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--brutal-black);
+    color: var(--brutal-white);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    position: absolute;
+    inset: 0;
+    opacity: 0.1;
+  }
+
+  .grid-cell {
+    background: var(--brutal-white);
+    border: 1px solid var(--brutal-white);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .hero .brutal-headline {
+    margin-bottom: 2rem;
+    animation: slideInBrutal 1s ease-out forwards;
+  }
+
+  /* STORY SECTIONS */
+  .story-section {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    padding: 4rem 2rem;
+  }
+
+  .story-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  /* CHARTS */
+  .chart-container {
+    margin: 2rem 0;
+  }
+
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    height: 300px;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--brutal-white);
+    border: 4px solid var(--brutal-black);
+    margin-top: 1rem;
+  }
+
+  .bar {
+    flex: 1;
+    background: var(--brutal-gray); /* Green for positive growth */
+    position: relative;
+    transition: all 0.8s ease-out;
+  }
+
+  .bar-label {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  .bar-value {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: 900;
+    font-size: 1.25rem;
+  }
+
+  /* BRUTAL INFO BLOCK */
+  .brutal-info-block {
+    background: var(--brutal-concrete);
+    border: 4px solid var(--brutal-black);
+    padding: 2rem;
+    margin: 2rem 0;
+  }
+
+  .brutal-info-block h3 {
+    margin-bottom: 1rem;
+  }
+
+  /* IMPACT GRID */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+  }
+
+  /* EVIDENCE CARDS */
+  .evidence-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+  }
+
+  .evidence-card {
+    background: var(--brutal-concrete);
+    border: 4px solid var(--brutal-black);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .evidence-number {
+    position: absolute;
+    top: -20px;
+    right: 20px;
+    font-size: 6rem;
+    font-weight: 900;
+    color: #FFD700; /* Golden yellow */
+    opacity: 0.2;
+  }
+
+  /* SCROLL INDICATOR */
+  .scroll-indicator {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 60px;
+    border: 4px solid var(--brutal-black);
+    background: var(--brutal-white);
+    opacity: 0.8;
+    animation: bounce 2s infinite;
+    z-index: 50;
+  }
+
+  .scroll-indicator::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    background: var(--brutal-black);
+    animation: scrollDot 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateX(-50%) translateY(0);
+    }
+    50% {
+      transform: translateX(-50%) translateY(10px);
+    }
+  }
+
+  @keyframes scrollDot {
+    0% {
+      top: 10px;
+    }
+    50% {
+      top: 30px;
+    }
+    100% {
+      top: 10px;
+    }
+  }
+
+  .form-confirmation {
+    background: var(--brutal-gray); /* Green for success */
+    color: var(--brutal-white);
+    padding: 2rem;
+    text-align: center;
+    font-weight: 900;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .story-content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .bar-chart {
+      height: 200px;
+    }
+  }
+</style>
+
+<script>
+  // Form handling
+  document
+    .getElementById("contactForm")
+    ?.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const formData = {
+        name: (document.getElementById("name") as HTMLInputElement).value,
+        email: (document.getElementById("email") as HTMLInputElement).value,
+        postcode: (document.getElementById("postcode") as HTMLInputElement)
+          .value,
+        message: (document.getElementById("message") as HTMLTextAreaElement)
+          .value,
+        timestamp: new Date().toISOString(),
+      };
+
+      // Show confirmation
+      const confirmation = document.getElementById("formConfirmation");
+      if (confirmation) {
+        confirmation.style.display = "block";
+      }
+
+      // Reset form
+      (this as HTMLFormElement).reset();
+
+      // Log for demo
+      console.log("Alliance Member Registered:", formData);
+
+      // Hide confirmation after 5 seconds
+      setTimeout(() => {
+        if (confirmation) {
+          confirmation.style.display = "none";
+        }
+      }, 5000);
+    });
+
+  // Hide scroll indicator on scroll
+  window.addEventListener("scroll", () => {
+    const indicator = document.querySelector(
+      ".scroll-indicator"
+    ) as HTMLElement;
+    if (indicator) {
+      if (window.scrollY > 100) {
+        indicator.style.opacity = "0";
+      } else {
+        indicator.style.opacity = "0.8";
+      }
+    }
+  });
+
+  // Parallax effect for hero grid
+  window.addEventListener("scroll", () => {
+    const scrolled = window.pageYOffset;
+    const grid = document.querySelector(".hero-grid") as HTMLElement;
+    if (grid) {
+      grid.style.transform = `translateY(${scrolled * 0.5}px)`;
+    }
+  });
+</script>
+</file>
+
+<file path="src/styles/global.css">
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --brutal-black: #0066CC; /* Primary Blue */
+    --brutal-white: #FFFFFF;
+    --brutal-red: #FF0000; /* Keep for warnings */
+    --brutal-gray: #4CAF50; /* Green accent */
+    --brutal-concrete: #FFF8DC; /* Light golden yellow */
+    --brutal-shadow: rgba(0, 102, 204, 0.3); /* Blue-tinted shadow */
+}
+
+body {
+    font-family: 'Arial Black', 'Helvetica Neue', sans-serif;
+    background: var(--brutal-white);
+    color: var(--brutal-black);
+    overflow-x: hidden;
+    line-height: 1.2;
+}
+
+/* BRUTALIST TYPOGRAPHY */
+.brutal-headline {
+    font-size: clamp(4rem, 12vw, 10rem);
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
+    text-transform: uppercase;
+}
+
+.brutal-subhead {
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+}
+
+.data-stat {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 900;
+    color: #FFD700; /* Golden yellow for positive stats */
+}
+
+/* BRUTAL CONTAINERS */
+.brutal-section {
+    border: 8px solid var(--brutal-black);
+    margin: 2rem;
+    padding: 3rem;
+    background: var(--brutal-white);
+    box-shadow: 15px 15px 0 var(--brutal-shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.brutal-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: var(--brutal-black);
+}
+
+/* DATA JOURNALISM ELEMENTS */
+.data-block {
+    background: var(--brutal-concrete);
+    border-left: 20px solid var(--brutal-gray); /* Green accent border */
+    padding: 2rem;
+    margin: 2rem 0;
+    position: relative;
+}
+
+.data-label {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+}
+
+/* PULL QUOTES */
+.pull-quote {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 900;
+    border-left: 10px solid var(--brutal-gray); /* Green accent */
+    padding-left: 2rem;
+    margin: 3rem 0;
+    position: relative;
+}
+
+.pull-quote::before {
+    content: '"';
+    position: absolute;
+    left: -20px;
+    top: -20px;
+    font-size: 8rem;
+    color: #FFD700; /* Golden yellow */
+    opacity: 0.2;
+}
+
+/* TIMELINE */
+.timeline {
+    position: relative;
+    padding: 3rem 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    background: var(--brutal-black);
+    transform: translateX(-50%);
+}
+
+.timeline-item {
+    position: relative;
+    padding: 2rem;
+    width: calc(50% - 40px);
+    margin-bottom: 3rem;
+}
+
+.timeline-item:nth-child(odd) {
+    margin-left: auto;
+    text-align: left;
+}
+
+.timeline-item:nth-child(even) {
+    margin-right: auto;
+    text-align: right;
+}
+
+.timeline-marker {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: #FFD700; /* Golden yellow */
+    border: 8px solid var(--brutal-black);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.timeline-item:nth-child(odd) .timeline-marker {
+    left: -60px;
+}
+
+.timeline-item:nth-child(even) .timeline-marker {
+    right: -60px;
+}
+
+/* FORM STYLING */
+.action-form {
+    background: var(--brutal-gray); /* Green for positive actions */
+    color: var(--brutal-white);
+    padding: 3rem;
+    margin: 3rem 0;
+    position: relative;
+}
+
+.form-group {
+    margin-bottom: 2rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.1em;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 4px solid var(--brutal-black);
+    background: var(--brutal-white);
+    color: var(--brutal-black);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    box-shadow: 8px 8px 0 var(--brutal-black);
+}
+
+.submit-btn {
+    background: var(--brutal-black);
+    color: var(--brutal-white);
+    border: none;
+    padding: 1.5rem 3rem;
+    font-family: inherit;
+    font-weight: 900;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    transform: translate(-5px, -5px);
+    box-shadow: 5px 5px 0 var(--brutal-white);
+}
+
+/* USER COUNTER */
+.user-counter {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.counter-block {
+    background: var(--brutal-black);
+    color: var(--brutal-white);
+    padding: 2rem;
+    text-align: center;
+    border: 4px solid var(--brutal-black);
+    position: relative;
+}
+
+.counter-block .data-stat {
+    color: var(--brutal-white);
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.counter-label {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.8;
+}
+
+/* FEED ITEMS */
+.feed-container {
+    margin: 3rem 0;
+}
+
+.feed-item {
+    border: 4px solid var(--brutal-black);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    background: var(--brutal-white);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.feed-item:hover {
+    transform: translateX(10px);
+    box-shadow: -10px 10px 0 var(--brutal-gray); /* Green shadow */
+}
+
+.feed-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+}
+
+.feed-content {
+    font-size: 1.125rem;
+    line-height: 1.6;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+    .brutal-section {
+        margin: 1rem;
+        padding: 2rem;
+    }
+
+    .timeline::before {
+        left: 40px;
+    }
+
+    .timeline-item {
+        width: calc(100% - 80px);
+        margin-left: 80px !important;
+        text-align: left !important;
+    }
+
+    .timeline-marker {
+        left: -60px !important;
+    }
+
+    .user-counter {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ANIMATIONS */
+@keyframes slideInBrutal {
+    to { transform: translateX(0); }
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+</file>
+
+<file path="package.json">
+{
+  "name": "site",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.13.0",
+    "decap-cms-app": "^3.8.3"
+  }
+}
+</file>
+
+</files>

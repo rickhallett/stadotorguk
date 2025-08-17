@@ -1,6 +1,10 @@
 backend:
-  name: git-gateway
-  branch: main # Your branch name
+  name: github
+  repo: rickhallett/stadotorguk
+  branch: dev
+  site_domain: localhost:4321 # Will be updated for production
+  base_url: http://localhost:4321 # Will be updated for production
+  auth_endpoint: oauth
 
 # Media files will be stored in the repo under public/uploads
 media_folder: "public/uploads"
@@ -30,17 +34,3 @@ collections:
       - {label: "Timestamp", name: "timestamp", widget: "datetime"}
       - {label: "Comment", name: "comment", widget: "text"}
       - {label: "Published", name: "published", widget: "boolean", default: true}
-
-  # Site Settings (optional)
-  - name: "settings"
-    label: "Site Settings"
-    files:
-      - name: "general"
-        label: "General Settings"
-        file: "src/content/settings/general.json"
-        fields:
-          - {label: "Site Title", name: "title", widget: "string"}
-          - {label: "Site Description", name: "description", widget: "text"}
-          - {label: "Emergency Contact", name: "emergency_contact", widget: "string"}
-          - {label: "Meeting Time", name: "meeting_time", widget: "string"}
-          - {label: "Meeting Location", name: "meeting_location", widget: "string"}

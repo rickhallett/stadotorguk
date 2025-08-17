@@ -4,12 +4,14 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "cp node_modules/decap-cms/dist/decap-cms.js public/admin/decap-cms.js",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "astro": "^5.13.0",
-    "decap-cms-app": "^3.8.3"
+    "astro-decap-cms-oauth": "^0.5.1",
+    "decap-cms": "^3.8.3"
   }
 }
