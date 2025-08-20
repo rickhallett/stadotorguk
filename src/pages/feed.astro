@@ -65,6 +65,10 @@ const fallbackItems = [
 
 // Use content collection items if available, otherwise use fallback
 const displayItems = feedItems.length > 0 ? feedItems : fallbackItems;
+
+// Get total supporter count for movement counter
+const allLeads = await getCollection('leads', ({ data }) => data.published);
+const totalSupporters = allLeads.length;
 ---
 
 <Layout title="Feed">
@@ -77,6 +81,19 @@ const displayItems = feedItems.length > 0 ? feedItems : fallbackItems;
             SILENCED BY THE COUNCIL. HEARD BY US.
         </p>
     </section>
+
+    <!-- OUR MOVEMENT IS GROWING -->
+    <BrutalSection title="OUR MOVEMENT IS GROWING">
+        <div class="movement-section">
+            <div class="movement-number" data-target={totalSupporters}>0</div>
+            <p class="movement-subtitle">VOTERS STANDING WITH US</p>
+            <div class="movement-cta">
+                <a href="/supporters" class="view-supporters-btn">
+                    SEE WHO'S JOINED
+                </a>
+            </div>
+        </div>
+    </BrutalSection>
 
     <!-- USER COUNTER -->
     <BrutalSection title="THE UNCONSULTED MAJORITY">
@@ -195,6 +212,55 @@ const displayItems = feedItems.length > 0 ? feedItems : fallbackItems;
         margin-top: 3rem;
     }
 
+    /* Movement Counter Styles */
+    .movement-section {
+        text-align: center;
+        padding: 3rem 0;
+    }
+
+    .movement-number {
+        font-family: 'Arial Black', sans-serif;
+        font-size: clamp(5rem, 12vw, 10rem);
+        color: #FFD700; /* Golden yellow - positive growth */
+        line-height: 1;
+        margin: 1rem 0;
+        font-weight: 900;
+        letter-spacing: -0.05em;
+    }
+
+    .movement-subtitle {
+        font-size: clamp(1.2rem, 3vw, 2rem);
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--brutal-black);
+        margin-bottom: 2rem;
+    }
+
+    .movement-cta {
+        margin-top: 2rem;
+    }
+
+    .view-supporters-btn {
+        display: inline-block;
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        padding: 1rem 2rem;
+        text-decoration: none;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border: 4px solid var(--brutal-black);
+        box-shadow: 8px 8px 0 var(--brutal-shadow);
+        transition: all 0.2s;
+    }
+
+    .view-supporters-btn:hover {
+        background: var(--brutal-gray);
+        transform: translate(-4px, -4px);
+        box-shadow: 12px 12px 0 var(--brutal-shadow);
+    }
+
     /* Additional animations for feed items */
     .feed-item {
         opacity: 0;
@@ -294,8 +360,45 @@ const displayItems = feedItems.length > 0 ? feedItems : fallbackItems;
         }, 16);
     }
 
+    // Movement counter animation
+    function animateMovementCounter() {
+        const counter = document.querySelector('.movement-number') as HTMLElement;
+        if (!counter) return;
+        
+        const target = parseInt(counter.dataset.target || '0');
+        const duration = 2000;
+        const step = target / (duration / 16);
+        let current = 0;
+        
+        const updateCounter = () => {
+            current += step;
+            if (current < target) {
+                counter.textContent = Math.floor(current).toLocaleString();
+                requestAnimationFrame(updateCounter);
+            } else {
+                counter.textContent = target.toLocaleString();
+            }
+        };
+        
+        // Trigger on intersection
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    updateCounter();
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+        
+        observer.observe(counter);
+    }
+
     // Animate counters on page load
     window.addEventListener('DOMContentLoaded', () => {
+        // Animate movement counter
+        animateMovementCounter();
+        
+        // Animate existing counters
         const counters = document.querySelectorAll('.counter-block .data-stat');
         counters.forEach((counter) => {
             const target = parseInt(counter.textContent || '0');
