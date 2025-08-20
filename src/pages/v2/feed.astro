@@ -1,0 +1,376 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BrutalSection from '../../components/BrutalSection.astro';
+import { getCollection } from 'astro:content';
+
+// Get all feed items from content collection
+const feedEntries = await getCollection('feed', ({ data }) => {
+    return data.published !== false; // Only show published items
+});
+
+// Sort by timestamp (newest first) and format for display
+const feedItems = feedEntries
+    .sort((a, b) => new Date(b.data.timestamp).getTime() - new Date(a.data.timestamp).getTime())
+    .map((entry, index) => {
+        const timestamp = new Date(entry.data.timestamp);
+        const now = new Date();
+        const diffInHours = Math.floor((now.getTime() - timestamp.getTime()) / (1000 * 60 * 60));
+        
+        let timeAgo;
+        if (diffInHours < 1) {
+            timeAgo = 'Just now';
+        } else if (diffInHours < 24) {
+            timeAgo = `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+        } else {
+            const diffInDays = Math.floor(diffInHours / 24);
+            if (diffInDays === 1) {
+                timeAgo = 'Yesterday';
+            } else {
+                timeAgo = `${diffInDays} days ago`;
+            }
+        }
+        
+        return {
+            id: index + 1,
+            username: entry.data.username,
+            location: entry.data.location,
+            timestamp: timeAgo,
+            comment: entry.data.comment
+        };
+    });
+
+// Mock data for demonstration (will be replaced with real data)
+const activeUsers = feedItems.length > 0 ? 1234 + feedItems.length : 1234;
+const todayUsers = 42;
+const weekUsers = 189;
+const monthUsers = 567;
+
+// Community-focused fallback data
+const fallbackItems = [
+    {
+        id: 1,
+        username: "Sarah M.",
+        location: "High Street",
+        timestamp: "2 hours ago",
+        comment: "My elderly neighbor couldn't get to her appointment today due to the traffic. We need to work together to find solutions that help everyone."
+    },
+    {
+        id: 2,
+        username: "John D.",
+        location: "Shore Road",
+        timestamp: "3 hours ago",
+        comment: "As a local volunteer with the emergency services, I've seen how traffic affects our community. Let's have an open discussion about the best path forward."
+    },
+    {
+        id: 3,
+        username: "Emma T.",
+        location: "Victoria Avenue",
+        timestamp: "5 hours ago",
+        comment: "Walking my children to school has become challenging. I hope we can find community solutions that work for families and local businesses alike."
+    },
+    {
+        id: 4,
+        username: "Michael R.",
+        location: "Station Road",
+        timestamp: "6 hours ago",
+        comment: "Our family business is struggling with deliveries. The community deserves transparent consultation on any changes affecting local trade."
+    },
+    {
+        id: 5,
+        username: "Lisa K.",
+        location: "Kings Road East",
+        timestamp: "8 hours ago",
+        comment: "As neighbors, we should support each other through these challenges. More community meetings would help us understand everyone's concerns."
+    },
+    {
+        id: 6,
+        username: "David H.",
+        location: "Durlston Road",
+        timestamp: "1 day ago",
+        comment: "I've lived here 30 years and seen many changes. What matters most is that our community stays connected and listens to each other."
+    },
+    {
+        id: 7,
+        username: "Claire W.",
+        location: "Northbrook Road",
+        timestamp: "1 day ago",
+        comment: "My disabled mother relies on accessible transport. Any decisions should consider how they affect our most vulnerable community members."
+    },
+    {
+        id: 8,
+        username: "Tom B.",
+        location: "Carnival Fields",
+        timestamp: "2 days ago",
+        comment: "Community unity means ensuring everyone has a voice. I hope the council will engage more openly with residents about future planning."
+    },
+    {
+        id: 9,
+        username: "Rachel P.",
+        location: "Bell Street",
+        timestamp: "2 days ago",
+        comment: "As a teacher here, I see how these issues affect families daily. Let's work together to build solutions that strengthen our community bonds."
+    },
+    {
+        id: 10,
+        username: "James L.",
+        location: "Commercial Road",
+        timestamp: "3 days ago",
+        comment: "Our community café has become a meeting place for neighbors discussing these changes. Together, we can advocate for fair representation."
+    }
+];
+
+// Use content collection items if available, otherwise use fallback
+const displayItems = feedItems.length > 0 ? feedItems : fallbackItems;
+---
+
+<Layout title="Community Voices">
+    <!-- HERO SECTION -->
+    <section class="feed-hero">
+        <h1 class="brutal-headline" style="font-size: clamp(3rem, 8vw, 6rem);">
+            COMMUNITY<br/>VOICES
+        </h1>
+        <p class="brutal-subhead" style="font-size: clamp(1.2rem, 3vw, 2rem);">
+            NEIGHBORS SUPPORTING NEIGHBORS. TOGETHER WE ARE HEARD.
+        </p>
+    </section>
+
+    <!-- USER COUNTER -->
+    <BrutalSection title="OUR GROWING COMMUNITY">
+        <div class="countdown-alert">
+            <div class="countdown-number" id="daysUntilVote">--</div>
+            <div class="countdown-label">DAYS UNTIL SEPTEMBER 15 COMMUNITY DISCUSSION</div>
+        </div>
+        <div class="user-counter">
+            <div class="counter-block counter-total">
+                <div class="data-stat">{activeUsers}</div>
+                <div class="counter-label">United Community Members</div>
+            </div>
+            <div class="counter-block">
+                <div class="data-stat">{todayUsers}</div>
+                <div class="counter-label">Joined Today</div>
+            </div>
+            <div class="counter-block">
+                <div class="data-stat">{weekUsers}</div>
+                <div class="counter-label">This Week</div>
+            </div>
+            <div class="counter-block">
+                <div class="data-stat">{monthUsers}</div>
+                <div class="counter-label">This Month</div>
+            </div>
+        </div>
+    </BrutalSection>
+
+    <!-- FEED -->
+    <BrutalSection title="COMMUNITY CONVERSATIONS">
+        <p style="margin-bottom: 2rem; font-size: 1.125rem;">
+            Every neighbor's story matters. Every concern deserves attention. 
+            Together, we're building a stronger community voice that represents all of us.
+        </p>
+        <div class="feed-container">
+            {displayItems.map((item) => (
+                <div class="feed-item fade-in" data-id={item.id}>
+                    <div class="feed-meta">
+                        <span class="feed-user">{item.username} • {item.location}</span>
+                        <span class="feed-time">{item.timestamp}</span>
+                    </div>
+                    <div class="feed-content">
+                        "{item.comment}"
+                    </div>
+                </div>
+            ))}
+        </div>
+        
+        <div class="load-more-container">
+            <button class="submit-btn" id="loadMore">
+                HEAR MORE NEIGHBORS
+            </button>
+        </div>
+    </BrutalSection>
+
+    <!-- JOIN CTA -->
+    <BrutalSection background="black">
+        <h2 class="brutal-subhead" style="color: #FFD700; margin-bottom: 2rem;">
+            SHARE YOUR VOICE
+        </h2>
+        <p style="font-size: 1.25rem; margin-bottom: 2rem;">
+            Your experience strengthens our community. Share your story. Stand together with neighbors.
+        </p>
+        <a href="/v2/" class="submit-btn" style="display: inline-block; text-decoration: none;">
+            JOIN OUR MOVEMENT
+        </a>
+    </BrutalSection>
+</Layout>
+
+<style>
+    .feed-hero {
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        padding: 6rem 2rem;
+        text-align: center;
+        border-bottom: 8px solid var(--brutal-gray); /* Green accent */
+    }
+
+    .feed-hero .brutal-headline {
+        margin-bottom: 1rem;
+    }
+
+    .countdown-alert {
+        background: var(--brutal-red);
+        color: var(--brutal-white);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 4px solid var(--brutal-black);
+        box-shadow: 8px 8px 0 var(--brutal-shadow);
+        text-align: center;
+    }
+
+    .countdown-number {
+        font-family: 'Arial Black', sans-serif;
+        font-size: 4rem;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    .countdown-label {
+        font-size: 1.25rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-top: 0.5rem;
+    }
+
+    .counter-total {
+        grid-column: 1 / -1;
+        background: #FFD700 !important; /* Golden yellow for main counter */
+        transform: scale(1.1);
+        box-shadow: 0 10px 30px rgba(0, 102, 204, 0.3); /* Blue-tinted shadow */
+    }
+
+    .load-more-container {
+        text-align: center;
+        margin-top: 3rem;
+    }
+
+    /* Additional animations for feed items */
+    .feed-item {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .feed-item:nth-child(1) { animation-delay: 0.1s; }
+    .feed-item:nth-child(2) { animation-delay: 0.2s; }
+    .feed-item:nth-child(3) { animation-delay: 0.3s; }
+    .feed-item:nth-child(4) { animation-delay: 0.4s; }
+    .feed-item:nth-child(5) { animation-delay: 0.5s; }
+    .feed-item:nth-child(6) { animation-delay: 0.6s; }
+    .feed-item:nth-child(7) { animation-delay: 0.7s; }
+    .feed-item:nth-child(8) { animation-delay: 0.8s; }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .feed-hero {
+            padding: 4rem 1rem;
+        }
+    }
+</style>
+
+<script>
+    // Simulate loading more items
+    document.getElementById('loadMore')?.addEventListener('click', function() {
+        const container = document.querySelector('.feed-container');
+        const button = this as HTMLButtonElement;
+        
+        // Disable button temporarily
+        button.disabled = true;
+        button.textContent = 'LOADING...';
+        
+        // Simulate API call
+        setTimeout(() => {
+            // Mock new community-focused items
+            const newItems = [
+                {
+                    username: "Margaret S.",
+                    location: "Sea Road",
+                    timestamp: "4 days ago",
+                    comment: "Our community garden group has been discussing these changes. We believe more neighborhood consultation would help everyone understand each other's needs better."
+                },
+                {
+                    username: "Peter W.",
+                    location: "Manor Road",
+                    timestamp: "5 days ago",
+                    comment: "As a retired teacher, I've seen how important it is for communities to work together. Let's ensure all voices are heard in future planning decisions."
+                }
+            ];
+            
+            // Add new items to feed
+            newItems.forEach((item, index) => {
+                const feedItem = document.createElement('div');
+                feedItem.className = 'feed-item';
+                feedItem.style.animationDelay = `${(index + 1) * 0.1}s`;
+                feedItem.innerHTML = `
+                    <div class="feed-meta">
+                        <span class="feed-user">${item.username} • ${item.location}</span>
+                        <span class="feed-time">${item.timestamp}</span>
+                    </div>
+                    <div class="feed-content">
+                        "${item.comment}"
+                    </div>
+                `;
+                container?.appendChild(feedItem);
+            });
+            
+            // Re-enable button
+            button.disabled = false;
+            button.textContent = 'HEAR MORE NEIGHBORS';
+        }, 1000);
+    });
+
+    // Counter animation
+    function animateCounter(element: HTMLElement, target: number) {
+        const duration = 2000;
+        const start = 0;
+        const increment = target / (duration / 16);
+        let current = start;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                element.textContent = target.toString();
+                clearInterval(timer);
+            } else {
+                element.textContent = Math.floor(current).toString();
+            }
+        }, 16);
+    }
+
+    // Animate counters on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        const counters = document.querySelectorAll('.counter-block .data-stat');
+        counters.forEach((counter) => {
+            const target = parseInt(counter.textContent || '0');
+            animateCounter(counter as HTMLElement, target);
+        });
+
+        // Calculate days until September 15, 2024
+        const voteDate = new Date('2024-09-15');
+        const today = new Date();
+        const timeDiff = voteDate.getTime() - today.getTime();
+        const daysUntil = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+        
+        const countdownElement = document.getElementById('daysUntilVote');
+        if (countdownElement) {
+            if (daysUntil > 0) {
+                countdownElement.textContent = daysUntil.toString();
+            } else {
+                countdownElement.textContent = 'NOW';
+            }
+        }
+    });
+</script>

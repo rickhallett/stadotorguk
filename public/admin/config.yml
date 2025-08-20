@@ -34,3 +34,25 @@ collections:
       - {label: "Timestamp", name: "timestamp", widget: "datetime"}
       - {label: "Comment", name: "comment", widget: "text"}
       - {label: "Published", name: "published", widget: "boolean", default: true}
+      
+  # Campaign Supporters/Leads Collection
+  - name: "leads"
+    label: "Campaign Supporters"
+    folder: "src/content/leads"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{hour}}{{minute}}-{{fields.submission_id}}"
+    summary: "{{fields.first_name}} {{fields.last_name}} - {{fields.visitor_type}}"
+    sortable_fields: ['timestamp', 'visitor_type', 'last_name']
+    fields:
+      - {label: "Timestamp", name: "timestamp", widget: "datetime", format: "YYYY-MM-DD HH:mm"}
+      - {label: "User ID", name: "user_id", widget: "hidden"}
+      - {label: "Full Name", name: "name", widget: "string"}
+      - {label: "First Name", name: "first_name", widget: "string"}
+      - {label: "Last Name", name: "last_name", widget: "string"}
+      - {label: "Email", name: "email", widget: "string", pattern: ['^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', 'Must be a valid email']}
+      - {label: "Visitor Type", name: "visitor_type", widget: "select", options: ["Local", "Visitor", "Other"], default: "Local"}
+      - {label: "Comments", name: "comments", widget: "text", required: false}
+      - {label: "Referral Code", name: "referral_code", widget: "string", required: false}
+      - {label: "Source", name: "source", widget: "string", default: "survey_modal"}
+      - {label: "Submission ID", name: "submission_id", widget: "hidden"}
+      - {label: "Published", name: "published", widget: "boolean", default: true}

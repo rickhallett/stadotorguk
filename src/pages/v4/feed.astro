@@ -1,0 +1,376 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BrutalSection from '../../components/BrutalSection.astro';
+import { getCollection } from 'astro:content';
+
+// Get all feed items from content collection
+const feedEntries = await getCollection('feed', ({ data }) => {
+    return data.published !== false; // Only show published items
+});
+
+// Sort by timestamp (newest first) and format for display
+const feedItems = feedEntries
+    .sort((a, b) => new Date(b.data.timestamp).getTime() - new Date(a.data.timestamp).getTime())
+    .map((entry, index) => {
+        const timestamp = new Date(entry.data.timestamp);
+        const now = new Date();
+        const diffInHours = Math.floor((now.getTime() - timestamp.getTime()) / (1000 * 60 * 60));
+        
+        let timeAgo;
+        if (diffInHours < 1) {
+            timeAgo = 'Just now';
+        } else if (diffInHours < 24) {
+            timeAgo = `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+        } else {
+            const diffInDays = Math.floor(diffInHours / 24);
+            if (diffInDays === 1) {
+                timeAgo = 'Yesterday';
+            } else {
+                timeAgo = `${diffInDays} days ago`;
+            }
+        }
+        
+        return {
+            id: index + 1,
+            username: entry.data.username,
+            location: entry.data.location,
+            timestamp: timeAgo,
+            comment: entry.data.comment
+        };
+    });
+
+// Mock data for demonstration (will be replaced with real data)
+const activeUsers = feedItems.length > 0 ? 1234 + feedItems.length : 1234;
+const todayUsers = 42;
+const weekUsers = 189;
+const monthUsers = 567;
+
+// Emergency-themed fallback data
+const fallbackItems = [
+    {
+        id: 1,
+        username: "Paramedic James D.",
+        location: "Ambulance Station",
+        timestamp: "2 hours ago",
+        comment: "15-minute delay to cardiac arrest call. Patient's condition deteriorated during extended response time."
+    },
+    {
+        id: 2,
+        username: "Helen M.",
+        location: "School Road",
+        timestamp: "4 hours ago",
+        comment: "My daughter's asthma attack - ambulance couldn't reach us for 20 minutes due to traffic gridlock."
+    },
+    {
+        id: 3,
+        username: "Fire Chief David B.",
+        location: "Station Road",
+        timestamp: "6 hours ago",
+        comment: "House fire response delayed 12 minutes. Every second matters when lives are at stake."
+    },
+    {
+        id: 4,
+        username: "Dr. Margaret K.",
+        location: "Medical Centre",
+        timestamp: "8 hours ago",
+        comment: "Critical patient transfers taking twice as long. This is a public health emergency."
+    },
+    {
+        id: 5,
+        username: "Nurse Sarah W.",
+        location: "High Street",
+        timestamp: "12 hours ago",
+        comment: "Can't get to emergency calls. Traffic chaos is literally killing people."
+    },
+    {
+        id: 6,
+        username: "Emergency Response Alex P.",
+        location: "North Swanage",
+        timestamp: "1 day ago",
+        comment: "Stroke patient waited 18 minutes for ambulance. Golden hour lost to traffic delays."
+    },
+    {
+        id: 7,
+        username: "Police Officer Claire R.",
+        location: "Shore Road",
+        timestamp: "1 day ago",
+        comment: "Emergency vehicles blocked again. This is a crisis waiting to happen."
+    },
+    {
+        id: 8,
+        username: "Resident Tom H.",
+        location: "Durlston Road",
+        timestamp: "2 days ago",
+        comment: "Father's heart attack - paramedics stuck in traffic. Thank God he survived the delay."
+    },
+    {
+        id: 9,
+        username: "Dispatcher Lisa M.",
+        location: "Control Room",
+        timestamp: "2 days ago",
+        comment: "Every emergency call in North Swanage now includes 'traffic delay' warnings."
+    },
+    {
+        id: 10,
+        username: "Resident Emma J.",
+        location: "Northbrook Road",
+        timestamp: "3 days ago",
+        comment: "Elderly neighbor collapsed. Took 22 minutes for help to arrive. This has to stop."
+    }
+];
+
+// Use content collection items if available, otherwise use fallback
+const displayItems = feedItems.length > 0 ? feedItems : fallbackItems;
+---
+
+<Layout title="Feed">
+    <!-- HERO SECTION -->
+    <section class="feed-hero">
+        <h1 class="brutal-headline" style="font-size: clamp(3rem, 8vw, 6rem);">
+            EMERGENCY<br/>REPORTS
+        </h1>
+        <p class="brutal-subhead" style="font-size: clamp(1.2rem, 3vw, 2rem);">
+            LIVES AT RISK. SAFETY FIRST. URGENT ACTION NEEDED.
+        </p>
+    </section>
+
+    <!-- USER COUNTER -->
+    <BrutalSection title="THE EMERGENCY RESPONSE CRISIS">
+        <div class="countdown-alert">
+            <div class="countdown-number" id="daysUntilVote">--</div>
+            <div class="countdown-label">DAYS UNTIL CRITICAL SAFETY VOTE</div>
+        </div>
+        <div class="user-counter">
+            <div class="counter-block counter-total">
+                <div class="data-stat">{activeUsers}</div>
+                <div class="counter-label">Emergency Reports Filed</div>
+            </div>
+            <div class="counter-block">
+                <div class="data-stat">{todayUsers}</div>
+                <div class="counter-label">Critical Reports Today</div>
+            </div>
+            <div class="counter-block">
+                <div class="data-stat">{weekUsers}</div>
+                <div class="counter-label">Safety Alerts This Week</div>
+            </div>
+            <div class="counter-block">
+                <div class="data-stat">{monthUsers}</div>
+                <div class="counter-label">Emergency Delays This Month</div>
+            </div>
+        </div>
+    </BrutalSection>
+
+    <!-- FEED -->
+    <BrutalSection title="EMERGENCY INCIDENT REPORTS">
+        <p style="margin-bottom: 2rem; font-size: 1.125rem;">
+            Every life-threatening delay documented. Every emergency response failure recorded. 
+            First responders and families sharing critical safety evidence.
+        </p>
+        <div class="feed-container">
+            {displayItems.map((item) => (
+                <div class="feed-item fade-in" data-id={item.id}>
+                    <div class="feed-meta">
+                        <span class="feed-user">{item.username} • {item.location}</span>
+                        <span class="feed-time">{item.timestamp}</span>
+                    </div>
+                    <div class="feed-content">
+                        "{item.comment}"
+                    </div>
+                </div>
+            ))}
+        </div>
+        
+        <div class="load-more-container">
+            <button class="submit-btn" id="loadMore">
+                LOAD MORE EMERGENCY REPORTS
+            </button>
+        </div>
+    </BrutalSection>
+
+    <!-- JOIN CTA -->
+    <BrutalSection background="black">
+        <h2 class="brutal-subhead" style="color: #FFD700; margin-bottom: 2rem;">
+            REPORT EMERGENCY DELAYS
+        </h2>
+        <p style="font-size: 1.25rem; margin-bottom: 2rem;">
+            Document the crisis. Save lives. Every emergency delay must be recorded.
+        </p>
+        <a href="/v4/" class="submit-btn" style="display: inline-block; text-decoration: none;">
+            REPORT LIFE-THREATENING DELAYS
+        </a>
+    </BrutalSection>
+</Layout>
+
+<style>
+    .feed-hero {
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        padding: 6rem 2rem;
+        text-align: center;
+        border-bottom: 8px solid var(--brutal-gray);
+    }
+
+    .feed-hero .brutal-headline {
+        margin-bottom: 1rem;
+    }
+
+    .countdown-alert {
+        background: var(--brutal-red);
+        color: var(--brutal-white);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 4px solid var(--brutal-black);
+        box-shadow: 8px 8px 0 var(--brutal-shadow);
+        text-align: center;
+    }
+
+    .countdown-number {
+        font-family: 'Arial Black', sans-serif;
+        font-size: 4rem;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    .countdown-label {
+        font-size: 1.25rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-top: 0.5rem;
+    }
+
+    .counter-total {
+        grid-column: 1 / -1;
+        background: #FFD700 !important;
+        transform: scale(1.1);
+        box-shadow: 0 10px 30px rgba(0, 102, 204, 0.3);
+    }
+
+    .load-more-container {
+        text-align: center;
+        margin-top: 3rem;
+    }
+
+    /* Additional animations for feed items */
+    .feed-item {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .feed-item:nth-child(1) { animation-delay: 0.1s; }
+    .feed-item:nth-child(2) { animation-delay: 0.2s; }
+    .feed-item:nth-child(3) { animation-delay: 0.3s; }
+    .feed-item:nth-child(4) { animation-delay: 0.4s; }
+    .feed-item:nth-child(5) { animation-delay: 0.5s; }
+    .feed-item:nth-child(6) { animation-delay: 0.6s; }
+    .feed-item:nth-child(7) { animation-delay: 0.7s; }
+    .feed-item:nth-child(8) { animation-delay: 0.8s; }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .feed-hero {
+            padding: 4rem 1rem;
+        }
+    }
+</style>
+
+<script>
+    // Simulate loading more emergency reports
+    document.getElementById('loadMore')?.addEventListener('click', function() {
+        const container = document.querySelector('.feed-container');
+        const button = this as HTMLButtonElement;
+        
+        // Disable button temporarily
+        button.disabled = true;
+        button.textContent = 'LOADING REPORTS...';
+        
+        // Simulate API call
+        setTimeout(() => {
+            // Mock new emergency reports
+            const newItems = [
+                {
+                    username: "EMT Rachel T.",
+                    location: "Victoria Avenue",
+                    timestamp: "4 days ago",
+                    comment: "Child choking incident - 8 minute delay reaching family. Terrifying for everyone involved."
+                },
+                {
+                    username: "Dr. Michael P.",
+                    location: "Medical Centre",
+                    timestamp: "5 days ago",
+                    comment: "Emergency surgery patient delayed in transfer. These traffic jams are literally life-threatening."
+                }
+            ];
+            
+            // Add new items to feed
+            newItems.forEach((item, index) => {
+                const feedItem = document.createElement('div');
+                feedItem.className = 'feed-item';
+                feedItem.style.animationDelay = `${(index + 1) * 0.1}s`;
+                feedItem.innerHTML = `
+                    <div class="feed-meta">
+                        <span class="feed-user">${item.username} • ${item.location}</span>
+                        <span class="feed-time">${item.timestamp}</span>
+                    </div>
+                    <div class="feed-content">
+                        "${item.comment}"
+                    </div>
+                `;
+                container?.appendChild(feedItem);
+            });
+            
+            // Re-enable button
+            button.disabled = false;
+            button.textContent = 'LOAD MORE EMERGENCY REPORTS';
+        }, 1000);
+    });
+
+    // Counter animation
+    function animateCounter(element: HTMLElement, target: number) {
+        const duration = 2000;
+        const start = 0;
+        const increment = target / (duration / 16);
+        let current = start;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                element.textContent = target.toString();
+                clearInterval(timer);
+            } else {
+                element.textContent = Math.floor(current).toString();
+            }
+        }, 16);
+    }
+
+    // Animate counters on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        const counters = document.querySelectorAll('.counter-block .data-stat');
+        counters.forEach((counter) => {
+            const target = parseInt(counter.textContent || '0');
+            animateCounter(counter as HTMLElement, target);
+        });
+
+        // Calculate days until September 15, 2024
+        const voteDate = new Date('2024-09-15');
+        const today = new Date();
+        const timeDiff = voteDate.getTime() - today.getTime();
+        const daysUntil = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+        
+        const countdownElement = document.getElementById('daysUntilVote');
+        if (countdownElement) {
+            if (daysUntil > 0) {
+                countdownElement.textContent = daysUntil.toString();
+            } else {
+                countdownElement.textContent = 'NOW';
+            }
+        }
+    });
+</script>

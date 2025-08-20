@@ -1,0 +1,452 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import DataBlock from "../../components/DataBlock.astro";
+import BrutalSection from "../../components/BrutalSection.astro";
+import ImpactCard from "../../components/ImpactCard.astro";
+---
+
+<Layout title="Home">
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-grid">
+      {[...Array(9)].map(() => <div class="grid-cell" />)}
+    </div>
+    <div class="hero-content">
+      <h1 class="brutal-headline">EMERGENCY<br />RESPONSE<br />CRISIS</h1>
+      <p class="brutal-subhead">LIVES AT RISK. ACTION NEEDED NOW.</p>
+      <div class="data-block" style="opacity: 1; transform: none;">
+        <div class="data-label">15 MINUTES DELAYS</div>
+        <div class="data-stat">CRITICAL</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCROLL INDICATOR -->
+  <div class="scroll-indicator"></div>
+
+  <!-- INTRODUCTION -->
+  <section class="story-section fade-in">
+    <div class="story-content">
+      <div>
+        <h2 class="brutal-subhead">THE LIFE-SAVING ALLIANCE</h2>
+        <p style="font-size: 1.25rem; margin: 2rem 0; line-height: 1.6;">
+          The Emergency Response Crisis Alliance emerged when paramedics, fire 
+          crews, and healthcare workers raised the alarm about traffic delays 
+          threatening lives. Every second counts in an emergency - but Swanage's 
+          traffic crisis is stealing precious time from those who need it most.
+        </p>
+        <div class="pull-quote">
+          "When emergency response times double, lives hang in the balance"
+        </div>
+      </div>
+      <DataBlock
+        label="FIRST RESPONDERS"
+        stat="1,247"
+        description="Demanding urgent safety action"
+      />
+    </div>
+  </section>
+
+  <!-- TRAFFIC SURGE -->
+  <BrutalSection title="THE £75,000 SAFETY BETRAYAL">
+    <div class="chart-container">
+      <h3 class="brutal-subhead">EMERGENCY RESPONSE EXPOSED</h3>
+      <div class="bar-chart">
+        <div class="bar" style="height: 30%;" data-value="387">
+          <span class="bar-value">387</span>
+          <span class="bar-label">Survey Responses</span>
+        </div>
+        <div class="bar" style="height: 60%;" data-value="71%">
+          <span class="bar-value">71%</span>
+          <span class="bar-label">Were Tourists</span>
+        </div>
+        <div class="bar" style="height: 90%;" data-value="15min">
+          <span class="bar-value">15min</span>
+          <span class="bar-label">Emergency Delays</span>
+        </div>
+      </div>
+    </div>
+    <div class="brutal-info-block">
+      <h3 class="brutal-subhead">SAFETY CRISIS EVIDENCE</h3>
+      <ul style="font-size: 1.25rem; margin-top: 1rem; list-style: none;">
+        <li style="margin-bottom: 1rem;">
+          ▪ Survey ignored emergency services warnings
+        </li>
+        <li style="margin-bottom: 1rem;">
+          ▪ 15-minute delays to North Swanage documented
+        </li>
+        <li style="margin-bottom: 1rem;">
+          ▪ Ambulance crews report critical access failures
+        </li>
+        <li>▪ Fire service response times now dangerously extended</li>
+      </ul>
+    </div>
+  </BrutalSection>
+
+  <!-- IMPACT ANALYSIS -->
+  <BrutalSection title="LIFE-THREATENING IMPACT ANALYSIS">
+    <div class="impact-grid">
+      <ImpactCard
+        stat="15min"
+        description="Emergency response delays - critical for cardiac arrests"
+      />
+      <ImpactCard
+        stat="£75,000"
+        description="Wasted on survey while ignoring safety warnings"
+      />
+      <ImpactCard stat="0" description="Emergency service consultations conducted" />
+      <ImpactCard
+        stat="3"
+        description="Formal safety complaints filed with authorities"
+      />
+    </div>
+  </BrutalSection>
+
+  <!-- PARKING CRISIS -->
+  <BrutalSection title="THE SAFETY EMERGENCY">
+    <div class="evidence-grid">
+      <div class="evidence-card">
+        <div class="evidence-number">1</div>
+        <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">
+          RESPONSE TIME CRISIS
+        </h3>
+        <div class="data-stat" style="font-size: 3rem;">15min</div>
+        <p style="margin-top: 1rem;">Emergency delays threaten lives daily</p>
+      </div>
+      <div class="evidence-card">
+        <div class="evidence-number">2</div>
+        <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">AMBULANCE ACCESS</h3>
+        <div class="data-stat" style="font-size: 3rem;">BLOCKED</div>
+        <p style="margin-top: 1rem;">
+          Critical routes impassable during medical emergencies
+        </p>
+      </div>
+      <div class="evidence-card">
+        <div class="evidence-number">3</div>
+        <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">
+          SAFETY CONSULTATION
+        </h3>
+        <div class="data-stat" style="font-size: 3rem;">0</div>
+        <p style="margin-top: 1rem;">
+          Emergency services NEVER consulted on traffic plans
+        </p>
+      </div>
+    </div>
+  </BrutalSection>
+
+  <!-- CALL TO ACTION -->
+  <BrutalSection>
+    <h2
+      class="brutal-headline"
+      style="font-size: clamp(3rem, 8vw, 5rem); text-align: center;"
+    >
+      <span></span><br />PROTECT LIVES NOW
+    </h2>
+
+    <div class="action-form">
+      <form id="contactForm">
+        <div class="form-group">
+          <label for="name">NAME</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label for="email">EMAIL</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        <div class="form-group">
+          <label for="postcode">POSTCODE</label>
+          <input type="text" id="postcode" name="postcode" required />
+        </div>
+        <div class="form-group">
+          <label for="message">EMERGENCY EXPERIENCE (OPTIONAL)</label>
+          <textarea id="message" name="message" rows="4"></textarea>
+        </div>
+        <button type="submit" class="submit-btn">REPORT EMERGENCY DELAYS</button>
+      </form>
+      <div
+        class="form-confirmation"
+        id="formConfirmation"
+        style="display: none;"
+      >
+        EMERGENCY REPORT LOGGED - SAFETY FIRST
+      </div>
+    </div>
+  </BrutalSection>
+</Layout>
+
+<style>
+  /* HERO SECTION */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--brutal-black);
+    color: var(--brutal-white);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    position: absolute;
+    inset: 0;
+    opacity: 0.1;
+  }
+
+  .grid-cell {
+    background: var(--brutal-white);
+    border: 1px solid var(--brutal-white);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .hero .brutal-headline {
+    margin-bottom: 2rem;
+    animation: slideInBrutal 1s ease-out forwards;
+  }
+
+  /* STORY SECTIONS */
+  .story-section {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    padding: 4rem 2rem;
+  }
+
+  .story-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  /* CHARTS */
+  .chart-container {
+    margin: 2rem 0;
+  }
+
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    height: 300px;
+    gap: 1rem;
+    padding: 3rem;
+    background: var(--brutal-white);
+    border: 4px solid var(--brutal-black);
+    margin-top: 1rem;
+  }
+
+  .bar {
+    flex: 1;
+    background: var(--brutal-gray);
+    position: relative;
+    transition: all 0.8s ease-out;
+  }
+
+  .bar-label {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  .bar-value {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: 900;
+    font-size: 1.25rem;
+  }
+
+  /* BRUTAL INFO BLOCK */
+  .brutal-info-block {
+    background: var(--brutal-concrete);
+    border: 4px solid var(--brutal-black);
+    padding: 2rem;
+    margin: 2rem 0;
+  }
+
+  .brutal-info-block h3 {
+    margin-bottom: 1rem;
+  }
+
+  /* IMPACT GRID */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+  }
+
+  /* EVIDENCE CARDS */
+  .evidence-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+  }
+
+  .evidence-card {
+    background: var(--brutal-concrete);
+    border: 4px solid var(--brutal-black);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .evidence-number {
+    position: absolute;
+    top: -20px;
+    right: 20px;
+    font-size: 6rem;
+    font-weight: 900;
+    color: #ffd700;
+    opacity: 0.2;
+  }
+
+  /* SCROLL INDICATOR */
+  .scroll-indicator {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 60px;
+    border: 4px solid var(--brutal-black);
+    background: var(--brutal-white);
+    opacity: 0.8;
+    animation: bounce 2s infinite;
+    z-index: 50;
+  }
+
+  .scroll-indicator::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    background: var(--brutal-black);
+    animation: scrollDot 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateX(-50%) translateY(0);
+    }
+    50% {
+      transform: translateX(-50%) translateY(10px);
+    }
+  }
+
+  @keyframes scrollDot {
+    0% {
+      top: 10px;
+    }
+    50% {
+      top: 30px;
+    }
+    100% {
+      top: 10px;
+    }
+  }
+
+  .form-confirmation {
+    background: var(--brutal-gray);
+    color: var(--brutal-white);
+    padding: 2rem;
+    text-align: center;
+    font-weight: 900;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .story-content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .bar-chart {
+      height: 200px;
+    }
+  }
+</style>
+
+<script>
+  // Form handling
+  document
+    .getElementById("contactForm")
+    ?.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const formData = {
+        name: (document.getElementById("name") as HTMLInputElement).value,
+        email: (document.getElementById("email") as HTMLInputElement).value,
+        postcode: (document.getElementById("postcode") as HTMLInputElement)
+          .value,
+        message: (document.getElementById("message") as HTMLTextAreaElement)
+          .value,
+        timestamp: new Date().toISOString(),
+      };
+
+      // Show confirmation
+      const confirmation = document.getElementById("formConfirmation");
+      if (confirmation) {
+        confirmation.style.display = "block";
+      }
+
+      // Reset form
+      (this as HTMLFormElement).reset();
+
+      // Log for demo
+      console.log("Emergency Report Registered:", formData);
+
+      // Hide confirmation after 5 seconds
+      setTimeout(() => {
+        if (confirmation) {
+          confirmation.style.display = "none";
+        }
+      }, 5000);
+    });
+
+  // Hide scroll indicator on scroll
+  window.addEventListener("scroll", () => {
+    const indicator = document.querySelector(
+      ".scroll-indicator"
+    ) as HTMLElement;
+    if (indicator) {
+      if (window.scrollY > 100) {
+        indicator.style.opacity = "0";
+      } else {
+        indicator.style.opacity = "0.8";
+      }
+    }
+  });
+
+  // Parallax effect for hero grid
+  window.addEventListener("scroll", () => {
+    const scrolled = window.pageYOffset;
+    const grid = document.querySelector(".hero-grid") as HTMLElement;
+    if (grid) {
+      grid.style.transform = `translateY(${scrolled * 0.5}px)`;
+    }
+  });
+</script>

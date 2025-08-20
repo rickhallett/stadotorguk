@@ -1,0 +1,338 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Website Variants Showcase">
+  <style>
+    .variants-container {
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .variants-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .variants-title {
+      font-family: 'Arial Black', sans-serif;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .variants-subtitle {
+      font-size: 1.25rem;
+      color: #666;
+      margin-bottom: 2rem;
+    }
+
+    .variants-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .variant-card {
+      background: white;
+      border: 8px solid #000;
+      box-shadow: 15px 15px 0 rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .variant-card:hover {
+      transform: translate(-5px, -5px);
+      box-shadow: 20px 20px 0 rgba(0, 0, 0, 0.15);
+    }
+
+    .variant-number {
+      background: #000;
+      color: white;
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      font-family: 'Arial Black', sans-serif;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .variant-name {
+      font-family: 'Arial Black', sans-serif;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .variant-theme {
+      color: #666;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .variant-description {
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      min-height: 80px;
+    }
+
+    .variant-audience {
+      background: #f0f0f0;
+      padding: 0.75rem;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid #000;
+    }
+
+    .variant-audience-label {
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 0.875rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .variant-link {
+      display: inline-block;
+      background: #000;
+      color: white;
+      padding: 1rem 2rem;
+      text-decoration: none;
+      font-family: 'Arial Black', sans-serif;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      border: 4px solid #000;
+    }
+
+    .variant-link:hover {
+      background: white;
+      color: #000;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: bold;
+      margin-left: 1rem;
+    }
+
+    .status-ready {
+      background: #22c55e;
+      color: white;
+    }
+
+    .status-pending {
+      background: #f59e0b;
+      color: white;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 2rem;
+      color: #000;
+      text-decoration: none;
+      font-weight: bold;
+      transition: transform 0.2s;
+    }
+
+    .back-link:hover {
+      transform: translateX(-5px);
+    }
+  </style>
+
+  <div class="variants-container">
+    <a href="/" class="back-link">← Back to Original Site</a>
+    
+    <div class="variants-header">
+      <h1 class="variants-title">Website Copy Variants</h1>
+      <p class="variants-subtitle">Multiple messaging approaches for the Swanage Traffic Alliance</p>
+    </div>
+
+    <div class="variants-grid">
+      <!-- Variant 1: Legal Focus -->
+      <div class="variant-card">
+        <span class="variant-number">V1</span>
+        <span class="status-badge status-ready">READY</span>
+        <h2 class="variant-name">Legal Focus</h2>
+        <p class="variant-theme">Aggressive Legal Action</p>
+        <p class="variant-description">
+          Prosecutorial approach emphasizing constitutional violations, judicial review preparation, 
+          and legal precedents. Evidence-based messaging for legal action.
+        </p>
+        <div class="variant-audience">
+          <div class="variant-audience-label">Target Audience</div>
+          Legal professionals, rights advocates, journalists
+        </div>
+        <a href="/v1/" class="variant-link">View Legal Variant →</a>
+      </div>
+
+      <!-- Variant 2: Community Unity -->
+      <div class="variant-card">
+        <span class="variant-number">V2</span>
+        <span class="status-badge status-ready">READY</span>
+        <h2 class="variant-name">Community Unity</h2>
+        <p class="variant-theme">Grassroots Solidarity</p>
+        <p class="variant-description">
+          Inspirational messaging focused on collective action, neighbor support, 
+          and community resilience. Warm, empowering tone for local movement.
+        </p>
+        <div class="variant-audience">
+          <div class="variant-audience-label">Target Audience</div>
+          Local residents, community groups, families
+        </div>
+        <a href="/v2/" class="variant-link">View Community Variant →</a>
+      </div>
+
+      <!-- Variant 3: Data-Driven -->
+      <div class="variant-card">
+        <span class="variant-number">V3</span>
+        <span class="status-badge status-ready">READY</span>
+        <h2 class="variant-name">Data-Driven</h2>
+        <p class="variant-theme">Statistical Evidence</p>
+        <p class="variant-description">
+          Analytical approach with statistical analysis, data visualization, 
+          and quantifiable evidence. Objective, fact-based messaging.
+        </p>
+        <div class="variant-audience">
+          <div class="variant-audience-label">Target Audience</div>
+          Analysts, researchers, data scientists
+        </div>
+        <a href="/v3/" class="variant-link">View Data Variant →</a>
+      </div>
+
+      <!-- Variant 4: Emergency Response -->
+      <div class="variant-card">
+        <span class="variant-number">V4</span>
+        <span class="status-badge status-ready">READY</span>
+        <h2 class="variant-name">Emergency Response</h2>
+        <p class="variant-theme">Public Safety Crisis</p>
+        <p class="variant-description">
+          Urgent messaging about life-threatening delays, emergency service failures, 
+          and public safety risks. Protective, alarming tone.
+        </p>
+        <div class="variant-audience">
+          <div class="variant-audience-label">Target Audience</div>
+          Emergency services, healthcare workers, families
+        </div>
+        <a href="/v4/" class="variant-link">View Emergency Variant →</a>
+      </div>
+
+      <!-- Variant 5: Economic Impact -->
+      <div class="variant-card">
+        <span class="variant-number">V5</span>
+        <span class="status-badge status-ready">READY</span>
+        <h2 class="variant-name">Economic Impact</h2>
+        <p class="variant-theme">Business & Economic Damage</p>
+        <p class="variant-description">
+          Business-focused messaging about revenue losses, investment risks, 
+          and economic damage. Professional, pragmatic approach.
+        </p>
+        <div class="variant-audience">
+          <div class="variant-audience-label">Target Audience</div>
+          Business owners, investors, chamber of commerce
+        </div>
+        <a href="/v5/" class="variant-link">View Economic Variant →</a>
+      </div>
+
+      <!-- Variant 6: Environmental Justice -->
+      <div class="variant-card">
+        <span class="variant-number">V6</span>
+        <span class="status-badge status-pending">PENDING</span>
+        <h2 class="variant-name">Environmental Justice</h2>
+        <p class="variant-theme">Environmental & Climate Impact</p>
+        <p class="variant-description">
+          Environmental activism focus on emissions, pollution, and climate commitments. 
+          Urgent messaging about ecological damage.
+        </p>
+        <div class="variant-audience">
+          <div class="variant-audience-label">Target Audience</div>
+          Environmental activists, climate advocates, scientists
+        </div>
+        <a href="#" class="variant-link" style="opacity: 0.5; cursor: not-allowed;">Coming Soon</a>
+      </div>
+
+      <!-- Variant 7: Historical Context -->
+      <div class="variant-card">
+        <span class="variant-number">V7</span>
+        <span class="status-badge status-pending">PENDING</span>
+        <h2 class="variant-name">Historical Context</h2>
+        <p class="variant-theme">Historical Precedents</p>
+        <p class="variant-description">
+          Educational approach showing patterns of past council failures, 
+          democratic traditions, and historical lessons ignored.
+        </p>
+        <div class="variant-audience">
+          <div class="variant-audience-label">Target Audience</div>
+          Historians, academics, long-term residents
+        </div>
+        <a href="#" class="variant-link" style="opacity: 0.5; cursor: not-allowed;">Coming Soon</a>
+      </div>
+
+      <!-- Variant 8: Digital Resistance -->
+      <div class="variant-card">
+        <span class="variant-number">V8</span>
+        <span class="status-badge status-pending">PENDING</span>
+        <h2 class="variant-name">Digital Resistance</h2>
+        <p class="variant-theme">Tech-Enabled Activism</p>
+        <p class="variant-description">
+          Modern, tech-savvy approach with crowdsourcing, blockchain transparency, 
+          and digital democracy. Disruptive, innovative messaging.
+        </p>
+        <div class="variant-audience">
+          <div class="variant-audience-label">Target Audience</div>
+          Digital natives, tech workers, online activists
+        </div>
+        <a href="#" class="variant-link" style="opacity: 0.5; cursor: not-allowed;">Coming Soon</a>
+      </div>
+
+      <!-- Variant 9: International Solidarity -->
+      <div class="variant-card">
+        <span class="variant-number">V9</span>
+        <span class="status-badge status-pending">PENDING</span>
+        <h2 class="variant-name">International Solidarity</h2>
+        <p class="variant-theme">Global Movement</p>
+        <p class="variant-description">
+          International perspective emphasizing global solidarity, universal rights, 
+          and worldwide democracy defense. Inclusive, worldly approach.
+        </p>
+        <div class="variant-audience">
+          <div class="variant-audience-label">Target Audience</div>
+          International activists, NGOs, foreign media
+        </div>
+        <a href="#" class="variant-link" style="opacity: 0.5; cursor: not-allowed;">Coming Soon</a>
+      </div>
+
+      <!-- Variant 10: Investigative Journalism -->
+      <div class="variant-card">
+        <span class="variant-number">V10</span>
+        <span class="status-badge status-pending">PENDING</span>
+        <h2 class="variant-name">Investigative Journalism</h2>
+        <p class="variant-theme">Media Exposé</p>
+        <p class="variant-description">
+          Journalistic approach revealing corruption, following money trails, 
+          and exposing conspiracies. Provocative, investigative tone.
+        </p>
+        <div class="variant-audience">
+          <div class="variant-audience-label">Target Audience</div>
+          Journalists, media outlets, whistleblowers
+        </div>
+        <a href="#" class="variant-link" style="opacity: 0.5; cursor: not-allowed;">Coming Soon</a>
+      </div>
+    </div>
+
+    <div style="text-align: center; padding: 2rem; background: #f0f0f0; border: 4px solid #000; margin-top: 4rem;">
+      <h2 style="font-family: 'Arial Black', sans-serif; margin-bottom: 1rem;">Implementation Status</h2>
+      <p style="font-size: 1.25rem; margin-bottom: 1rem;">
+        <strong>5 of 10</strong> variants are currently live and ready for testing
+      </p>
+      <p style="color: #666;">
+        Each variant maintains the same core facts and brutalist design while offering unique messaging approaches
+      </p>
+    </div>
+  </div>
+</Layout>

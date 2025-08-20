@@ -1,0 +1,433 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BrutalSection from '../../components/BrutalSection.astro';
+import { getCollection } from 'astro:content';
+
+// Get all published leads
+const allLeads = await getCollection('leads', ({ data }) => data.published);
+
+// Sort by timestamp (newest first)
+const sortedLeads = allLeads.sort((a, b) => {
+    const dateA = new Date(a.data.timestamp);
+    const dateB = new Date(b.data.timestamp);
+    return dateB.getTime() - dateA.getTime();
+});
+
+// Get recent supporters (last 10)
+const recentSupporters = sortedLeads.slice(0, 10);
+
+// Count by visitor type
+const visitorTypeCounts = sortedLeads.reduce((acc, lead) => {
+    const type = lead.data.visitor_type || 'Local';
+    acc[type] = (acc[type] || 0) + 1;
+    return acc;
+}, {});
+
+// Calculate percentages
+const total = sortedLeads.length;
+const localPercentage = Math.round(((visitorTypeCounts.Local || 0) / total) * 100);
+const visitorPercentage = Math.round(((visitorTypeCounts.Visitor || 0) / total) * 100);
+const otherPercentage = Math.round(((visitorTypeCounts.Other || 0) / total) * 100);
+
+// Get supporters with comments
+const supportersWithComments = sortedLeads.filter(lead => lead.data.comments && lead.data.comments.trim()).slice(0, 5);
+---
+
+<Layout title="Our Supporters - Swanage Traffic Alliance">
+    <main>
+        <BrutalSection bgColor="var(--brutal-white)">
+            <div class="hero-section">
+                <h1>OUR MOVEMENT IS GROWING</h1>
+                <div class="hero-number" data-target={total}>0</div>
+                <p class="hero-subtitle">THE VOTERS THEY COULDN'T SILENCE</p>
+            </div>
+        </BrutalSection>
+
+        <BrutalSection bgColor="var(--brutal-concrete)">
+            <h2>THE REAL MAJORITY</h2>
+            <div class="breakdown-grid">
+                <div class="breakdown-card">
+                    <div class="breakdown-percentage">{localPercentage}%</div>
+                    <div class="breakdown-label">LOCAL RESIDENTS</div>
+                    <div class="breakdown-count">{visitorTypeCounts.Local || 0} supporters</div>
+                    <div class="breakdown-bar">
+                        <div class="breakdown-fill local-fill" style={`width: ${localPercentage}%`}></div>
+                    </div>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-percentage">{visitorPercentage}%</div>
+                    <div class="breakdown-label">VISITORS</div>
+                    <div class="breakdown-count">{visitorTypeCounts.Visitor || 0} supporters</div>
+                    <div class="breakdown-bar">
+                        <div class="breakdown-fill visitor-fill" style={`width: ${visitorPercentage}%`}></div>
+                    </div>
+                </div>
+                
+                {otherPercentage > 0 && (
+                    <div class="breakdown-card">
+                        <div class="breakdown-percentage">{otherPercentage}%</div>
+                        <div class="breakdown-label">OTHER</div>
+                        <div class="breakdown-count">{visitorTypeCounts.Other || 0} supporters</div>
+                        <div class="breakdown-bar">
+                            <div class="breakdown-fill other-fill" style={`width: ${otherPercentage}%`}></div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </BrutalSection>
+
+        <BrutalSection bgColor="var(--brutal-white)">
+            <h2>TESTIMONIES FOR THE RECORD</h2>
+            <div class="comments-grid">
+                {supportersWithComments.map((lead) => {
+                    const displayName = `${lead.data.first_name} ${lead.data.last_name.charAt(0)}.`;
+                    return (
+                        <div class="comment-card">
+                            <blockquote>"{lead.data.comments}"</blockquote>
+                            <div class="comment-author">
+                                <strong>{displayName}</strong>
+                                <span>{lead.data.visitor_type}</span>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        </BrutalSection>
+
+        <BrutalSection bgColor="var(--brutal-concrete)">
+            <h2>RECENT SUPPORTERS</h2>
+            <div class="recent-list">
+                {recentSupporters.map((lead) => {
+                    const date = new Date(lead.data.timestamp);
+                    const dateStr = date.toLocaleDateString('en-GB', { 
+                        day: 'numeric', 
+                        month: 'short' 
+                    });
+                    const displayName = `${lead.data.first_name} ${lead.data.last_name.charAt(0)}.`;
+                    
+                    return (
+                        <div class="recent-item">
+                            <div class="recent-name">{displayName}</div>
+                            <div class="recent-meta">
+                                <span class="recent-type">{lead.data.visitor_type}</span>
+                                <span class="recent-date">{dateStr}</span>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+            
+            <div class="cta-section">
+                <a href="/supporters/1" class="cta-button">VIEW ALL {total} SUPPORTERS</a>
+            </div>
+        </BrutalSection>
+
+        <BrutalSection bgColor="var(--brutal-red)">
+            <div class="join-section">
+                <h2>ADD YOUR VOICE</h2>
+                <p>Join the unconsulted majority. Your voice matters in the fight against corruption.</p>
+                <a href="/#signup" class="join-button">SIGN THE PETITION</a>
+            </div>
+        </BrutalSection>
+    </main>
+</Layout>
+
+<style>
+    h2 {
+        font-family: 'Arial Black', sans-serif;
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .hero-section {
+        text-align: center;
+        padding: 3rem 0;
+    }
+
+    .hero-section h1 {
+        font-family: 'Arial Black', sans-serif;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        letter-spacing: -0.02em;
+        margin-bottom: 2rem;
+    }
+
+    .hero-number {
+        font-family: 'Arial Black', sans-serif;
+        font-size: clamp(4rem, 10vw, 8rem);
+        color: var(--brutal-red);
+        line-height: 1;
+        margin: 1rem 0;
+    }
+
+    .hero-subtitle {
+        font-size: 1.125rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--brutal-gray);
+    }
+
+    .breakdown-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .breakdown-card {
+        background: var(--brutal-white);
+        border: 4px solid var(--brutal-black);
+        padding: 2rem;
+        box-shadow: 8px 8px 0 var(--brutal-shadow);
+    }
+
+    .breakdown-percentage {
+        font-family: 'Arial Black', sans-serif;
+        font-size: 3rem;
+        color: var(--brutal-black);
+        margin-bottom: 0.5rem;
+    }
+
+    .breakdown-label {
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+    }
+
+    .breakdown-count {
+        color: var(--brutal-gray);
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+    }
+
+    .breakdown-bar {
+        height: 20px;
+        background: var(--brutal-concrete);
+        border: 2px solid var(--brutal-black);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .breakdown-fill {
+        height: 100%;
+        background: var(--brutal-black);
+        transition: width 1s ease-out;
+    }
+
+    .local-fill {
+        background: var(--brutal-red);
+    }
+
+    .visitor-fill {
+        background: var(--brutal-gray);
+    }
+
+    .other-fill {
+        background: var(--brutal-concrete);
+        border-right: 2px solid var(--brutal-black);
+    }
+
+    .comments-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .comment-card {
+        background: var(--brutal-concrete);
+        border: 3px solid var(--brutal-black);
+        padding: 2rem;
+        box-shadow: 6px 6px 0 var(--brutal-shadow);
+    }
+
+    .comment-card blockquote {
+        font-size: 1.125rem;
+        line-height: 1.6;
+        margin: 0 0 1rem 0;
+        font-style: italic;
+    }
+
+    .comment-author {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        border-top: 2px solid var(--brutal-black);
+    }
+
+    .comment-author strong {
+        font-family: 'Arial Black', sans-serif;
+        text-transform: uppercase;
+    }
+
+    .comment-author span {
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .recent-list {
+        background: var(--brutal-white);
+        border: 4px solid var(--brutal-black);
+        box-shadow: 8px 8px 0 var(--brutal-shadow);
+    }
+
+    .recent-item {
+        padding: 1rem 1.5rem;
+        border-bottom: 2px solid var(--brutal-black);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .recent-item:last-child {
+        border-bottom: none;
+    }
+
+    .recent-name {
+        font-weight: bold;
+        font-size: 1.125rem;
+    }
+
+    .recent-meta {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .recent-type {
+        background: var(--brutal-gray);
+        color: var(--brutal-white);
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .recent-date {
+        font-size: 0.875rem;
+        color: var(--brutal-gray);
+    }
+
+    .cta-section {
+        text-align: center;
+        margin-top: 3rem;
+    }
+
+    .cta-button {
+        display: inline-block;
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        padding: 1rem 2rem;
+        text-decoration: none;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border: 4px solid var(--brutal-black);
+        box-shadow: 8px 8px 0 var(--brutal-shadow);
+        transition: all 0.2s;
+    }
+
+    .cta-button:hover {
+        background: var(--brutal-red);
+        transform: translate(-4px, -4px);
+        box-shadow: 12px 12px 0 var(--brutal-shadow);
+    }
+
+    .join-section {
+        text-align: center;
+        color: var(--brutal-white);
+        padding: 3rem 0;
+    }
+
+    .join-section h2 {
+        color: var(--brutal-white);
+    }
+
+    .join-section p {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+    }
+
+    .join-button {
+        display: inline-block;
+        background: var(--brutal-white);
+        color: var(--brutal-red);
+        padding: 1rem 3rem;
+        text-decoration: none;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border: 4px solid var(--brutal-white);
+        box-shadow: 8px 8px 0 rgba(0,0,0,0.3);
+        transition: all 0.2s;
+    }
+
+    .join-button:hover {
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        border-color: var(--brutal-black);
+        transform: translate(-4px, -4px);
+        box-shadow: 12px 12px 0 rgba(0,0,0,0.3);
+    }
+
+    @media (max-width: 768px) {
+        .breakdown-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .comments-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .recent-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .recent-meta {
+            width: 100%;
+            justify-content: space-between;
+        }
+    }
+</style>
+
+<script>
+    // Animate counter
+    const counter = document.querySelector('.hero-number');
+    const target = parseInt(counter.dataset.target);
+    const duration = 2000;
+    const step = target / (duration / 16);
+    let current = 0;
+    
+    const updateCounter = () => {
+        current += step;
+        if (current < target) {
+            counter.textContent = Math.floor(current);
+            requestAnimationFrame(updateCounter);
+        } else {
+            counter.textContent = target;
+        }
+    };
+    
+    // Start animation when visible
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                updateCounter();
+                observer.unobserve(entry.target);
+            }
+        });
+    });
+    
+    observer.observe(counter);
+</script>

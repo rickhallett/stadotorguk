@@ -1,0 +1,415 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BrutalSection from '../../components/BrutalSection.astro';
+import { getCollection } from 'astro:content';
+
+// Get all news items from content collection
+const newsEntries = await getCollection('news');
+
+// Sort by date (newest first) and format for display
+const newsItems = newsEntries
+    .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+    .map((entry, index) => {
+        const date = new Date(entry.data.date);
+        const formattedDate = date.toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: '2-digit', 
+            year: 'numeric' 
+        }).toUpperCase();
+        
+        return {
+            id: index + 1,
+            date: formattedDate,
+            title: entry.data.title,
+            content: entry.body || '',
+            slug: entry.slug
+        };
+    });
+
+// Legal-focused timeline items
+const fallbackItems = [
+    {
+        id: 1,
+        date: "AUG 28, 2024",
+        title: "GRANICUS LTD CONFIRMS TECHNICAL FAILURES",
+        content: "Independent technical assessment from survey provider confirms systematic failures. Evidence of procedural breach documented for judicial review proceedings."
+    },
+    {
+        id: 2,
+        date: "AUG 22, 2024",
+        title: "DORSET HIGHWAYS REFUSES DATA DISCLOSURE",
+        content: "FOI request denied without lawful basis. Clear breach of transparency obligations under Freedom of Information Act 2000. Appeal lodged with ICO."
+    },
+    {
+        id: 3,
+        date: "AUG 15, 2024",
+        title: "STANDING ORDER ABUSE DOCUMENTED",
+        content: "Council's use of Standing Order 1c to silence critics violates Article 10 ECHR and democratic principles. Legal precedent supports our constitutional challenge."
+    },
+    {
+        id: 4,
+        date: "AUG 10, 2024",
+        title: "UK STATISTICS AUTHORITY INVESTIGATION",
+        content: "Formal complaint accepted by Statistics Authority. Independent investigation launched into statistical integrity breaches. Regulatory action pending."
+    },
+    {
+        id: 5,
+        date: "AUG 01, 2024",
+        title: "LEGAL COALITION FORMED",
+        content: "Swanage Legal Coalition established with constitutional law expertise. Judicial review proceedings initiated. Statutory consultation breaches documented."
+    },
+    {
+        id: 6,
+        date: "JUL 25, 2024",
+        title: "CONSULTATION PROCESS RULED UNLAWFUL",
+        content: "Independent legal assessment confirms violations of Gunning Principles. Consultation failed all four statutory requirements for lawful public engagement."
+    },
+    {
+        id: 7,
+        date: "JUL 15, 2024",
+        title: "PROCEDURAL IMPROPRIETY EVIDENCE GATHERED",
+        content: "Documentary evidence establishes systematic failures in consultation process. Wednesbury unreasonableness standard clearly exceeded by council decisions."
+    },
+    {
+        id: 8,
+        date: "JUL 01, 2024",
+        title: "CONSTITUTIONAL RIGHTS VIOLATIONS DOCUMENTED",
+        content: "Breach of legitimate expectation and procedural fairness established. Residents' right to genuine consultation under Local Government Act 1972 violated."
+    }
+];
+
+// Use content collection items if available, otherwise use fallback
+const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
+---
+
+<Layout title="Legal Updates">
+    <!-- HERO SECTION -->
+    <section class="news-hero">
+        <h1 class="brutal-headline" style="font-size: clamp(3rem, 8vw, 6rem);">
+            CASE<br/>UPDATES
+        </h1>
+        <p class="brutal-subhead" style="font-size: clamp(1.2rem, 3vw, 2rem);">
+            JUDICIAL REVIEW PROCEEDINGS TIMELINE
+        </p>
+    </section>
+
+    <!-- TIMELINE -->
+    <BrutalSection>
+        <div class="timeline">
+            {displayItems.map((item, index) => (
+                <div class={`timeline-item fade-in ${index % 2 === 0 ? 'timeline-left' : 'timeline-right'}`}>
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">{item.date}</div>
+                        <h3 class="timeline-title">{item.title}</h3>
+                        <p class="timeline-text">{item.content}</p>
+                        <div class="legal-status">
+                            <span class="status-badge">EVIDENCE LOGGED</span>
+                        </div>
+                    </div>
+                </div>
+            ))}
+            
+            <!-- Ongoing indicator -->
+            <div class="timeline-ongoing">
+                <div class="timeline-marker ongoing-marker"></div>
+                <div class="ongoing-text">LEGAL PROCEEDINGS ACTIVE...</div>
+            </div>
+        </div>
+    </BrutalSection>
+
+    <!-- STAY INFORMED -->
+    <BrutalSection background="concrete">
+        <h2 class="brutal-subhead">CASE STATUS UPDATE</h2>
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>COURT DEADLINE</h3>
+                <p class="info-detail">90 DAYS</p>
+                <p>Judicial Review Application Window</p>
+            </div>
+            <div class="info-card">
+                <h3>EVIDENCE REVIEW</h3>
+                <p class="info-detail">ONGOING</p>
+                <p>Legal Team Assessment</p>
+            </div>
+            <div class="info-card">
+                <h3>COMPLAINANT STATUS</h3>
+                <p class="info-detail">1,247 REGISTERED</p>
+                <p>Claimants Supporting Case</p>
+            </div>
+        </div>
+    </BrutalSection>
+
+    <!-- URGENT ACTION -->
+    <BrutalSection background="black">
+        <h2 class="brutal-headline" style="font-size: clamp(2.5rem, 6vw, 4rem); color: var(--brutal-red); text-align: center;">
+            CONSTITUTIONAL<br/>RIGHTS AT STAKE
+        </h2>
+        <p style="font-size: 1.25rem; text-align: center; margin: 2rem 0;">
+            Your democratic rights have been violated. Join the legal challenge to restore 
+            constitutional governance and procedural fairness to Swanage.
+        </p>
+        <div style="text-align: center;">
+            <a href="/v1/" class="submit-btn" style="display: inline-block; text-decoration: none; margin: 0 1rem;">
+                JOIN LEGAL ACTION
+            </a>
+            <a href="/v1/feed" class="submit-btn" style="display: inline-block; text-decoration: none; margin: 0 1rem; background: var(--brutal-gray); /* Green for action */">
+                SUBMIT EVIDENCE
+            </a>
+        </div>
+    </BrutalSection>
+</Layout>
+
+<style>
+    .news-hero {
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        padding: 6rem 2rem;
+        text-align: center;
+        border-bottom: 8px solid var(--brutal-gray); /* Green accent */
+    }
+
+    .news-hero .brutal-headline {
+        margin-bottom: 1rem;
+    }
+
+    /* Enhanced Timeline Styles */
+    .timeline {
+        position: relative;
+        padding: 3rem 0;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 8px;
+        background: var(--brutal-black);
+        transform: translateX(-50%);
+    }
+
+    .timeline-item {
+        position: relative;
+        width: calc(50% - 60px);
+        margin-bottom: 4rem;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+    .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+    .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+    .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+    .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+    .timeline-item:nth-child(6) { animation-delay: 0.6s; }
+    .timeline-item:nth-child(7) { animation-delay: 0.7s; }
+    .timeline-item:nth-child(8) { animation-delay: 0.8s; }
+
+    .timeline-left {
+        margin-right: auto;
+        padding-right: 60px;
+        text-align: right;
+    }
+
+    .timeline-right {
+        margin-left: auto;
+        padding-left: 60px;
+        text-align: left;
+    }
+
+    .timeline-marker {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        background: #FFD700; /* Golden yellow */
+        border: 8px solid var(--brutal-black);
+        top: 0;
+        z-index: 1;
+    }
+
+    .timeline-left .timeline-marker {
+        right: -20px;
+    }
+
+    .timeline-right .timeline-marker {
+        left: -20px;
+    }
+
+    .timeline-content {
+        background: var(--brutal-white);
+        border: 4px solid var(--brutal-black);
+        padding: 2rem;
+        box-shadow: 10px 10px 0 var(--brutal-shadow);
+        transition: all 0.3s ease;
+    }
+
+    .timeline-content:hover {
+        transform: translate(-5px, -5px);
+        box-shadow: 15px 15px 0 var(--brutal-shadow);
+    }
+
+    .timeline-date {
+        font-size: 0.875rem;
+        font-weight: 900;
+        letter-spacing: 0.2em;
+        color: #FFD700; /* Golden yellow */
+        margin-bottom: 1rem;
+    }
+
+    .timeline-title {
+        font-size: 1.5rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+
+    .timeline-text {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .legal-status {
+        padding-top: 1rem;
+        border-top: 2px solid var(--brutal-black);
+    }
+
+    .status-badge {
+        background: var(--brutal-red);
+        color: var(--brutal-white);
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    /* Ongoing indicator */
+    .timeline-ongoing {
+        position: relative;
+        text-align: center;
+        padding-top: 2rem;
+    }
+
+    .ongoing-marker {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        animation: pulse 2s infinite;
+    }
+
+    .ongoing-text {
+        font-size: 1.5rem;
+        font-weight: 900;
+        letter-spacing: 0.2em;
+        margin-top: 4rem;
+        color: var(--brutal-red); /* Keep red for warning */
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: translateX(-50%) scale(1); }
+        50% { transform: translateX(-50%) scale(1.2); }
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Info Grid */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .info-card {
+        background: var(--brutal-white);
+        border: 4px solid var(--brutal-black);
+        padding: 2rem;
+        text-align: center;
+    }
+
+    .info-card h3 {
+        font-size: 1rem;
+        font-weight: 900;
+        letter-spacing: 0.2em;
+        color: #FFD700; /* Golden yellow */
+        margin-bottom: 1rem;
+    }
+
+    .info-detail {
+        font-size: 1.5rem;
+        font-weight: 900;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+        .news-hero {
+            padding: 4rem 1rem;
+        }
+
+        .timeline::before {
+            left: 40px;
+        }
+
+        .timeline-item {
+            width: calc(100% - 80px);
+            margin-left: 80px !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            text-align: left !important;
+        }
+
+        .timeline-marker {
+            left: -60px !important;
+            right: auto !important;
+        }
+
+        .timeline-content {
+            padding: 1.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.25rem;
+        }
+
+        .ongoing-marker {
+            left: 40px;
+            transform: translateX(-50%);
+        }
+    }
+</style>
+
+<script>
+    // Intersection Observer for timeline animations
+    const observerOptions = {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    // Observe timeline items
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.timeline-item').forEach(el => {
+            observer.observe(el);
+        });
+    });
+</script>

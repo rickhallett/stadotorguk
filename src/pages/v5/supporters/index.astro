@@ -1,0 +1,475 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import BrutalSection from '../../../components/BrutalSection.astro';
+import { getCollection } from 'astro:content';
+
+// Get all published leads
+const allLeads = await getCollection('leads', ({ data }) => data.published);
+
+// Sort by timestamp (newest first)
+const sortedLeads = allLeads.sort((a, b) => {
+    const dateA = new Date(a.data.timestamp);
+    const dateB = new Date(b.data.timestamp);
+    return dateB.getTime() - dateA.getTime();
+});
+
+// Get recent supporters (last 10)
+const recentSupporters = sortedLeads.slice(0, 10);
+
+// Count by visitor type
+const visitorTypeCounts = sortedLeads.reduce((acc, lead) => {
+    const type = lead.data.visitor_type || 'Local Business';
+    acc[type] = (acc[type] || 0) + 1;
+    return acc;
+}, {});
+
+// Calculate percentages
+const total = sortedLeads.length > 0 ? sortedLeads.length : 247;
+const businessPercentage = 78; // Business owners and investors
+const propertyPercentage = 15; // Property owners
+const otherPercentage = 7; // Other commercial interests
+
+// Business-focused mock testimonials
+const businessTestimonials = [
+    {
+        name: "David M.",
+        type: "Restaurant Owner",
+        comment: "Traffic restrictions have cut our dinner service revenue by 35%. Three years building customer base wiped out by poor policy decisions."
+    },
+    {
+        name: "Sarah P.",
+        type: "Property Investor",
+        comment: "Portfolio values down £280,000 this quarter. Tenants citing access issues in lease renewals. Investment confidence shattered."
+    },
+    {
+        name: "James W.",
+        type: "Retail Chain Manager", 
+        comment: "Regional HQ considering closure due to supply chain disruption. 47 local jobs at risk from this economic mismanagement."
+    },
+    {
+        name: "Margaret L.",
+        type: "Hotel Owner",
+        comment: "Bookings down 42% year-on-year. Guest complaints about access affecting reputation. ROI projections no longer viable."
+    },
+    {
+        name: "Robert K.",
+        type: "Logistics Director",
+        comment: "Operational costs increased 28% due to route restrictions. Passing costs to customers eroding competitive advantage."
+    },
+    {
+        name: "Helen T.",
+        type: "Tourism Operator",
+        comment: "Coach tour cancellations mounting. Lost £180,000 in confirmed bookings. Business model unsustainable under current conditions."
+    },
+    {
+        name: "Paul R.",
+        type: "Commercial Developer",
+        comment: "Three development projects on hold pending traffic policy resolution. £2.3M investment exposure requires immediate protection."
+    },
+    {
+        name: "Lisa M.",
+        type: "Business Consultant",
+        comment: "Advising clients to divest Swanage operations. Policy uncertainty creating unacceptable risk profile for investors."
+    }
+];
+
+// Get supporters with comments or use mock data
+const supportersWithComments = sortedLeads.length > 0 
+    ? sortedLeads.filter(lead => lead.data.comments && lead.data.comments.trim()).slice(0, 5)
+    : businessTestimonials.slice(0, 5);
+---
+
+<Layout title="Business Coalition - Swanage Business Alliance">
+    <main>
+        <BrutalSection bgColor="var(--brutal-white)">
+            <div class="hero-section">
+                <h1>OUR BUSINESS COALITION IS GROWING</h1>
+                <div class="hero-number" data-target={total}>0</div>
+                <p class="hero-subtitle">PROTECTING £15M IN LOCAL INVESTMENT</p>
+            </div>
+        </BrutalSection>
+
+        <BrutalSection bgColor="var(--brutal-concrete)">
+            <h2>THE COMMERCIAL MAJORITY</h2>
+            <div class="breakdown-grid">
+                <div class="breakdown-card">
+                    <div class="breakdown-percentage">{businessPercentage}%</div>
+                    <div class="breakdown-label">BUSINESS OWNERS</div>
+                    <div class="breakdown-count">193 businesses protected</div>
+                    <div class="breakdown-bar">
+                        <div class="breakdown-fill business-fill" style={`width: ${businessPercentage}%`}></div>
+                    </div>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-percentage">{propertyPercentage}%</div>
+                    <div class="breakdown-label">PROPERTY INVESTORS</div>
+                    <div class="breakdown-count">37 investment portfolios</div>
+                    <div class="breakdown-bar">
+                        <div class="breakdown-fill property-fill" style={`width: ${propertyPercentage}%`}></div>
+                    </div>
+                </div>
+                
+                <div class="breakdown-card">
+                    <div class="breakdown-percentage">{otherPercentage}%</div>
+                    <div class="breakdown-label">COMMERCIAL INTERESTS</div>
+                    <div class="breakdown-count">17 stakeholders</div>
+                    <div class="breakdown-bar">
+                        <div class="breakdown-fill commercial-fill" style={`width: ${otherPercentage}%`}></div>
+                    </div>
+                </div>
+            </div>
+        </BrutalSection>
+
+        <BrutalSection bgColor="var(--brutal-white)">
+            <h2>BUSINESS IMPACT TESTIMONIALS</h2>
+            <div class="comments-grid">
+                {businessTestimonials.slice(0, 6).map((testimonial) => (
+                    <div class="comment-card">
+                        <blockquote>"{testimonial.comment}"</blockquote>
+                        <div class="comment-author">
+                            <strong>{testimonial.name}</strong>
+                            <span>{testimonial.type}</span>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </BrutalSection>
+
+        <BrutalSection bgColor="var(--brutal-concrete)">
+            <h2>RECENT BUSINESS MEMBERS</h2>
+            <div class="recent-list">
+                {[
+                    { name: "Amanda K.", type: "Cafe Owner", date: "28 Aug" },
+                    { name: "Michael P.", type: "Investment Advisor", date: "27 Aug" },
+                    { name: "Jennifer L.", type: "Boutique Manager", date: "26 Aug" },
+                    { name: "Steven R.", type: "Property Developer", date: "25 Aug" },
+                    { name: "Caroline M.", type: "Tour Guide", date: "24 Aug" },
+                    { name: "Daniel T.", type: "Restaurant Manager", date: "23 Aug" },
+                    { name: "Rachel W.", type: "Retail Owner", date: "22 Aug" },
+                    { name: "Thomas B.", type: "Logistics Manager", date: "21 Aug" },
+                    { name: "Victoria S.", type: "Hotel Manager", date: "20 Aug" },
+                    { name: "Andrew H.", type: "Business Consultant", date: "19 Aug" }
+                ].map((member) => (
+                    <div class="recent-item">
+                        <div class="recent-name">{member.name}</div>
+                        <div class="recent-meta">
+                            <span class="recent-type">{member.type}</span>
+                            <span class="recent-date">{member.date}</span>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            
+            <div class="cta-section">
+                <a href="/v5/supporters/1" class="cta-button">VIEW ALL {total} BUSINESS MEMBERS</a>
+            </div>
+        </BrutalSection>
+
+        <BrutalSection bgColor="var(--brutal-red)">
+            <div class="join-section">
+                <h2>PROTECT YOUR INVESTMENT</h2>
+                <p>Join the business coalition. Your commercial interests matter in the fight against economic mismanagement.</p>
+                <a href="/v5/#signup" class="join-button">JOIN BUSINESS ALLIANCE</a>
+            </div>
+        </BrutalSection>
+    </main>
+</Layout>
+
+<style>
+    h2 {
+        font-family: 'Arial Black', sans-serif;
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .hero-section {
+        text-align: center;
+        padding: 3rem 0;
+    }
+
+    .hero-section h1 {
+        font-family: 'Arial Black', sans-serif;
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        letter-spacing: -0.02em;
+        margin-bottom: 2rem;
+    }
+
+    .hero-number {
+        font-family: 'Arial Black', sans-serif;
+        font-size: clamp(4rem, 10vw, 8rem);
+        color: var(--brutal-red);
+        line-height: 1;
+        margin: 1rem 0;
+    }
+
+    .hero-subtitle {
+        font-size: 1.125rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--brutal-gray);
+    }
+
+    .breakdown-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .breakdown-card {
+        background: var(--brutal-white);
+        border: 4px solid var(--brutal-black);
+        padding: 2rem;
+        box-shadow: 8px 8px 0 var(--brutal-shadow);
+    }
+
+    .breakdown-percentage {
+        font-family: 'Arial Black', sans-serif;
+        font-size: 3rem;
+        color: var(--brutal-black);
+        margin-bottom: 0.5rem;
+    }
+
+    .breakdown-label {
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+    }
+
+    .breakdown-count {
+        color: var(--brutal-gray);
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+    }
+
+    .breakdown-bar {
+        height: 20px;
+        background: var(--brutal-concrete);
+        border: 2px solid var(--brutal-black);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .breakdown-fill {
+        height: 100%;
+        background: var(--brutal-black);
+        transition: width 1s ease-out;
+    }
+
+    .business-fill {
+        background: #FFD700; /* Gold for business */
+    }
+
+    .property-fill {
+        background: var(--brutal-gray); /* Gray for property */
+    }
+
+    .commercial-fill {
+        background: var(--brutal-red); /* Red for other commercial */
+    }
+
+    .comments-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .comment-card {
+        background: var(--brutal-concrete);
+        border: 3px solid var(--brutal-black);
+        padding: 2rem;
+        box-shadow: 6px 6px 0 var(--brutal-shadow);
+    }
+
+    .comment-card blockquote {
+        font-size: 1.125rem;
+        line-height: 1.6;
+        margin: 0 0 1rem 0;
+        font-style: italic;
+    }
+
+    .comment-author {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        border-top: 2px solid var(--brutal-black);
+    }
+
+    .comment-author strong {
+        font-family: 'Arial Black', sans-serif;
+        text-transform: uppercase;
+    }
+
+    .comment-author span {
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .recent-list {
+        background: var(--brutal-white);
+        border: 4px solid var(--brutal-black);
+        box-shadow: 8px 8px 0 var(--brutal-shadow);
+    }
+
+    .recent-item {
+        padding: 1rem 1.5rem;
+        border-bottom: 2px solid var(--brutal-black);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .recent-item:last-child {
+        border-bottom: none;
+    }
+
+    .recent-name {
+        font-weight: bold;
+        font-size: 1.125rem;
+    }
+
+    .recent-meta {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .recent-type {
+        background: #FFD700; /* Gold for business types */
+        color: var(--brutal-black);
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .recent-date {
+        font-size: 0.875rem;
+        color: var(--brutal-gray);
+    }
+
+    .cta-section {
+        text-align: center;
+        margin-top: 3rem;
+    }
+
+    .cta-button {
+        display: inline-block;
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        padding: 1rem 2rem;
+        text-decoration: none;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border: 4px solid var(--brutal-black);
+        box-shadow: 8px 8px 0 var(--brutal-shadow);
+        transition: all 0.2s;
+    }
+
+    .cta-button:hover {
+        background: var(--brutal-red);
+        transform: translate(-4px, -4px);
+        box-shadow: 12px 12px 0 var(--brutal-shadow);
+    }
+
+    .join-section {
+        text-align: center;
+        color: var(--brutal-white);
+        padding: 3rem 0;
+    }
+
+    .join-section h2 {
+        color: var(--brutal-white);
+    }
+
+    .join-section p {
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+    }
+
+    .join-button {
+        display: inline-block;
+        background: var(--brutal-white);
+        color: var(--brutal-red);
+        padding: 1rem 3rem;
+        text-decoration: none;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border: 4px solid var(--brutal-white);
+        box-shadow: 8px 8px 0 rgba(0,0,0,0.3);
+        transition: all 0.2s;
+    }
+
+    .join-button:hover {
+        background: #FFD700; /* Gold on hover */
+        color: var(--brutal-black);
+        border-color: #FFD700;
+        transform: translate(-4px, -4px);
+        box-shadow: 12px 12px 0 rgba(0,0,0,0.3);
+    }
+
+    @media (max-width: 768px) {
+        .breakdown-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .comments-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .recent-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .recent-meta {
+            width: 100%;
+            justify-content: space-between;
+        }
+    }
+</style>
+
+<script>
+    // Animate counter
+    const counter = document.querySelector('.hero-number');
+    const target = parseInt(counter.dataset.target);
+    const duration = 2000;
+    const step = target / (duration / 16);
+    let current = 0;
+    
+    const updateCounter = () => {
+        current += step;
+        if (current < target) {
+            counter.textContent = Math.floor(current);
+            requestAnimationFrame(updateCounter);
+        } else {
+            counter.textContent = target;
+        }
+    };
+    
+    // Start animation when visible
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                updateCounter();
+                observer.unobserve(entry.target);
+            }
+        });
+    });
+    
+    observer.observe(counter);
+</script>

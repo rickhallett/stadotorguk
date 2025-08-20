@@ -74,12 +74,16 @@ const displayItems = feedItems.length > 0 ? feedItems : fallbackItems;
             COMMUNITY<br/>VOICES
         </h1>
         <p class="brutal-subhead" style="font-size: clamp(1.2rem, 3vw, 2rem);">
-            REAL STORIES FROM REAL RESIDENTS
+            SILENCED BY THE COUNCIL. HEARD BY US.
         </p>
     </section>
 
     <!-- USER COUNTER -->
-    <BrutalSection title="ACTIVE RESISTANCE">
+    <BrutalSection title="THE UNCONSULTED MAJORITY">
+        <div class="countdown-alert">
+            <div class="countdown-number" id="daysUntilVote">--</div>
+            <div class="countdown-label">DAYS UNTIL SEPTEMBER 15 VOTE</div>
+        </div>
         <div class="user-counter">
             <div class="counter-block counter-total">
                 <div class="data-stat">{activeUsers}</div>
@@ -103,7 +107,8 @@ const displayItems = feedItems.length > 0 ? feedItems : fallbackItems;
     <!-- FEED -->
     <BrutalSection title="LATEST REPORTS">
         <p style="margin-bottom: 2rem; font-size: 1.125rem;">
-            These are the voices of your neighbors. Every story matters. Every complaint is documented.
+            Every story the Town Council ignored. Every concern dismissed under Standing Order 1c. 
+            We're building the evidence trail for judicial review.
         </p>
         <div class="feed-container">
             {displayItems.map((item) => (
@@ -151,6 +156,31 @@ const displayItems = feedItems.length > 0 ? feedItems : fallbackItems;
 
     .feed-hero .brutal-headline {
         margin-bottom: 1rem;
+    }
+
+    .countdown-alert {
+        background: var(--brutal-red);
+        color: var(--brutal-white);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 4px solid var(--brutal-black);
+        box-shadow: 8px 8px 0 var(--brutal-shadow);
+        text-align: center;
+    }
+
+    .countdown-number {
+        font-family: 'Arial Black', sans-serif;
+        font-size: 4rem;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    .countdown-label {
+        font-size: 1.25rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-top: 0.5rem;
     }
 
     .counter-total {
@@ -271,5 +301,20 @@ const displayItems = feedItems.length > 0 ? feedItems : fallbackItems;
             const target = parseInt(counter.textContent || '0');
             animateCounter(counter as HTMLElement, target);
         });
+
+        // Calculate days until September 15, 2024
+        const voteDate = new Date('2024-09-15');
+        const today = new Date();
+        const timeDiff = voteDate.getTime() - today.getTime();
+        const daysUntil = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+        
+        const countdownElement = document.getElementById('daysUntilVote');
+        if (countdownElement) {
+            if (daysUntil > 0) {
+                countdownElement.textContent = daysUntil.toString();
+            } else {
+                countdownElement.textContent = 'NOW';
+            }
+        }
     });
 </script>
