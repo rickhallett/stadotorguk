@@ -99,25 +99,25 @@ const totalSupporters = memberStats.total;
     <!-- USER COUNTER -->
     <BrutalSection title="THE UNCONSULTED MAJORITY">
         <div class="counter-container">
-            <div class="countdown-alert">
-                <div class="countdown-number" id="daysUntilVote">--</div>
-                <div class="countdown-label">DAYS UNTIL SEPTEMBER 15 VOTE</div>
+            <div class="countdown-alert" role="timer" aria-live="polite" aria-label="Countdown to council vote">
+                <div class="countdown-number" id="daysUntilVote" aria-describedby="countdown-description">--</div>
+                <div class="countdown-label" id="countdown-description">DAYS UNTIL SEPTEMBER 15 VOTE</div>
             </div>
-            <div class="counter-block counter-total">
-                <div class="data-stat">{activeUsers}</div>
+            <div class="counter-block counter-total" role="status" aria-label="Total membership count">
+                <div class="data-stat" aria-live="polite">{activeUsers}</div>
                 <div class="counter-label">Total Active Members</div>
             </div>
-            <div class="statistics-grid">
-                <div class="counter-block counter-stat">
-                    <div class="data-stat">{todayUsers}</div>
+            <div class="statistics-grid" role="region" aria-label="Membership statistics">
+                <div class="counter-block counter-stat" role="status">
+                    <div class="data-stat" aria-label="{todayUsers} members">{todayUsers}</div>
                     <div class="counter-label">Joined Today</div>
                 </div>
-                <div class="counter-block counter-stat">
-                    <div class="data-stat">{weekUsers}</div>
+                <div class="counter-block counter-stat" role="status">
+                    <div class="data-stat" aria-label="{weekUsers} members">{weekUsers}</div>
                     <div class="counter-label">Joined This Week</div>
                 </div>
-                <div class="counter-block counter-stat">
-                    <div class="data-stat">{monthUsers}</div>
+                <div class="counter-block counter-stat" role="status">
+                    <div class="data-stat" aria-label="{monthUsers} members">{monthUsers}</div>
                     <div class="counter-label">Joined This Month</div>
                 </div>
             </div>
@@ -480,6 +480,16 @@ const totalSupporters = memberStats.total;
             // Add appropriate styling based on countdown status
             if (daysText === 'TODAY' || daysText === 'TOMORROW') {
                 countdownElement.style.animation = 'pulse 1s ease-in-out infinite';
+            }
+            
+            // Update ARIA label for screen readers
+            const alertDiv = countdownElement.closest('.countdown-alert');
+            if (alertDiv) {
+                const ariaText = daysText === 'TODAY' ? 'Vote is today' : 
+                                daysText === 'TOMORROW' ? 'Vote is tomorrow' :
+                                daysText === 'VOTE PASSED' ? 'The vote has passed' :
+                                `${daysText} days until the vote`;
+                alertDiv.setAttribute('aria-label', ariaText);
             }
         }
     });
