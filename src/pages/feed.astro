@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import BrutalSection from '../components/BrutalSection.astro';
 import { getCollection } from 'astro:content';
+import { getMemberStats } from '../utils/memberStats';
 
 // Get all feed items from content collection
 const feedEntries = await getCollection('feed', ({ data }) => {
@@ -39,11 +40,12 @@ const feedItems = feedEntries
         };
     });
 
-// Mock data for demonstration (will be replaced with real data)
-const activeUsers = feedItems.length > 0 ? 1234 + feedItems.length : 1234;
-const todayUsers = 42;
-const weekUsers = 189;
-const monthUsers = 567;
+// Get real member statistics with caching
+const memberStats = await getMemberStats();
+const activeUsers = memberStats.total;
+const todayUsers = memberStats.today;
+const weekUsers = memberStats.thisWeek;
+const monthUsers = memberStats.thisMonth;
 
 // Fallback data if no content exists
 const fallbackItems = [
@@ -66,9 +68,8 @@ const fallbackItems = [
 // Use content collection items if available, otherwise use fallback
 const displayItems = feedItems.length > 0 ? feedItems : fallbackItems;
 
-// Get total supporter count for movement counter
-const allLeads = await getCollection('leads', ({ data }) => data.published);
-const totalSupporters = allLeads.length;
+// Use cached total for movement counter (already fetched above)
+const totalSupporters = memberStats.total;
 ---
 
 <Layout title="Feed">

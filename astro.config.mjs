@@ -4,6 +4,7 @@ import decapCmsOauth from "astro-decap-cms-oauth";
 
 // https://astro.build/config
 export default defineConfig({
+  output: 'server', // Use server mode for OAuth integration
   integrations: [decapCmsOauth()],
   server: {
     host: true, // Allow external connections
