@@ -20,6 +20,8 @@ create-prd <feature-name> <description>
 3. Create a comprehensive PRD document
 4. Save to `@specs/` directory with filename format: `<last number + 1><feature-name>.prd.md` e.g. `001-first-feature.prd.md`
 
+You must scan the specs directory and find the next available number (e.g. 001,002 and 003 already exist, and so this new prd is "004-<feature-name>.prd.md).
+
 ## PRD Structure
 
 The PRD should include:
