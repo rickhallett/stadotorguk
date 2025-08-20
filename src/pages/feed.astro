@@ -98,26 +98,28 @@ const totalSupporters = memberStats.total;
 
     <!-- USER COUNTER -->
     <BrutalSection title="THE UNCONSULTED MAJORITY">
-        <div class="countdown-alert">
-            <div class="countdown-number" id="daysUntilVote">--</div>
-            <div class="countdown-label">DAYS UNTIL SEPTEMBER 15 VOTE</div>
-        </div>
-        <div class="user-counter">
+        <div class="counter-container">
+            <div class="countdown-alert">
+                <div class="countdown-number" id="daysUntilVote">--</div>
+                <div class="countdown-label">DAYS UNTIL SEPTEMBER 15 VOTE</div>
+            </div>
             <div class="counter-block counter-total">
                 <div class="data-stat">{activeUsers}</div>
                 <div class="counter-label">Total Active Members</div>
             </div>
-            <div class="counter-block">
-                <div class="data-stat">{todayUsers}</div>
-                <div class="counter-label">Joined Today</div>
-            </div>
-            <div class="counter-block">
-                <div class="data-stat">{weekUsers}</div>
-                <div class="counter-label">Joined This Week</div>
-            </div>
-            <div class="counter-block">
-                <div class="data-stat">{monthUsers}</div>
-                <div class="counter-label">Joined This Month</div>
+            <div class="statistics-grid">
+                <div class="counter-block counter-stat">
+                    <div class="data-stat">{todayUsers}</div>
+                    <div class="counter-label">Joined Today</div>
+                </div>
+                <div class="counter-block counter-stat">
+                    <div class="data-stat">{weekUsers}</div>
+                    <div class="counter-label">Joined This Week</div>
+                </div>
+                <div class="counter-block counter-stat">
+                    <div class="data-stat">{monthUsers}</div>
+                    <div class="counter-label">Joined This Month</div>
+                </div>
             </div>
         </div>
     </BrutalSection>
@@ -176,14 +178,31 @@ const totalSupporters = memberStats.total;
         margin-bottom: 1rem;
     }
 
+    .counter-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
     .countdown-alert {
-        background: var(--brutal-red);
+        background: #FF4500;
         color: var(--brutal-white);
         padding: 2rem;
-        margin-bottom: 2rem;
         border: 4px solid var(--brutal-black);
         box-shadow: 8px 8px 0 var(--brutal-shadow);
         text-align: center;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.02);
+        }
     }
 
     .countdown-number {
@@ -202,10 +221,38 @@ const totalSupporters = memberStats.total;
     }
 
     .counter-total {
-        grid-column: 1 / -1;
-        background: #FFD700 !important; /* Golden yellow for main counter */
-        transform: scale(1.1);
-        box-shadow: 0 10px 30px rgba(0, 102, 204, 0.3); /* Blue-tinted shadow */
+        background: #FFD700 !important;
+        color: var(--brutal-black) !important;
+        padding: 2rem;
+        border: 4px solid var(--brutal-black);
+        box-shadow: 8px 8px 0 var(--brutal-shadow);
+        text-align: center;
+    }
+
+    .counter-total .data-stat {
+        color: var(--brutal-black) !important;
+    }
+
+    .statistics-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 16px;
+    }
+
+    .counter-stat {
+        background: #0066CC !important;
+        transition: transform 0.2s ease;
+    }
+
+    .counter-stat:hover {
+        transform: scale(1.02);
+    }
+
+    @media (max-width: 768px) {
+        .statistics-grid {
+            grid-template-columns: 1fr;
+        }
     }
 
     .load-more-container {
@@ -399,25 +446,40 @@ const totalSupporters = memberStats.total;
         // Animate movement counter
         animateMovementCounter();
         
-        // Animate existing counters
+        // Animate existing counters with staggered delay
         const counters = document.querySelectorAll('.counter-block .data-stat');
-        counters.forEach((counter) => {
+        counters.forEach((counter, index) => {
             const target = parseInt(counter.textContent || '0');
-            animateCounter(counter as HTMLElement, target);
+            // Add staggered delay for statistics blocks
+            setTimeout(() => {
+                animateCounter(counter as HTMLElement, target);
+            }, index * 200); // 0.2s delay between each
         });
 
-        // Calculate days until September 15, 2024
-        const voteDate = new Date('2024-09-15');
-        const today = new Date();
-        const timeDiff = voteDate.getTime() - today.getTime();
-        const daysUntil = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+        // Calculate days until September 15, 2025
+        function calculateDaysUntil() {
+            const targetDate = new Date('2025-09-15');
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            targetDate.setHours(0, 0, 0, 0);
+            
+            const diffTime = targetDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return 'TODAY';
+            if (diffDays === 1) return 'TOMORROW';
+            if (diffDays < 0) return 'VOTE PASSED';
+            return diffDays.toString();
+        }
         
         const countdownElement = document.getElementById('daysUntilVote');
         if (countdownElement) {
-            if (daysUntil > 0) {
-                countdownElement.textContent = daysUntil.toString();
-            } else {
-                countdownElement.textContent = 'NOW';
+            const daysText = calculateDaysUntil();
+            countdownElement.textContent = daysText;
+            
+            // Add appropriate styling based on countdown status
+            if (daysText === 'TODAY' || daysText === 'TOMORROW') {
+                countdownElement.style.animation = 'pulse 1s ease-in-out infinite';
             }
         }
     });
