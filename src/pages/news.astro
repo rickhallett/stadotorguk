@@ -61,6 +61,12 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
     <!-- TIMELINE -->
     <BrutalSection>
         <div class="timeline">
+            <!-- Ongoing indicator at top -->
+            <div class="timeline-ongoing">
+                <div class="timeline-marker ongoing-marker"></div>
+                <div class="ongoing-text">THE FIGHT CONTINUES...</div>
+            </div>
+            
             {displayItems.map((item, index) => (
                 <div class={`timeline-item fade-in ${index % 2 === 0 ? 'timeline-left' : 'timeline-right'}`}>
                     <div class="timeline-marker"></div>
@@ -71,12 +77,6 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
                     </div>
                 </div>
             ))}
-            
-            <!-- Ongoing indicator -->
-            <div class="timeline-ongoing">
-                <div class="timeline-marker ongoing-marker"></div>
-                <div class="ongoing-text">THE FIGHT CONTINUES...</div>
-            </div>
         </div>
     </BrutalSection>
 
@@ -194,11 +194,11 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
     }
 
     .timeline-left .timeline-marker {
-        right: -20px;
+        right: -24px;
     }
 
     .timeline-right .timeline-marker {
-        left: -20px;
+        left: -24px;
     }
 
     .timeline-content {
@@ -239,13 +239,18 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
     .timeline-ongoing {
         position: relative;
         text-align: center;
-        padding-top: 2rem;
+        padding-bottom: 3rem;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .ongoing-marker {
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
+        top: 0;
         animation: pulse 2s infinite;
     }
 
@@ -253,8 +258,10 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
         font-size: 1.5rem;
         font-weight: 900;
         letter-spacing: 0.2em;
-        margin-top: 4rem;
-        color: var(--brutal-red); /* Keep red for warning */
+        color: #0066CC;
+        opacity: 0.6;
+        margin: 0;
+        padding-top: 4px;
     }
 
     @keyframes pulse {
@@ -322,16 +329,34 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
         }
 
         .timeline-content {
-            padding: 1.5rem;
+            padding: 1rem;
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
         }
 
         .timeline-title {
-            font-size: 1.25rem;
+            font-size: 1rem;
         }
 
+        .timeline-text {
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+
+        .timeline-ongoing {
+            justify-content: flex-start;
+            padding-left: 60px;
+        }
+        
         .ongoing-marker {
-            left: 40px;
-            transform: translateX(-50%);
+            left: 20px;
+            transform: none;
+        }
+        
+        .ongoing-text {
+            text-align: left;
         }
     }
 </style>
