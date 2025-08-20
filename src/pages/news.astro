@@ -6,8 +6,9 @@ import { getCollection } from 'astro:content';
 // Get all news items from content collection
 const newsEntries = await getCollection('news');
 
-// Sort by date (newest first) and format for display
+// Filter for published items only, sort by date (newest first) and format for display
 const newsItems = newsEntries
+    .filter(entry => entry.data.published !== false)
     .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
     .map((entry, index) => {
         const date = new Date(entry.data.date);
