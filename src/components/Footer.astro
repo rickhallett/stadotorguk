@@ -3,17 +3,72 @@
 
 <footer class="site-footer">
     <div class="footer-content">
-        <div class="footer-section">
-            <h3>SUBMIT EVIDENCE</h3>
-            <p>evidence@swanagetraffic.org</p>
+        <div class="footer-contact">
+            <h3>CONTACT US</h3>
+            <a href="mailto:johnsilver@swanagetraffic.org.uk" class="contact-email">
+                johnsilver@swanagetraffic.org.uk
+            </a>
         </div>
-        <div class="footer-section">
-            <h3>REPORT VIOLATIONS</h3>
-            <p>07XXX XXXXXX</p>
-        </div>
-        <div class="footer-section">
-            <h3>MEETINGS</h3>
-            <p>Thursdays 7PM<br/>Community Center</p>
+        <div class="footer-social">
+            <h3>FOLLOW THE MOVEMENT</h3>
+            <div class="social-grid">
+                <a href="https://x.com/swanagetraffic" 
+                   class="social-link social-link--x" 
+                   aria-label="Follow on X (formerly Twitter)"
+                   target="_blank"
+                   rel="noopener">
+                    <span>X</span>
+                </a>
+                <a href="https://facebook.com/swanagetraffic" 
+                   class="social-link social-link--facebook" 
+                   aria-label="Follow on Facebook"
+                   target="_blank"
+                   rel="noopener">
+                    <span>FB</span>
+                </a>
+                <a href="https://instagram.com/swanagetraffic" 
+                   class="social-link social-link--instagram" 
+                   aria-label="Follow on Instagram"
+                   target="_blank"
+                   rel="noopener">
+                    <span>IG</span>
+                </a>
+                <a href="https://youtube.com/@swanagetraffic" 
+                   class="social-link social-link--youtube" 
+                   aria-label="Subscribe on YouTube"
+                   target="_blank"
+                   rel="noopener">
+                    <span>YT</span>
+                </a>
+                <a href="https://linkedin.com/company/swanage-traffic-alliance" 
+                   class="social-link social-link--linkedin" 
+                   aria-label="Follow on LinkedIn"
+                   target="_blank"
+                   rel="noopener">
+                    <span>LI</span>
+                </a>
+                <a href="https://tiktok.com/@swanagetraffic" 
+                   class="social-link social-link--tiktok" 
+                   aria-label="Follow on TikTok"
+                   target="_blank"
+                   rel="noopener">
+                    <span>TT</span>
+                </a>
+                <a href="https://wa.me/message/PLACEHOLDER" 
+                   class="social-link social-link--whatsapp" 
+                   aria-label="Message on WhatsApp"
+                   target="_blank"
+                   rel="noopener">
+                    <span>WA</span>
+                </a>
+                <a href="https://t.me/swanagetraffic" 
+                   class="social-link social-link--telegram" 
+                   aria-label="Join on Telegram"
+                   target="_blank"
+                   rel="noopener">
+                    <span>TG</span>
+                </a>
+            </div>
         </div>
     </div>
     <div class="footer-bottom">
@@ -26,7 +81,7 @@
         background: var(--brutal-black);
         color: var(--brutal-white);
         padding: 3rem 2rem 1rem;
-        border-top: 8px solid var(--brutal-gray); /* Green accent */
+        border-top: 8px solid var(--brutal-gray);
         margin-top: 4rem;
     }
 
@@ -34,24 +89,108 @@
         max-width: 1400px;
         margin: 0 auto;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 2rem;
+        grid-template-columns: 40% 60%;
+        gap: 3rem;
         margin-bottom: 2rem;
     }
 
-    .footer-section h3 {
+    .footer-contact h3,
+    .footer-social h3 {
         font-size: 1rem;
         font-weight: 900;
         text-transform: uppercase;
         letter-spacing: 0.2em;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
         color: #FFD700; /* Golden yellow */
     }
 
-    .footer-section p {
+    .contact-email {
+        color: var(--brutal-white);
+        text-decoration: none;
         font-size: 1.125rem;
         line-height: 1.6;
+        transition: color 0.2s;
     }
+
+    .contact-email:hover {
+        color: #FFD700;
+    }
+
+    .social-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        max-width: 280px;
+    }
+
+    .social-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 60px;
+        height: 60px;
+        background: var(--brutal-black);
+        color: var(--brutal-white);
+        border: 4px solid var(--brutal-white);
+        box-shadow: 5px 5px 0 rgba(255, 255, 255, 0.2);
+        text-decoration: none;
+        font-weight: 900;
+        font-size: 1.25rem;
+        letter-spacing: -0.05em;
+        font-family: 'Arial Black', 'Helvetica Neue', sans-serif;
+        transition: none; /* Harsh transitions */
+        cursor: pointer;
+    }
+
+    .social-link span {
+        user-select: none;
+    }
+
+    .social-link:hover {
+        transform: translate(-5px, -5px);
+        box-shadow: 10px 10px 0 var(--brutal-gray);
+        background: var(--brutal-white);
+        color: var(--brutal-black);
+        border-color: var(--brutal-white);
+    }
+
+    .social-link:active {
+        transform: translate(0, 0);
+        box-shadow: 2px 2px 0 rgba(255, 255, 255, 0.2);
+        background: #FFD700;
+        color: var(--brutal-black);
+        border-color: #FFD700;
+    }
+
+    .social-link:focus-visible {
+        outline: 3px solid #FFD700;
+        outline-offset: 2px;
+    }
+
+    /* Page load animation */
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .social-link {
+        animation: slideInUp 0.4s ease-out backwards;
+    }
+
+    .social-link:nth-child(1) { animation-delay: 0ms; }
+    .social-link:nth-child(2) { animation-delay: 50ms; }
+    .social-link:nth-child(3) { animation-delay: 100ms; }
+    .social-link:nth-child(4) { animation-delay: 150ms; }
+    .social-link:nth-child(5) { animation-delay: 200ms; }
+    .social-link:nth-child(6) { animation-delay: 250ms; }
+    .social-link:nth-child(7) { animation-delay: 300ms; }
+    .social-link:nth-child(8) { animation-delay: 350ms; }
 
     .footer-bottom {
         max-width: 1400px;
@@ -68,10 +207,72 @@
         opacity: 0.8;
     }
 
+    /* Responsive Design */
     @media (max-width: 768px) {
         .footer-content {
             grid-template-columns: 1fr;
             text-align: center;
+            gap: 2rem;
+        }
+
+        .footer-contact {
+            border-bottom: 2px solid var(--brutal-gray);
+            padding-bottom: 2rem;
+        }
+
+        .social-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            max-width: 140px;
+            margin: 0 auto;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            font-size: 1rem;
+            border-width: 3px;
+            box-shadow: 3px 3px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .social-link:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0 var(--brutal-gray);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .footer-content {
+            padding: 0 1rem;
+        }
+
+        .social-grid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            max-width: none;
+        }
+
+        .social-link {
+            width: 100%;
+            max-width: 200px;
+            height: 44px; /* Minimum touch target */
+        }
+    }
+
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+        .social-link {
+            border-width: 6px;
+        }
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+        .social-link {
+            animation: none;
+            transition: none;
         }
     }
 </style>
