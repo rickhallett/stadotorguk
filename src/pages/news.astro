@@ -60,7 +60,7 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
       BREAKING<br />UPDATES
     </h1>
     <p class="brutal-subhead" style="font-size: clamp(1.2rem, 3vw, 2rem);">
-      EVIDENCE TRAIL FOR JUDICIAL REVIEW
+      FOLLOW THE EVIDENCE TRAIL
     </p>
   </section>
 
@@ -95,19 +95,14 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
     <h2 class="brutal-subhead">STAY INFORMED</h2>
     <div class="info-grid">
       <div class="info-card">
-        <h3>NEXT MEETING</h3>
-        <p class="info-detail">SEPT 1 - PLANNING</p>
-        <p>Committee Showdown</p>
+        <h3>NEXT SESSION</h3>
+        <p class="info-detail">SEPT 1</p>
+        <p>Planning & Consultation Meeting</p>
       </div>
       <div class="info-card">
-        <h3>COUNCIL SESSION</h3>
-        <p class="info-detail">SEPT 15 - FINAL VOTE</p>
-        <p>Shore Road Decision</p>
-      </div>
-      <div class="info-card">
-        <h3>LEGAL UPDATE</h3>
-        <p class="info-detail">EVIDENCE SUBMITTED</p>
-        <p>Judicial Review Prepared</p>
+        <h3>LOOKING AHEAD</h3>
+        <p class="info-detail">SEPT 15</p>
+        <p>Full Council Meeting</p>
       </div>
     </div>
   </BrutalSection>
@@ -167,34 +162,6 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
     position: relative;
     width: calc(50% - 60px);
     margin-bottom: 4rem;
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeInUp 0.8s ease-out forwards;
-  }
-
-  .timeline-item:nth-child(1) {
-    animation-delay: 0.1s;
-  }
-  .timeline-item:nth-child(2) {
-    animation-delay: 0.2s;
-  }
-  .timeline-item:nth-child(3) {
-    animation-delay: 0.3s;
-  }
-  .timeline-item:nth-child(4) {
-    animation-delay: 0.4s;
-  }
-  .timeline-item:nth-child(5) {
-    animation-delay: 0.5s;
-  }
-  .timeline-item:nth-child(6) {
-    animation-delay: 0.6s;
-  }
-  .timeline-item:nth-child(7) {
-    animation-delay: 0.7s;
-  }
-  .timeline-item:nth-child(8) {
-    animation-delay: 0.8s;
   }
 
   .timeline-left {
@@ -264,12 +231,14 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
   /* Ongoing indicator */
   .timeline-ongoing {
     position: relative;
-    text-align: center;
     padding-bottom: 3rem;
     margin-bottom: 2rem;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-left: calc(
+      50% + 60px
+    ); /* Position to the right of the timeline line */
   }
 
   .ongoing-marker {
@@ -277,7 +246,6 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
     left: 50%;
     transform: translateX(-50%);
     top: 0;
-    animation: pulse 2s infinite;
   }
 
   .ongoing-text {
@@ -288,23 +256,7 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
     opacity: 0.6;
     margin: 0;
     padding-top: 4px;
-  }
-
-  @keyframes pulse {
-    0%,
-    100% {
-      transform: translateX(-50%) scale(1);
-    }
-    50% {
-      transform: translateX(-50%) scale(1.2);
-    }
-  }
-
-  @keyframes fadeInUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    text-align: left;
   }
 
   /* Info Grid */
@@ -336,81 +288,75 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
     margin-bottom: 0.5rem;
   }
 
-  /* Mobile Responsive */
+  /* Mobile Responsive - Vertical Card Stack */
   @media (max-width: 768px) {
     .news-hero {
       padding: 4rem 1rem;
     }
 
+    /* Hide timeline line and ongoing indicator on mobile */
     .timeline::before {
-      left: 40px;
-    }
-
-    .timeline-item {
-      width: calc(100% - 80px);
-      margin-left: 80px !important;
-      padding-left: 0 !important;
-      padding-right: 0 !important;
-      text-align: left !important;
-    }
-
-    .timeline-marker {
-      left: -60px !important;
-      right: auto !important;
-    }
-
-    .timeline-content {
-      padding: 1rem;
-    }
-
-    .timeline-date {
-      font-size: 0.75rem;
-    }
-
-    .timeline-title {
-      font-size: 1rem;
-    }
-
-    .timeline-text {
-      font-size: 0.875rem;
-      line-height: 1.4;
+      display: none;
     }
 
     .timeline-ongoing {
-      justify-content: flex-start;
-      padding-left: 60px;
+      display: none;
     }
 
-    .ongoing-marker {
-      left: 20px;
-      transform: none;
+    /* Reset timeline container for mobile card stack */
+    .timeline {
+      padding: 2rem 1rem;
     }
 
-    .ongoing-text {
-      text-align: left;
+    /* Transform timeline items into stacked cards */
+    .timeline-item {
+      width: 100% !important;
+      margin: 0 0 2rem 0 !important;
+      padding: 0 !important;
+      text-align: left !important;
+      position: relative;
+    }
+
+    /* Hide timeline markers on mobile */
+    .timeline-marker {
+      display: none;
+    }
+
+    /* Enhanced card styling for mobile */
+    .timeline-content {
+      padding: 1.5rem;
+      background: var(--brutal-white);
+      border: 4px solid var(--brutal-black);
+      box-shadow: 8px 8px 0 var(--brutal-shadow);
+      transition: all 0.2s ease;
+    }
+
+    .timeline-content:active {
+      transform: translate(2px, 2px);
+      box-shadow: 6px 6px 0 var(--brutal-shadow);
+    }
+
+    .timeline-date {
+      font-size: 0.875rem;
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      color: #ffd700;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .timeline-title {
+      font-size: 1.25rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .timeline-text {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--brutal-black);
     }
   }
 </style>
-
-<script>
-  // Intersection Observer for timeline animations
-  const observerOptions = {
-    threshold: 0.2,
-    rootMargin: "0px 0px -50px 0px",
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
-      }
-    });
-  }, observerOptions);
-
-  // Observe timeline items
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".timeline-item").forEach((el) => {
-      observer.observe(el);
-    });
-  });
-</script>

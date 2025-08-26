@@ -367,7 +367,7 @@ const { total, today, thisWeek, thisMonth } = stats;
 4. Add build-time cache (`.cache/` directory)
 
 ### Phase 2: Rollout (Week 2)
-1. Update all variant pages (`/v1` through `/v5`)
+1. Update all pages
 2. Update supporters pages
 3. Add stats to homepage if needed
 4. Monitor build times
