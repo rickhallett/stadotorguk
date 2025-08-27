@@ -88,6 +88,11 @@
       </div> -->
     </div>
   </div>
+  <div class="footer-legal">
+    <a href="/terms">Terms & Conditions</a>
+    <span class="separator">|</span>
+    <a href="/privacy">Privacy Policy</a>
+  </div>
   <div class="footer-bottom">
     <p>&copy; 2025 Swanage Traffic Alliance</p>
   </div>
@@ -229,11 +234,39 @@
     animation-delay: 350ms;
   }
 
+  .footer-legal {
+    max-width: 1400px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 1.5rem 0;
+    border-top: 2px solid var(--brutal-gray);
+  }
+  
+  .footer-legal a {
+    color: var(--brutal-white);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.1em;
+    transition: color 0.3s;
+    opacity: 0.9;
+  }
+  
+  .footer-legal a:hover {
+    color: #FFD700;
+    opacity: 1;
+  }
+  
+  .footer-legal .separator {
+    margin: 0 1.5rem;
+    opacity: 0.5;
+    color: var(--brutal-gray);
+  }
+
   .footer-bottom {
     max-width: 1400px;
     margin: 0 auto;
-    padding-top: 2rem;
-    border-top: 2px solid var(--brutal-gray);
+    padding-top: 1rem;
     text-align: center;
   }
 
@@ -268,6 +301,19 @@
     /* Make copyright font smaller on mobile */
     .footer-bottom p {
       font-size: 0.75rem; /* Reduced from 0.875rem */
+    }
+
+    /* Legal links on mobile */
+    .footer-legal {
+      padding: 1rem 0;
+    }
+
+    .footer-legal a {
+      font-size: 0.75rem;
+    }
+
+    .footer-legal .separator {
+      margin: 0 0.75rem;
     }
 
     .social-grid {
