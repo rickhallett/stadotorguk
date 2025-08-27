@@ -1,5 +1,5 @@
 ---
-
+import PageCounter from './PageCounter.astro';
 ---
 
 <footer class="site-footer">
@@ -87,6 +87,9 @@
         </a>
       </div> -->
     </div>
+  </div>
+  <div class="footer-stats">
+    <PageCounter />
   </div>
   <div class="footer-legal">
     <a href="/terms">Terms & Conditions</a>
@@ -232,6 +235,15 @@
   }
   .social-link:nth-child(8) {
     animation-delay: 350ms;
+  }
+
+  .footer-stats {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+    border-top: 2px solid var(--brutal-gray);
   }
 
   .footer-legal {
