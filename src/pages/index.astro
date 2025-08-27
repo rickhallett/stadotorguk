@@ -141,25 +141,56 @@ import ImpactCard from "../components/ImpactCard.astro";
       <span></span><br />Join the alliance
     </h2>
 
-    <!-- <div class="action-form">
+    <div class="action-form">
       <form id="contactForm">
         <div class="form-group">
-          <label for="name">NAME</label>
-          <input type="text" id="name" name="name" required />
+          <label for="name">NAME *</label>
+          <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            required 
+            maxlength="100"
+            pattern="[A-Za-z\s]+"
+            title="Please enter a valid name"
+          />
+          <span class="error-message" data-for="name"></span>
         </div>
         <div class="form-group">
-          <label for="email">EMAIL</label>
-          <input type="email" id="email" name="email" required />
+          <label for="email">EMAIL *</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            required 
+            maxlength="255"
+          />
+          <span class="error-message" data-for="email"></span>
         </div>
         <div class="form-group">
-          <label for="postcode">POSTCODE</label>
-          <input type="text" id="postcode" name="postcode" required />
+          <label for="postcode">POSTCODE *</label>
+          <input 
+            type="text" 
+            id="postcode" 
+            name="postcode" 
+            required 
+            pattern="[A-Z]{1,2}[0-9]{1,2}[A-Z]?\s?[0-9][A-Z]{2}"
+            title="Please enter a valid UK postcode"
+            maxlength="10"
+          />
+          <span class="error-message" data-for="postcode"></span>
         </div>
         <div class="form-group">
           <label for="message">YOUR STORY (OPTIONAL)</label>
-          <textarea id="message" name="message" rows="4"></textarea>
+          <textarea 
+            id="message" 
+            name="message" 
+            rows="4"
+            maxlength="1000"
+          ></textarea>
+          <small>Characters remaining: <span id="charCount">1000</span></small>
         </div>
-        <button type="submit" class="submit-btn"> STAND WITH US </button>
+        <button type="submit" class="submit-btn">STAND WITH US</button>
       </form>
       <div
         class="form-confirmation"
@@ -168,7 +199,7 @@ import ImpactCard from "../components/ImpactCard.astro";
       >
         CONFIRMED: YOU ARE NOW PART OF THE ALLIANCE
       </div>
-    </div> -->
+    </div>
 </Layout>
 
 <style>
@@ -364,15 +395,125 @@ import ImpactCard from "../components/ImpactCard.astro";
     }
   }
 
-  .form-confirmation {
-    background: var(--brutal-gray); /* Green for success */
+  /* Form Styles */
+  .action-form {
+    background: var(--brutal-white);
+    border: 8px solid var(--brutal-black);
+    box-shadow: 15px 15px 0 var(--brutal-shadow);
+    padding: 3rem;
+    margin: 2rem 0;
+  }
+
+  .form-group {
+    margin-bottom: 2rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-family: 'Arial Black', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 4px solid var(--brutal-black);
+    font-size: 1rem;
+    font-family: 'Arial', sans-serif;
+    background: var(--brutal-white);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    box-shadow: 8px 8px 0 var(--brutal-shadow);
+    transform: translate(-2px, -2px);
+  }
+
+  .form-group small {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--brutal-gray);
+  }
+
+  .error-message {
+    color: var(--brutal-red);
+    font-weight: bold;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    display: none;
+  }
+
+  .error-message.show {
+    display: block;
+  }
+
+  .submit-btn {
+    background: var(--brutal-red);
     color: var(--brutal-white);
+    border: 4px solid var(--brutal-black);
+    padding: 1.5rem 3rem;
+    font-family: 'Arial Black', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 8px 8px 0 var(--brutal-black);
+  }
+
+  .submit-btn:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 12px 12px 0 var(--brutal-black);
+  }
+
+  .submit-btn:active {
+    transform: translate(0, 0);
+    box-shadow: 4px 4px 0 var(--brutal-black);
+  }
+
+  .submit-btn:disabled {
+    background: var(--brutal-gray);
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  .form-confirmation {
+    background: var(--brutal-black);
+    color: var(--brutal-white);
+    border: 4px solid var(--brutal-red);
     padding: 2rem;
     text-align: center;
-    font-weight: 900;
+    font-family: 'Arial Black', sans-serif;
     font-size: 1.5rem;
+    font-weight: 900;
     text-transform: uppercase;
+    letter-spacing: -2px;
     margin-top: 2rem;
+    animation: confirmSlam 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes confirmSlam {
+    0% {
+      transform: scale(0) rotate(-5deg);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.1) rotate(2deg);
+    }
+    100% {
+      transform: scale(1) rotate(0);
+      opacity: 1;
+    }
   }
 
   @media (max-width: 768px) {
@@ -401,44 +542,118 @@ import ImpactCard from "../components/ImpactCard.astro";
     .bar-chart {
       height: 200px;
     }
+
+    /* Form mobile styles */
+    .action-form {
+      padding: 1.5rem;
+      margin: 1rem;
+      box-shadow: 8px 8px 0 var(--brutal-shadow);
+    }
+    
+    .form-group label {
+      font-size: 1rem;
+    }
+    
+    .submit-btn {
+      width: 100%;
+      font-size: 1.2rem;
+      padding: 1rem 2rem;
+    }
+    
+    .form-confirmation {
+      font-size: 1.2rem;
+      padding: 1.5rem;
+    }
   }
 </style>
 
 <script>
+  // Character counter for message field
+  const messageField = document.getElementById("message") as HTMLTextAreaElement;
+  const charCountSpan = document.getElementById("charCount");
+  
+  if (messageField && charCountSpan) {
+    messageField.addEventListener("input", () => {
+      const remaining = 1000 - messageField.value.length;
+      charCountSpan.textContent = remaining.toString();
+    });
+  }
+
   // Form handling
   document
     .getElementById("contactForm")
-    ?.addEventListener("submit", function (e) {
+    ?.addEventListener("submit", async function (e) {
       e.preventDefault();
-
-      const formData = {
-        name: (document.getElementById("name") as HTMLInputElement).value,
-        email: (document.getElementById("email") as HTMLInputElement).value,
-        postcode: (document.getElementById("postcode") as HTMLInputElement)
-          .value,
-        message: (document.getElementById("message") as HTMLTextAreaElement)
-          .value,
-        timestamp: new Date().toISOString(),
-      };
-
-      // Show confirmation
+      
+      const form = this as HTMLFormElement;
+      const submitBtn = form.querySelector('.submit-btn') as HTMLButtonElement;
       const confirmation = document.getElementById("formConfirmation");
-      if (confirmation) {
-        confirmation.style.display = "block";
+      
+      // Get form data
+      const nameValue = (document.getElementById("name") as HTMLInputElement).value;
+      const nameParts = nameValue.trim().split(' ');
+      
+      const formData = {
+        first_name: nameParts[0],
+        last_name: nameParts.slice(1).join(' ') || '',
+        email: (document.getElementById("email") as HTMLInputElement).value,
+        postcode: (document.getElementById("postcode") as HTMLInputElement).value,
+        comments: (document.getElementById("message") as HTMLTextAreaElement).value,
+      };
+      
+      // Show loading state
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'PROCESSING...';
       }
-
-      // Reset form
-      (this as HTMLFormElement).reset();
-
-      // Log for demo
-      console.log("Alliance Member Registered:", formData);
-
-      // Hide confirmation after 5 seconds
-      setTimeout(() => {
-        if (confirmation) {
-          confirmation.style.display = "none";
+      
+      try {
+        // Submit to API
+        const response = await fetch('/api/submit-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+          // Show confirmation
+          if (confirmation) {
+            form.style.display = 'none';
+            confirmation.style.display = 'block';
+          }
+          
+          // Reset form
+          form.reset();
+          if (charCountSpan) charCountSpan.textContent = '1000';
+          
+          // Hide confirmation after 5 seconds and show form again
+          setTimeout(() => {
+            if (confirmation) {
+              confirmation.style.display = 'none';
+              form.style.display = 'block';
+            }
+          }, 5000);
+          
+          console.log('Lead submitted successfully:', result.submission_id);
+        } else {
+          // Handle API errors
+          const errorMsg = result.error || 'Submission failed. Please try again.';
+          alert(errorMsg);
+          console.error('Submission error:', result);
         }
-      }, 5000);
+      } catch (error) {
+        // Handle network errors
+        alert('There was an error submitting your information. Please try again later.');
+        console.error('Network error:', error);
+      } finally {
+        // Reset button state
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'STAND WITH US';
+        }
+      }
     });
 
   // Hide scroll indicator on scroll
