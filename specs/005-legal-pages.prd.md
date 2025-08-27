@@ -87,13 +87,7 @@ This PRD outlines the requirements for creating Terms and Conditions and Privacy
 
 3. **Integration Points**:
    - Footer component modification for legal links
-   - Form components to reference terms acceptance
    - Cookie consent banner implementation
-
-4. **Performance**:
-   - Page load time < 2 seconds
-   - Optimized for text-heavy content
-   - Lazy loading for non-critical elements
 
 ### Design Requirements
 
