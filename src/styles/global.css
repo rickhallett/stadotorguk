@@ -299,7 +299,7 @@ body {
 
   .data-stat {
     font-size: clamp(
-      4rem,
+      3rem,
       12vw,
       8rem
     ); /* Increased from clamp(3rem, 8vw, 6rem) */
