@@ -376,9 +376,26 @@ import ImpactCard from "../components/ImpactCard.astro";
   }
 
   @media (max-width: 768px) {
+    /* Reduce hero section padding and height dramatically */
+    .hero {
+      min-height: 65vh; /* Remove 100vh constraint */
+      padding: 2rem 1rem; /* Add some vertical padding instead of centering */
+      justify-content: center; /* Align content to top instead of center */
+    }
+
+    /* Reduce hero headline bottom margin by 50% */
+    .hero .brutal-headline {
+      margin-bottom: 1rem;
+    }
+
+    /* Reduce story section padding by 50% */
+    .story-section {
+      padding: 2rem 1rem;
+    }
+
     .story-content {
       grid-template-columns: 1fr;
-      gap: 2rem;
+      gap: 1rem; /* Reduced from 2rem */
     }
 
     .bar-chart {

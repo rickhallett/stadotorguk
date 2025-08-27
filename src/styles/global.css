@@ -281,8 +281,34 @@ body {
 /* MOBILE RESPONSIVE */
 @media (max-width: 768px) {
   .brutal-section {
-    margin: 1rem;
-    padding: 2rem;
+    margin: 0.5rem; /* Reduced from 1rem */
+    padding: 1rem; /* Reduced from 2rem */
+  }
+
+  /* Increase data block height and adjust typography for mobile */
+  .data-block {
+    margin: 1rem 0; /* Reduced from 2rem 0 */
+    padding: 2rem 1rem; /* Increased vertical padding for more height */
+  }
+
+  /* Increase typography sizes for better mobile visibility */
+  .data-label {
+    font-size: 0.875rem; /* Increased from 0.655rem */
+    margin-bottom: 1rem; /* Increased spacing */
+  }
+
+  .data-stat {
+    font-size: clamp(
+      4rem,
+      12vw,
+      8rem
+    ); /* Increased from clamp(3rem, 8vw, 6rem) */
+    line-height: 1; /* Tighter line height for better visual impact */
+  }
+
+  /* Reduce pull quote spacing */
+  .pull-quote {
+    margin: 1.5rem 0; /* Reduced from 3rem 0 */
   }
 
   .timeline::before {

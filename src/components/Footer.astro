@@ -253,8 +253,20 @@
     }
 
     .footer-contact {
-      border-bottom: 2px solid var(--brutal-gray);
+      /* Remove green line on mobile */
+      border-bottom: none;
       padding-bottom: 2rem;
+    }
+
+    /* Make email smaller and not bold on mobile */
+    .contact-email {
+      font-size: 1rem; /* Reduced from 1.125rem */
+      font-weight: normal; /* Remove bold */
+    }
+
+    /* Make copyright font smaller on mobile */
+    .footer-bottom p {
+      font-size: 0.75rem; /* Reduced from 0.875rem */
     }
 
     .social-grid {
