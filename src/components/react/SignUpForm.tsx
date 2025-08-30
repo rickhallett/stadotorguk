@@ -149,21 +149,22 @@ export function SignUpForm({
   }, [values.name, values.email, values.postcode, submissionError]);
 
   return (
-    <div className={`action-form ${className}`} {...props}>
-      {showConfirmation ? (
-        <div 
-          className="form-confirmation"
-          role="alert"
-          aria-live="polite"
-        >
-          CONFIRMED: YOU ARE NOW PART OF THE ALLIANCE
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+    <div className={`signup-form-container ${className}`} {...props}>
+      <div className="action-form">
+        {showConfirmation ? (
+          <div 
+            className="form-confirmation"
+            role="alert"
+            aria-live="polite"
+          >
+            CONFIRMED: YOU ARE NOW PART OF THE ALLIANCE
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
           {/* Global form error */}
           {submissionError && (
             <div 
-              className="form-error global-error"
+              className="error-message global-error show"
               role="alert"
               aria-live="polite"
             >
@@ -309,6 +310,7 @@ export function SignUpForm({
           </div>
         </form>
       )}
+      </div>
     </div>
   );
 }
