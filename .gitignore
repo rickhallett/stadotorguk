@@ -28,5 +28,5 @@ pnpm-debug.log*
 public/admin/decap-cms.js
 .cache/
 
-.vercel/
+.vercel/output/
 

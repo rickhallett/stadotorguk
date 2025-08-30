@@ -50,7 +50,11 @@ const leadCount = await getLeadCount();
         </div> -->
         <!-- <p style="font-size: 1.25rem; opacity: 0.5">~ Margaret S</p> -->
       </div>
-      <DataBlock label="ACTIVE MEMBERS" stat={leadCount.toString()} description="" />
+      <DataBlock
+        label="ACTIVE MEMBERS"
+        stat={leadCount.toString()}
+        description=""
+      />
     </div>
   </section>
 
@@ -536,7 +540,7 @@ const leadCount = await getLeadCount();
       max-width: 90%;
       margin: 0 auto;
     }
-    
+
     .signup-form-container .action-form {
       padding: 1.5rem;
       margin: 1rem 0;
