@@ -5,7 +5,10 @@ const currentPath = Astro.url.pathname;
 <header class="site-header">
   <div class="header-content">
     <div class="logo">
-      <a href="/">STA</a>
+      <a href="/">
+        <img src="/sta-logo-header.png" alt="Swanage Traffic Alliance Logo" class="header-logo" />
+        STA
+      </a>
     </div>
     <nav class="main-nav">
       <a href="/" class={currentPath === "/" ? "active" : ""}>Home</a>
@@ -42,6 +45,14 @@ const currentPath = Astro.url.pathname;
     text-decoration: none;
     letter-spacing: -0.05em;
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .header-logo {
+    height: 40px;
+    width: auto;
   }
 
   .logo a:hover {
@@ -83,8 +94,13 @@ const currentPath = Astro.url.pathname;
     }
 
     .header-content {
-      flex-direction: column;
+      flex-direction: row;
+      justify-content: space-between;
       gap: 0.5rem; /* Reduced from 1rem */
+    }
+    
+    .logo a {
+      font-size: 1.5rem;
     }
 
     .main-nav {
