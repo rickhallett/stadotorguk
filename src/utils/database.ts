@@ -138,6 +138,8 @@ export async function getAllLeads(): Promise<Lead[]> {
   }
 }
 
+// ... existing code
+
 export async function getLeads(limit: number, offset: number): Promise<Lead[]> {
   try {
     const sql = getSql();
@@ -154,6 +156,24 @@ export async function getLeads(limit: number, offset: number): Promise<Lead[]> {
     throw error;
   }
 }
+
+export async function getLeadByEmail(email: string): Promise<Lead | null> {
+  try {
+    const sql = getSql();
+    const result = await sql<Lead[]>`
+      SELECT * FROM leads 
+      WHERE email = ${email}
+      LIMIT 1
+    `;
+    return result.length > 0 ? result[0] : null;
+  } catch (error) {
+    console.error("Failed to get lead by email:", error);
+    throw error;
+  }
+}
+
+export async function getMemberStats(): Promise<DatabaseMemberStats> {
+// ... existing code
 
 export async function getMemberStats(): Promise<DatabaseMemberStats> {
   try {
