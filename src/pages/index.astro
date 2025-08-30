@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import DataBlock from "../components/astro/DataBlock.astro";
 import BrutalSection from "../components/astro/BrutalSection.astro";
 import ImpactCard from "../components/astro/ImpactCard.astro";
+import { SignUpForm } from "../components/react/SignUpForm.tsx";
 ---
 
 <Layout title="Home">
@@ -141,60 +142,7 @@ import ImpactCard from "../components/astro/ImpactCard.astro";
       <span></span><br />Join the alliance
     </h2>
 
-    <div class="action-form">
-      <form id="contactForm">
-        <div class="form-group">
-          <label for="name">NAME *</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            maxlength="100"
-            pattern="[A-Za-z\s]+"
-            title="Please enter a valid name"
-          />
-          <span class="error-message" data-for="name"></span>
-        </div>
-        <div class="form-group">
-          <label for="email">EMAIL *</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            maxlength="255"
-          />
-          <span class="error-message" data-for="email"></span>
-        </div>
-        <div class="form-group">
-          <label for="postcode">POSTCODE *</label>
-          <input
-            type="text"
-            id="postcode"
-            name="postcode"
-            required
-            title="Please enter a valid UK postcode"
-            maxlength="10"
-          />
-          <span class="error-message" data-for="postcode"></span>
-        </div>
-        <div class="form-group">
-          <label for="message">YOUR STORY (OPTIONAL)</label>
-          <textarea id="message" name="message" rows="4" maxlength="1000"
-          ></textarea>
-          <small>Characters remaining: <span id="charCount">1000</span></small>
-        </div>
-        <button type="submit" class="submit-btn">STAND WITH US</button>
-      </form>
-      <div
-        class="form-confirmation"
-        id="formConfirmation"
-        style="display: none;"
-      >
-        CONFIRMED: YOU ARE NOW PART OF THE ALLIANCE
-      </div>
-    </div>
+    <SignUpForm client:load />
   </BrutalSection>
 </Layout>
 
@@ -565,101 +513,7 @@ import ImpactCard from "../components/astro/ImpactCard.astro";
 </style>
 
 <script>
-  // Character counter for message field
-  const messageField = document.getElementById(
-    "message"
-  ) as HTMLTextAreaElement;
-  const charCountSpan = document.getElementById("charCount");
-
-  if (messageField && charCountSpan) {
-    messageField.addEventListener("input", () => {
-      const remaining = 1000 - messageField.value.length;
-      charCountSpan.textContent = remaining.toString();
-    });
-  }
-
-  // Form handling
-  document
-    .getElementById("contactForm")
-    ?.addEventListener("submit", async function (e) {
-      e.preventDefault();
-
-      const form = this as HTMLFormElement;
-      const submitBtn = form.querySelector(".submit-btn") as HTMLButtonElement;
-      const confirmation = document.getElementById("formConfirmation");
-
-      // Get form data
-      const nameValue = (document.getElementById("name") as HTMLInputElement)
-        .value;
-      const nameParts = nameValue.trim().split(" ");
-
-      const formData = {
-        first_name: nameParts[0],
-        last_name: nameParts.slice(1).join(" ") || "",
-        email: (document.getElementById("email") as HTMLInputElement).value,
-        postcode: (document.getElementById("postcode") as HTMLInputElement)
-          .value,
-        comments: (document.getElementById("message") as HTMLTextAreaElement)
-          .value,
-      };
-
-      // Show loading state
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "PROCESSING...";
-      }
-
-      try {
-        // Submit to API
-        const response = await fetch("/api/submit-lead", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        });
-
-        const result = await response.json();
-
-        if (response.ok && result.success) {
-          // Show confirmation
-          if (confirmation) {
-            form.style.display = "none";
-            confirmation.style.display = "block";
-          }
-
-          // Reset form
-          form.reset();
-          if (charCountSpan) charCountSpan.textContent = "1000";
-
-          // Hide confirmation after 5 seconds and show form again
-          setTimeout(() => {
-            if (confirmation) {
-              confirmation.style.display = "none";
-              form.style.display = "block";
-            }
-          }, 5000);
-
-          console.log("Lead submitted successfully:", result.submission_id);
-        } else {
-          // Handle API errors
-          const errorMsg =
-            result.error || "Submission failed. Please try again.";
-          alert(errorMsg);
-          console.error("Submission error:", result);
-        }
-      } catch (error) {
-        // Handle network errors
-        alert(
-          "There was an error submitting your information. Please try again later."
-        );
-        console.error("Network error:", error);
-      } finally {
-        // Reset button state
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.textContent = "STAND WITH US";
-        }
-      }
-    });
+  // Non-form JavaScript functionality remains
 
   // Hide scroll indicator on scroll
   window.addEventListener("scroll", () => {
