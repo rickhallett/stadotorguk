@@ -1,19 +1,17 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import BrutalSection from '../components/astro/BrutalSection.astro';
-import { getCollection } from 'astro:content';
+import { getAllLeads, type Lead } from '../utils/database';
 import { getMemberStats } from '../utils/memberStats';
 
-// Get all feed items from content collection
-const feedEntries = await getCollection('feed', ({ data }) => {
-    return data.published !== false; // Only show published items
-});
+// Get all feed items from the database
+const allLeads = await getAllLeads();
 
-// Sort by timestamp (newest first) and format for display
-const feedItems = feedEntries
-    .sort((a, b) => new Date(b.data.timestamp).getTime() - new Date(a.data.timestamp).getTime())
-    .map((entry, index) => {
-        const timestamp = new Date(entry.data.timestamp);
+// Filter for leads with comments and format them for the feed
+const feedItems = allLeads
+    .filter((lead: Lead) => lead.comments && lead.comments.trim() !== '')
+    .map((lead: Lead, index: number) => {
+        const timestamp = new Date(lead.timestamp);
         const now = new Date();
         const diffInHours = Math.floor((now.getTime() - timestamp.getTime()) / (1000 * 60 * 60));
         
@@ -33,10 +31,10 @@ const feedItems = feedEntries
         
         return {
             id: index + 1,
-            username: entry.data.username,
-            location: entry.data.location,
+            username: lead.first_name,
+            location: 'Swanage', // Location data is not in the leads table, so we'll use a placeholder
             timestamp: timeAgo,
-            comment: entry.data.comment
+            comment: lead.comments
         };
     });
 
@@ -47,26 +45,8 @@ const todayUsers = memberStats.today;
 const weekUsers = memberStats.thisWeek;
 const monthUsers = memberStats.thisMonth;
 
-// Fallback data if no content exists
-const fallbackItems = [
-    {
-        id: 1,
-        username: "Sarah M.",
-        location: "High Street",
-        timestamp: "2 hours ago",
-        comment: "Stuck in traffic for 45 minutes trying to get to the doctor's surgery."
-    },
-    {
-        id: 2,
-        username: "John D.",
-        location: "Shore Road",
-        timestamp: "3 hours ago",
-        comment: "Emergency vehicles couldn't get through again today."
-    }
-];
-
-// Use content collection items if available, otherwise use fallback
-const displayItems = feedItems.length > 0 ? feedItems : fallbackItems;
+// Use database items if available, otherwise show a message
+const displayItems = feedItems;
 
 // Use cached total for movement counter (already fetched above)
 const totalSupporters = memberStats.total;
@@ -131,17 +111,21 @@ const totalSupporters = memberStats.total;
             We're building the evidence trail for judicial review.
         </p>
         <div class="feed-container">
-            {displayItems.map((item) => (
-                <div class="feed-item fade-in" data-id={item.id}>
-                    <div class="feed-meta">
-                        <span class="feed-user">{item.username} • {item.location}</span>
-                        <span class="feed-time">{item.timestamp}</span>
+            {displayItems.length > 0 ? (
+                displayItems.map((item) => (
+                    <div class="feed-item fade-in" data-id={item.id}>
+                        <div class="feed-meta">
+                            <span class="feed-user">{item.username} • {item.location}</span>
+                            <span class="feed-time">{item.timestamp}</span>
+                        </div>
+                        <div class="feed-content">
+                            "{item.comment}"
+                        </div>
                     </div>
-                    <div class="feed-content">
-                        "{item.comment}"
-                    </div>
-                </div>
-            ))}
+                ))
+            ) : (
+                <p>No stories yet. Be the first to share yours!</p>
+            )}
         </div>
         
         <div class="load-more-container">
