@@ -1,4 +1,4 @@
-import { getCollection } from 'astro:content';
+import { getMemberStats as getDbMemberStats, type DatabaseMemberStats } from './database.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -41,8 +41,8 @@ export async function getMemberStats(options = { useCache: true }): Promise<Memb
     }
   }
   
-  // Compute fresh stats
-  console.log('Computing fresh member stats...');
+  // Compute fresh stats from database
+  console.log('Computing fresh member stats from database...');
   const stats = await computeMemberStats();
   
   // Save to cache
@@ -61,73 +61,19 @@ export async function getMemberStats(options = { useCache: true }): Promise<Memb
 }
 
 async function computeMemberStats(): Promise<MemberStats> {
-  const leads = await getCollection('leads', ({ data }) => data.published !== false);
-  const now = new Date();
-  
-  // Time-based filtering
-  const today = leads.filter(lead => {
-    const date = new Date(lead.data.timestamp);
-    return (now.getTime() - date.getTime()) < 24 * 60 * 60 * 1000;
-  });
-  
-  const thisWeek = leads.filter(lead => {
-    const date = new Date(lead.data.timestamp);
-    return (now.getTime() - date.getTime()) < 7 * 24 * 60 * 60 * 1000;
-  });
-  
-  const thisMonth = leads.filter(lead => {
-    const date = new Date(lead.data.timestamp);
-    return (now.getTime() - date.getTime()) < 30 * 24 * 60 * 60 * 1000;
-  });
-  
-  // Type breakdown
-  const byType = leads.reduce((acc, lead) => {
-    const type = lead.data.visitor_type || 'Local';
-    acc[type] = (acc[type] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
-  
-  // Growth calculations
-  const sortedLeads = [...leads].sort((a, b) => 
-    new Date(a.data.timestamp).getTime() - new Date(b.data.timestamp).getTime()
-  );
-  
-  const firstDate = sortedLeads[0] ? new Date(sortedLeads[0].data.timestamp) : now;
-  const daysSinceStart = Math.max(1, (now.getTime() - firstDate.getTime()) / (24 * 60 * 60 * 1000));
-  const dailyAverage = Math.round(leads.length / daysSinceStart);
-  
-  // Week-over-week growth
-  const lastWeek = leads.filter(lead => {
-    const date = new Date(lead.data.timestamp);
-    const daysAgo = (now.getTime() - date.getTime()) / (24 * 60 * 60 * 1000);
-    return daysAgo >= 7 && daysAgo < 14;
-  });
-  
-  const weeklyGrowth = lastWeek.length > 0 
-    ? Math.round(((thisWeek.length - lastWeek.length) / lastWeek.length) * 100)
-    : 100;
+  try {
+    // Get stats directly from database - much faster than file iteration
+    const dbStats = await getDbMemberStats();
     
-  const trend = weeklyGrowth > 5 ? 'up' : weeklyGrowth < -5 ? 'down' : 'stable';
-  
-  return {
-    total: leads.length,
-    today: today.length,
-    thisWeek: thisWeek.length,
-    thisMonth: thisMonth.length,
-    byType: {
-      Local: byType.Local || 0,
-      Visitor: byType.Visitor || 0,
-      Tourist: byType.Tourist || 0,
-      Other: byType.Other || 0,
-    },
-    growth: {
-      dailyAverage,
-      weeklyGrowth,
-      trend,
-    },
-    lastUpdated: now.toISOString(),
-    cacheVersion: '1.0.0',
-  };
+    // Convert DatabaseMemberStats to MemberStats format (they're compatible)
+    return {
+      ...dbStats,
+      cacheVersion: '2.0.0-neon' // Updated version to indicate database source
+    };
+  } catch (error) {
+    console.error('Failed to get member stats from database:', error);
+    throw error;
+  }
 }
 
 // Export for use in static builds

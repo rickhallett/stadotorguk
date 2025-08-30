@@ -1,10 +1,11 @@
 // API endpoint for sign-up form lead submission
-// Creates lead entries in GitHub repository via GitHub API
+// Creates lead entries in Neon database with GitHub backup
 
 import type { APIRoute } from "astro";
 import { Octokit } from "@octokit/rest";
 import crypto from 'crypto';
 import { config } from "dotenv";
+import { createLead, type LeadData } from "../../utils/database.js";
 
 // Load environment variables from .env files for local development
 config({ path: [".env.local", ".env"] });
@@ -67,8 +68,48 @@ export const POST: APIRoute = async ({ request }) => {
     // Determine visitor type from postcode
     const visitor_type = determineVisitorType(data.postcode);
     
-    // Create markdown content for the lead file
-    const fileContent = `---
+    // Prepare lead data for database
+    const leadData: LeadData = {
+      timestamp: timestamp,
+      user_id: user_id,
+      submission_id: submission_id,
+      first_name: data.first_name,
+      last_name: data.last_name || '',
+      name: `${data.first_name} ${data.last_name || ''}`,
+      email: data.email,
+      visitor_type: visitor_type as 'Local' | 'Visitor' | 'Tourist' | 'Other',
+      comments: data.comments || '',
+      referral_code: '',
+      source: 'signup_form',
+      published: true
+    };
+    
+    // Primary: Save to Neon database
+    let leadId: number;
+    try {
+      leadId = await createLead(leadData);
+      console.log(`Lead saved to database with ID: ${leadId}`);
+    } catch (dbError: any) {
+      console.error('Database save failed:', dbError);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Failed to save submission to database', 
+          details: dbError.message 
+        }), 
+        {
+          status: 500,
+          headers: { 
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        }
+      );
+    }
+    
+    // Secondary: Backup to GitHub (optional, continues even if it fails)
+    if (process.env.GITHUB_TOKEN) {
+      try {
+        const fileContent = `---
 timestamp: ${timestamp}
 user_id: ${user_id}
 name: ${data.first_name} ${data.last_name || ''}
@@ -82,59 +123,30 @@ source: signup_form
 submission_id: ${submission_id}
 published: true
 ---`;
-    
-    // Create filename with timestamp and submission ID
-    const date = new Date();
-    const filename = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}-${String(date.getHours()).padStart(2, '0')}${String(date.getMinutes()).padStart(2, '0')}-${submission_id}.md`;
-    
-    // Check if GitHub token is available
-    if (!process.env.GITHUB_TOKEN) {
-      console.error('GitHub token not configured');
-      return new Response(
-        JSON.stringify({ 
-          error: 'Server configuration error', 
-          details: 'GitHub integration not configured' 
-        }), 
-        {
-          status: 500,
-          headers: { 
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
-        }
-      );
-    }
-    
-    // Initialize GitHub client
-    const octokit = new Octokit({
-      auth: process.env.GITHUB_TOKEN
-    });
-    
-    // Create file in repository
-    try {
-      await octokit.repos.createOrUpdateFileContents({
-        owner: 'rickhallett',
-        repo: 'stadotorguk',
-        path: `src/content/leads/${filename}`,
-        message: `Add new lead: ${data.first_name} ${data.last_name || ''}`,
-        content: Buffer.from(fileContent).toString('base64'),
-        branch: 'dev'
-      });
-    } catch (githubError: any) {
-      console.error('GitHub API error:', githubError);
-      return new Response(
-        JSON.stringify({ 
-          error: 'Failed to save submission', 
-          details: githubError.message 
-        }), 
-        {
-          status: 500,
-          headers: { 
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
-        }
-      );
+        
+        const date = new Date();
+        const filename = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}-${String(date.getHours()).padStart(2, '0')}${String(date.getMinutes()).padStart(2, '0')}-${submission_id}.md`;
+        
+        const octokit = new Octokit({
+          auth: process.env.GITHUB_TOKEN
+        });
+        
+        await octokit.repos.createOrUpdateFileContents({
+          owner: 'rickhallett',
+          repo: 'stadotorguk',
+          path: `src/content/leads/${filename}`,
+          message: `Add new lead: ${data.first_name} ${data.last_name || ''} (DB ID: ${leadId})`,
+          content: Buffer.from(fileContent).toString('base64'),
+          branch: 'dev'
+        });
+        
+        console.log(`Lead backed up to GitHub: ${filename}`);
+      } catch (githubError: any) {
+        console.warn('GitHub backup failed (non-critical):', githubError.message);
+        // Continue execution - GitHub backup failure is not critical
+      }
+    } else {
+      console.log('GitHub token not configured, skipping backup');
     }
     
     // Return success response

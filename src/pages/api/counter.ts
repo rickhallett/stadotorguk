@@ -1,19 +1,19 @@
 // API endpoint for page counter
-// Production Edge Config integration
+// Neon database integration with Edge Config fallback
 
 import type { APIRoute } from "astro";
 import { get } from "@vercel/edge-config";
 import { config } from "dotenv";
+import { getPageCount, incrementPageCount } from "../../utils/database.js";
 
 // Load environment variables from .env files for local development
 config({ path: [".env.local", ".env"] });
 
-// Update Edge Config using Vercel API
+// Fallback: Update Edge Config using Vercel API (for legacy support)
 async function updateEdgeConfig(key: string, value: number) {
   if (!process.env.VERCEL_API_TOKEN || !process.env.EDGE_CONFIG_ID) {
-    throw new Error(
-      "Missing required environment variables: VERCEL_API_TOKEN or EDGE_CONFIG_ID"
-    );
+    console.warn("Edge Config not configured, skipping fallback update");
+    return { success: false };
   }
 
   const apiUrl = new URL(
@@ -55,8 +55,15 @@ export const GET: APIRoute = async ({ request }) => {
     const { searchParams } = new URL(request.url);
     const action = searchParams.get("action") || "read";
 
-    // Read current count from Edge Config
-    const currentCount = Number((await get("page_views")) || 0);
+    // Primary: Read current count from Neon database
+    let currentCount: number;
+    try {
+      currentCount = await getPageCount();
+    } catch (dbError) {
+      console.error("Database read failed, trying Edge Config fallback:", dbError);
+      // Fallback to Edge Config if database fails
+      currentCount = Number((await get("page_views")) || 0);
+    }
 
     // For read-only requests (just display the count)
     if (request.method === "GET" && action === "read") {
@@ -103,24 +110,36 @@ export const POST: APIRoute = async ({ request }) => {
     const { searchParams } = new URL(request.url);
     const action = searchParams.get("action") || "increment";
 
-    // Read current count from Edge Config
-    const currentCount = Number((await get("page_views")) || 0);
-
     // For increment requests (track page view)
     if (
       request.method === "POST" ||
       (request.method === "GET" && action === "increment")
     ) {
-      const newCount = currentCount + 1;
+      // Primary: Increment count in Neon database
+      let newCount: number;
+      try {
+        newCount = await incrementPageCount();
+      } catch (dbError) {
+        console.error("Database increment failed, trying Edge Config fallback:", dbError);
+        
+        // Fallback: Read current count and increment in Edge Config
+        const currentCount = Number((await get("page_views")) || 0);
+        newCount = currentCount + 1;
+        await updateEdgeConfig("page_views", newCount);
+      }
 
-      // Update the count in Edge Config
-      const updateResult = await updateEdgeConfig("page_views", newCount);
+      // Optional: Keep Edge Config in sync (fire-and-forget)
+      try {
+        await updateEdgeConfig("page_views", newCount);
+      } catch (edgeError) {
+        console.warn("Edge Config sync failed (non-critical):", edgeError);
+      }
 
       // Return the new count
       return new Response(
         JSON.stringify({
           count: newCount,
-          success: updateResult.success,
+          success: true,
         }),
         {
           status: 200,
