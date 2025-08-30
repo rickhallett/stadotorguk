@@ -133,7 +133,7 @@ import ImpactCard from "../components/ImpactCard.astro";
   </BrutalSection> -->
 
   <!-- CALL TO ACTION -->
-  <!-- <BrutalSection>
+  <BrutalSection>
     <h2
       class="brutal-headline"
       style="font-size: clamp(3rem, 8vw, 5rem); text-align: center;"
@@ -145,11 +145,11 @@ import ImpactCard from "../components/ImpactCard.astro";
       <form id="contactForm">
         <div class="form-group">
           <label for="name">NAME *</label>
-          <input 
-            type="text" 
-            id="name" 
-            name="name" 
-            required 
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
             maxlength="100"
             pattern="[A-Za-z\s]+"
             title="Please enter a valid name"
@@ -158,23 +158,22 @@ import ImpactCard from "../components/ImpactCard.astro";
         </div>
         <div class="form-group">
           <label for="email">EMAIL *</label>
-          <input 
-            type="email" 
-            id="email" 
-            name="email" 
-            required 
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
             maxlength="255"
           />
           <span class="error-message" data-for="email"></span>
         </div>
         <div class="form-group">
           <label for="postcode">POSTCODE *</label>
-          <input 
-            type="text" 
-            id="postcode" 
-            name="postcode" 
-            required 
-            pattern="[A-Z]{1,2}[0-9]{1,2}[A-Z]?\s?[0-9][A-Z]{2}"
+          <input
+            type="text"
+            id="postcode"
+            name="postcode"
+            required
             title="Please enter a valid UK postcode"
             maxlength="10"
           />
@@ -182,11 +181,7 @@ import ImpactCard from "../components/ImpactCard.astro";
         </div>
         <div class="form-group">
           <label for="message">YOUR STORY (OPTIONAL)</label>
-          <textarea 
-            id="message" 
-            name="message" 
-            rows="4"
-            maxlength="1000"
+          <textarea id="message" name="message" rows="4" maxlength="1000"
           ></textarea>
           <small>Characters remaining: <span id="charCount">1000</span></small>
         </div>
@@ -200,6 +195,7 @@ import ImpactCard from "../components/ImpactCard.astro";
         CONFIRMED: YOU ARE NOW PART OF THE ALLIANCE
       </div>
     </div>
+  </BrutalSection>
 </Layout>
 
 <style>
@@ -410,12 +406,13 @@ import ImpactCard from "../components/ImpactCard.astro";
 
   .form-group label {
     display: block;
-    font-family: 'Arial Black', sans-serif;
+    font-family: "Arial Black", sans-serif;
     font-size: 1.2rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: -2px;
     margin-bottom: 0.5rem;
+    color: var(--brutal-black);
   }
 
   .form-group input,
@@ -424,7 +421,7 @@ import ImpactCard from "../components/ImpactCard.astro";
     padding: 1rem;
     border: 4px solid var(--brutal-black);
     font-size: 1rem;
-    font-family: 'Arial', sans-serif;
+    font-family: "Arial", sans-serif;
     background: var(--brutal-white);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -461,7 +458,7 @@ import ImpactCard from "../components/ImpactCard.astro";
     color: var(--brutal-white);
     border: 4px solid var(--brutal-black);
     padding: 1.5rem 3rem;
-    font-family: 'Arial Black', sans-serif;
+    font-family: "Arial Black", sans-serif;
     font-size: 1.5rem;
     font-weight: 900;
     text-transform: uppercase;
@@ -493,7 +490,7 @@ import ImpactCard from "../components/ImpactCard.astro";
     border: 4px solid var(--brutal-red);
     padding: 2rem;
     text-align: center;
-    font-family: 'Arial Black', sans-serif;
+    font-family: "Arial Black", sans-serif;
     font-size: 1.5rem;
     font-weight: 900;
     text-transform: uppercase;
@@ -549,17 +546,17 @@ import ImpactCard from "../components/ImpactCard.astro";
       margin: 1rem;
       box-shadow: 8px 8px 0 var(--brutal-shadow);
     }
-    
+
     .form-group label {
       font-size: 1rem;
     }
-    
+
     .submit-btn {
       width: 100%;
       font-size: 1.2rem;
       padding: 1rem 2rem;
     }
-    
+
     .form-confirmation {
       font-size: 1.2rem;
       padding: 1.5rem;
@@ -569,9 +566,11 @@ import ImpactCard from "../components/ImpactCard.astro";
 
 <script>
   // Character counter for message field
-  const messageField = document.getElementById("message") as HTMLTextAreaElement;
+  const messageField = document.getElementById(
+    "message"
+  ) as HTMLTextAreaElement;
   const charCountSpan = document.getElementById("charCount");
-  
+
   if (messageField && charCountSpan) {
     messageField.addEventListener("input", () => {
       const remaining = 1000 - messageField.value.length;
@@ -584,74 +583,80 @@ import ImpactCard from "../components/ImpactCard.astro";
     .getElementById("contactForm")
     ?.addEventListener("submit", async function (e) {
       e.preventDefault();
-      
+
       const form = this as HTMLFormElement;
-      const submitBtn = form.querySelector('.submit-btn') as HTMLButtonElement;
+      const submitBtn = form.querySelector(".submit-btn") as HTMLButtonElement;
       const confirmation = document.getElementById("formConfirmation");
-      
+
       // Get form data
-      const nameValue = (document.getElementById("name") as HTMLInputElement).value;
-      const nameParts = nameValue.trim().split(' ');
-      
+      const nameValue = (document.getElementById("name") as HTMLInputElement)
+        .value;
+      const nameParts = nameValue.trim().split(" ");
+
       const formData = {
         first_name: nameParts[0],
-        last_name: nameParts.slice(1).join(' ') || '',
+        last_name: nameParts.slice(1).join(" ") || "",
         email: (document.getElementById("email") as HTMLInputElement).value,
-        postcode: (document.getElementById("postcode") as HTMLInputElement).value,
-        comments: (document.getElementById("message") as HTMLTextAreaElement).value,
+        postcode: (document.getElementById("postcode") as HTMLInputElement)
+          .value,
+        comments: (document.getElementById("message") as HTMLTextAreaElement)
+          .value,
       };
-      
+
       // Show loading state
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.textContent = 'PROCESSING...';
+        submitBtn.textContent = "PROCESSING...";
       }
-      
+
       try {
         // Submit to API
-        const response = await fetch('/api/submit-lead', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
+        const response = await fetch("/api/submit-lead", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
         });
-        
+
         const result = await response.json();
-        
+
         if (response.ok && result.success) {
           // Show confirmation
           if (confirmation) {
-            form.style.display = 'none';
-            confirmation.style.display = 'block';
+            form.style.display = "none";
+            confirmation.style.display = "block";
           }
-          
+
           // Reset form
           form.reset();
-          if (charCountSpan) charCountSpan.textContent = '1000';
-          
+          if (charCountSpan) charCountSpan.textContent = "1000";
+
           // Hide confirmation after 5 seconds and show form again
           setTimeout(() => {
             if (confirmation) {
-              confirmation.style.display = 'none';
-              form.style.display = 'block';
+              confirmation.style.display = "none";
+              form.style.display = "block";
             }
           }, 5000);
-          
-          console.log('Lead submitted successfully:', result.submission_id);
+
+          console.log("Lead submitted successfully:", result.submission_id);
         } else {
           // Handle API errors
-          const errorMsg = result.error || 'Submission failed. Please try again.';
+          const errorMsg =
+            result.error || "Submission failed. Please try again.";
           alert(errorMsg);
-          console.error('Submission error:', result);
+          console.error("Submission error:", result);
         }
       } catch (error) {
         // Handle network errors
-        alert('There was an error submitting your information. Please try again later.');
-        console.error('Network error:', error);
+        alert(
+          "There was an error submitting your information. Please try again later."
+        );
+        console.error("Network error:", error);
       } finally {
         // Reset button state
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.textContent = 'STAND WITH US';
+          submitBtn.textContent = "STAND WITH US";
         }
       }
     });

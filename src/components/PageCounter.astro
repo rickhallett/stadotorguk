@@ -55,16 +55,9 @@ const formattedCount = new Intl.NumberFormat("en-GB").format(count);
 </div>
 
 <script is:inline>
-  // Client-side increment on page load (fire and forget)
-  console.log("🔄 PageCounter script executing...", Date.now());
-
   if (typeof window !== "undefined") {
-    console.log("🌐 Window is available, setting up counter increment...");
-
     const counterBlock = document.querySelector(".counter-block");
     const apiUrl = counterBlock?.getAttribute("data-api-url");
-
-    console.log("📍 Counter block found:", !!counterBlock, "API URL:", apiUrl);
 
     if (apiUrl) {
       console.log("📡 Sending increment request...");

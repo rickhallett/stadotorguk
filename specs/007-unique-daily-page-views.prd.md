@@ -504,199 +504,37 @@ describe('Unique Visitor Tracking', () => {
   });
 });
 ```
-  
-  // Generate visitor hash
-  const visitorHash = generateVisitorHash(request);
-  
-  // Check if unique visitor
-  const isUnique = !config.daily_seen_hashes.includes(visitorHash);
-  
-  if (isUnique && config.daily_seen_hashes.length < 10000) { // Limit for safety
-    config.daily_seen_hashes.push(visitorHash);
-    config.daily_unique_count++;
-  }
-  
-  // Always increment total views
-  config.page_views++;
-  
-  // Update Edge Config
-  await updateEdgeConfig(config);
-  
-  return {
-    total_views: config.page_views,
-    unique_today: config.daily_unique_count,
-    is_unique: isUnique
-  };
-}
-```
-
-#### Component Update
-```astro
----
-// PageCounter.astro updates
-const data = await fetch(`${apiBaseUrl}/api/counter?action=read`);
-const { total_views, unique_today, yesterday_unique } = await data.json();
----
-
-<div class="counter-block">
-  <div class="counter-item">
-    <span class="counter-number">{formatNumber(unique_today)}</span>
-    <span class="counter-label">UNIQUE TODAY</span>
-  </div>
-  <div class="counter-item">
-    <span class="counter-number">{formatNumber(total_views)}</span>
-    <span class="counter-label">TOTAL VIEWS</span>
-  </div>
-</div>
-```
-
-### 5.2 Phase 2: Enhanced Analytics (Future)
-
-#### Potential Enhancements
-- Rolling 7-day unique visitor history
-- Hourly breakdown of unique visitors
-- New vs returning visitor ratio
-- Geographic distribution (country-level)
-
-### 5.3 Storage Optimization
-
-#### Set Size Management
-```javascript
-// Prevent unbounded growth
-const MAX_DAILY_HASHES = 10000; // ~160KB storage
-
-if (config.daily_seen_hashes.length >= MAX_DAILY_HASHES) {
-  // Stop tracking new uniques for the day
-  // Still increment total views
-  console.warn('Daily unique limit reached');
-}
-```
-
-#### Alternative: Bloom Filter (Advanced)
-For high-traffic sites (>10K daily uniques):
-```javascript
-// Use bloom filter for space efficiency
-// 10,000 items, 0.1% false positive rate = ~15KB
-const bloomFilter = new BloomFilter(10000, 0.001);
-```
-
-## 6. Privacy & Compliance
-
-### GDPR Compliance
-- **No personal data**: Only statistical aggregates
-- **Hash-only storage**: Cannot reverse to identify individuals  
-- **Daily purge**: Automatic data minimization
-- **No cross-site tracking**: Hashes are site-specific
-- **No consent needed**: No cookies or personal data
-
-### Data Retention
-- Hashed identifiers: 24 hours maximum
-- Daily counts: Retained indefinitely
-- No user profiles or behavior tracking
-- Complete daily reset ensures data minimization
-
-## 7. Migration Strategy
-
-### Backward Compatibility
-```javascript
-// Graceful upgrade from existing counter
-if (!config.daily_seen_hashes) {
-  config = {
-    ...config,
-    daily_unique_count: 0,
-    daily_seen_hashes: [],
-    daily_reset_date: today,
-    yesterday_unique_count: 0
-  };
-}
-```
-
-### Zero-Downtime Migration
-1. Deploy new code with feature flag
-2. Test with subset of traffic
-3. Monitor Edge Config storage usage
-4. Enable for all traffic
-5. Update display components
-
-## 8. Success Metrics
-
-### Technical KPIs
-- Hash computation time: <5ms
-- Edge Config update time: <50ms
-- Daily storage usage: <100KB
-- False positive rate: <1%
-
-### Business KPIs
-- More accurate visitor metrics
-- 50% reduction in inflated counts
-- Clear daily traffic patterns
-- Improved stakeholder reporting
-
-## 9. Testing Strategy
-
-### Test Cases
-1. **First visit of the day**: Should count as unique
-2. **Repeat visit same day**: Should not count as unique
-3. **Visit after midnight UTC**: Should count as unique again
-4. **Multiple tabs/windows**: Should count as one unique
-5. **Incognito mode**: May count as separate unique (acceptable)
-
-### Load Testing
-```javascript
-// Simulate 1000 unique visitors
-for (let i = 0; i < 1000; i++) {
-  const mockRequest = createMockRequest(`user-${i}`);
-  await handler(mockRequest);
-}
-// Verify: daily_unique_count === 1000
-```
 
 ## 10. Implementation Checklist
 
-### Phase 1 Launch
-- [ ] Update Edge Config schema
-- [ ] Implement visitor hash generation
-- [ ] Add daily reset logic
-- [ ] Update counter API endpoint
-- [ ] Modify PageCounter component
-- [ ] Test uniqueness detection
-- [ ] Verify daily reset at midnight UTC
-- [ ] Update privacy policy
-- [ ] Deploy with feature flag
+### Phase 1: Per-Page Tracking
+- [ ] Update API to accept page parameter
+- [ ] Extend Edge Config structure for page_counts
+- [ ] Update PageCounter component with page prop
+- [ ] Test backward compatibility
+- [ ] Deploy to production
 - [ ] Monitor storage usage
 
-## 11. Alternative Approaches Considered
+### Phase 2: Unique Visitors
+- [ ] Add crypto imports for hashing
+- [ ] Implement visitor hash generation
+- [ ] Add daily reset logic
+- [ ] Update API with uniqueness checking
+- [ ] Modify display components
+- [ ] Add feature flag for gradual rollout
+- [ ] Test midnight UTC reset
+- [ ] Update privacy policy
+- [ ] Monitor storage limits
 
-### Rejected: Client-Side Fingerprinting
-- Privacy concerns
-- Requires JavaScript
-- Can be blocked by extensions
-- More complex implementation
+## 11. Conclusion
 
-### Rejected: Session Storage
-- Requires cookies/storage
-- GDPR consent needed
-- Can be cleared by user
-- Not reliable for counting
+This phased approach allows for incremental feature deployment with minimal risk:
 
-### Rejected: IP-Only Tracking
-- Not unique enough (shared IPs)
-- Privacy concerns with raw IP storage
-- VPN/proxy complications
-- Dynamic IP changes
+**Phase 1 (Per-Page)**: Simple, low-risk extension that provides immediate value with page-level insights.
 
-## 12. Future Considerations
+**Phase 2 (Unique Visitors)**: More complex but provides crucial metrics about actual reach versus raw traffic.
 
-### Potential Enhancements
-- **Hourly breakdown**: "Peak hours: 2-3 PM"
-- **Return visitor tracking**: "23% returning visitors"
-- **Referrer analysis**: Track traffic sources
-- **Campaign attribution**: UTM parameter support
-- **Real-time dashboard**: Live visitor count
-
-### Scaling Considerations
-- For >10K daily visitors: Consider Bloom filters
-- For >100K daily visitors: Consider probabilistic counting
+Both phases maintain backward compatibility and can be rolled back independently if needed. The architecture supports future enhancements while keeping the current implementation simple and maintainable.
 - For analytics depth: Consider dedicated analytics service
 
 ## Appendix A: Implementation Code
