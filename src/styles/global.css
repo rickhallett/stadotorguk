@@ -160,8 +160,10 @@ body {
   background: var(--brutal-gray); /* Green for positive actions */
   color: var(--brutal-white);
   padding: 3rem;
-  margin: 3rem 0;
+  margin: 3rem auto;
   position: relative;
+  width: 100%;
+  max-width: 800px;
 }
 
 .form-group {
@@ -212,6 +214,13 @@ body {
 .submit-btn:hover {
   transform: translate(-5px, -5px);
   box-shadow: 5px 5px 0 var(--brutal-white);
+}
+
+.submit-btn:disabled {
+  background: var(--brutal-gray);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* USER COUNTER */

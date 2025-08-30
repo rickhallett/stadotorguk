@@ -8,6 +8,7 @@ export interface SignUpFormValues {
   email: string;
   postcode: string;
   message: string;
+  [key: string]: string;
 }
 
 export interface SignUpFormErrors {

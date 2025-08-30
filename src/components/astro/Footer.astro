@@ -10,9 +10,9 @@ import { PageCounter } from "../react/PageCounter.tsx";
         admin@swanagetraffic.org.uk
       </a>
     </div>
-    <div class="footer-social">
-      <!-- <h3>FOLLOW THE MOVEMENT</h3> -->
-      <!-- <div class="social-grid">
+    <!-- <div class="footer-social"> -->
+    <!-- <h3>FOLLOW THE MOVEMENT</h3> -->
+    <!-- <div class="social-grid">
         <a
           href="https://x.com/swanagetraffic"
           class="social-link social-link--x"
@@ -86,7 +86,7 @@ import { PageCounter } from "../react/PageCounter.tsx";
           <span>TG</span>
         </a>
       </div> -->
-    </div>
+    <!-- </div> -->
   </div>
   <div class="footer-stats">
     <PageCounter client:load />
@@ -118,10 +118,14 @@ import { PageCounter } from "../react/PageCounter.tsx";
   .footer-content {
     max-width: 1400px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: 40% 60%;
-    gap: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 2rem;
+  }
+
+  .footer-contact {
+    text-align: center;
   }
 
   .footer-contact h3,

@@ -162,15 +162,8 @@ export function useFormValidation<T extends Record<string, string>>(
     setTouched(prev => ({ ...prev, [field]: true }));
   }, []);
 
-  // Check if form is valid (no errors and all required fields filled)
-  const isValid = Object.keys(errors).every(field => !errors[field as keyof T]) &&
-    Object.keys(validationSchema).every(field => {
-      const rule = validationSchema[field as keyof T] as FormValidationRule;
-      if (rule.required) {
-        return values[field as keyof T] && values[field as keyof T].trim() !== '';
-      }
-      return true;
-    });
+  // Check if form is valid (no errors)
+  const isValid = Object.values(errors).every(error => error === '');
 
   // Cleanup on unmount
   React.useEffect(() => {

@@ -160,20 +160,17 @@ export async function getLeads(limit: number, offset: number): Promise<Lead[]> {
 export async function getLeadByEmail(email: string): Promise<Lead | null> {
   try {
     const sql = getSql();
-    const result = await sql<Lead[]>`
+    const result = await sql`
       SELECT * FROM leads 
       WHERE email = ${email}
       LIMIT 1
     `;
-    return result.length > 0 ? result[0] : null;
+    return (result as Lead[]).length > 0 ? (result as Lead[])[0] : null;
   } catch (error) {
     console.error("Failed to get lead by email:", error);
     throw error;
   }
 }
-
-export async function getMemberStats(): Promise<DatabaseMemberStats> {
-// ... existing code
 
 export async function getMemberStats(): Promise<DatabaseMemberStats> {
   try {
