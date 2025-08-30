@@ -381,3 +381,16 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Confirmation banner styling (global so it applies to React render output) */
+.form-confirmation {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .form-confirmation {
+    font-size: 0.8rem;
+  }
+}

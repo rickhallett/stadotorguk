@@ -481,12 +481,19 @@ const leadCount = await getLeadCount();
     padding: 2rem;
     text-align: center;
     font-family: "Arial Black", sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: -2px;
-    margin-top: 2rem;
+    margin-top: 1rem;
     animation: confirmSlam 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Ensure confirmation styles also apply when rendered standalone */
+  .form-confirmation {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 1rem;
   }
 
   .signup-form-container .sr-only {
@@ -583,8 +590,13 @@ const leadCount = await getLeadCount();
     }
 
     .signup-form-container .form-confirmation {
-      font-size: 1.2rem;
+      font-size: 0.8rem;
       padding: 1.5rem;
+    }
+
+    /* Standalone confirmation on mobile */
+    .form-confirmation {
+      font-size: 0.8rem;
     }
 
     /* Inputs and textarea should span nearly full width on mobile */
