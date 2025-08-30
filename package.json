@@ -9,8 +9,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "migrate-leads": "tsx scripts/migrate-leads.ts",
-        "test-migration": "bun run scripts/test-migration.ts"
-  },
+    "test-migration": "bun run scripts/test-migration.ts",
     "simulate-traffic": "tsx scripts/simulate-traffic.ts"
   },
   "dependencies": {
