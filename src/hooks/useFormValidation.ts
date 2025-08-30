@@ -84,7 +84,7 @@ export function useFormValidation<T extends Record<string, string>>(
 
     setErrors(newErrors);
     return isValid;
-  }, [values, validateField]);
+  }, [values, validationSchema]);
 
   // Handle field change
   const handleChange = useCallback((field: keyof T, value: string) => {
@@ -97,7 +97,7 @@ export function useFormValidation<T extends Record<string, string>>(
       const fieldError = validateField(field, value);
       setErrors(prev => ({ ...prev, [field]: fieldError }));
     }
-  }, [errors, validateField]);
+  }, [errors, validationSchema]);
 
   // Handle field blur (for touched state and validation)
   const handleBlur = useCallback((field: keyof T) => {
@@ -108,7 +108,7 @@ export function useFormValidation<T extends Record<string, string>>(
     // Validate field on blur
     const fieldError = validateField(field, values[field]);
     setErrors(prev => ({ ...prev, [field]: fieldError }));
-  }, [values, validateField]);
+  }, [values, validationSchema]);
 
   // Handle form submission
   const handleSubmit = useCallback((onSubmit: (values: T) => Promise<void>) => {
