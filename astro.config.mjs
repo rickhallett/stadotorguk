@@ -3,12 +3,13 @@ import { defineConfig } from "astro/config";
 import decapCmsOauth from "astro-decap-cms-oauth";
 import node from "@astrojs/node";
 import vercel from "@astrojs/vercel";
+import react from "@astrojs/react";
 
 // https://astro.build/config
 export default defineConfig({
   output: "server", // Use server mode for OAuth integration
   adapter: vercel({}),
-  integrations: [decapCmsOauth()],
+  integrations: [decapCmsOauth(), react()],
   server: {
     host: true, // Allow external connections
     allowedHosts: ["2d208b860f07.ngrok-free.app", "localhost", "127.0.0.1"],
