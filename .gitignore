@@ -27,3 +27,6 @@ pnpm-debug.log*
 # Generated CMS file (copied from node_modules)
 public/admin/decap-cms.js
 .cache/
+
+.vercel/
+
