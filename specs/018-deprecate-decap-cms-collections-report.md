@@ -3,10 +3,10 @@
 ## PRD: 018-deprecate-decap-cms-collections.prd.md
 
 ## Tasks Completed
-- [ ] Task 1: Remove `feed` and `leads` collections from `public/admin/config.yml`.
-- [ ] Task 2: Remove `feed` and `leads` collections from `src/content/config.ts`.
-- [ ] Task 3: Delete the `src/content/feed` directory.
-- [ ] Task 4: Delete the `src/content/leads` directory.
+- [x] Task 1: Remove `feed` and `leads` collections from `public/admin/config.yml`.
+- [x] Task 2: Remove `feed` and `leads` collections from `src/content/config.ts`.
+- [x] Task 3: Delete the `src/content/feed` directory.
+- [x] Task 4: Delete the `src/content/leads` directory.
 
 ## Testing Summary
 - Tests written: 0
