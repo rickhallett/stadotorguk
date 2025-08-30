@@ -45,6 +45,18 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
     
+    // API endpoint for sign-up form lead submission
+// Creates lead entries in Neon database with GitHub backup
+
+import type { APIRoute } from "astro";
+import { Octokit } from "@octokit/rest";
+import crypto from 'crypto';
+import { config } from "dotenv";
+import { createLead, getLeadByEmail, type LeadData } from "../../utils/database.js";
+
+// Load environment variables from .env files for local development
+config({ path: [".env.local", ".env"] });
+// ... existing code
     // Validate email format
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(data.email)) {
@@ -59,8 +71,24 @@ export const POST: APIRoute = async ({ request }) => {
         }
       );
     }
+
+    // Check for existing email
+    const existingLead = await getLeadByEmail(data.email);
+    if (existingLead) {
+      return new Response(
+        JSON.stringify({ error: 'This email address has already been registered.' }),
+        {
+          status: 409, // Conflict
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        }
+      );
+    }
     
     // Generate unique IDs
+// ... existing code
     const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 16);
     const submission_id = 'sub_' + crypto.randomBytes(6).toString('hex');
     const user_id = 'usr_' + crypto.randomBytes(6).toString('hex');
