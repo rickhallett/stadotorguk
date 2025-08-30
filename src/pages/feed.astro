@@ -50,6 +50,7 @@ const displayItems = feedItems;
 
 // Use cached total for movement counter (already fetched above)
 const totalSupporters = memberStats.total;
+const showLoadMore = feedItems.length >= 10;
 ---
 
 <Layout title="Feed">
@@ -75,10 +76,7 @@ const totalSupporters = memberStats.total;
     <!-- USER COUNTER -->
     <BrutalSection title="THE UNCONSULTED MAJORITY">
         <div class="counter-container">
-            <div class="countdown-alert" role="timer" aria-live="polite" aria-label="Countdown to council vote">
-                <div class="countdown-number" id="daysUntilVote" aria-describedby="countdown-description">--</div>
-                <div class="countdown-label" id="countdown-description">DAYS UNTIL SEPTEMBER 15 VOTE</div>
-            </div>
+            
             <div class="counter-block counter-total" role="status" aria-label="Total membership count">
                 <div class="data-stat" aria-live="polite">{activeUsers}</div>
                 <div class="counter-label">Total Active Members</div>
@@ -101,11 +99,7 @@ const totalSupporters = memberStats.total;
     </BrutalSection>
 
     <!-- FEED -->
-    <BrutalSection title="LATEST REPORTS">
-        <p style="margin-bottom: 2rem; font-size: 1.125rem;">
-            Every story the Town Council ignored. Every concern dismissed under Standing Order 1c. 
-            We're building the evidence trail for judicial review.
-        </p>
+    <BrutalSection title="LATEST MEMBERS">
         <div class="feed-container">
             {displayItems.length > 0 ? (
                 displayItems.map((item) => (
@@ -125,9 +119,11 @@ const totalSupporters = memberStats.total;
         </div>
         
         <div class="load-more-container">
-            <button class="submit-btn" id="loadMore">
-                LOAD MORE VOICES
-            </button>
+            {showLoadMore && (
+                <button class="submit-btn" id="loadMore">
+                    LOAD MORE VOICES
+                </button>
+            )}
         </div>
     </BrutalSection>
 
