@@ -4,6 +4,9 @@ import DataBlock from "../components/astro/DataBlock.astro";
 import BrutalSection from "../components/astro/BrutalSection.astro";
 import ImpactCard from "../components/astro/ImpactCard.astro";
 import { SignUpForm } from "../components/react/SignUpForm.tsx";
+import { getLeadCount } from "../utils/database";
+
+const leadCount = await getLeadCount();
 ---
 
 <Layout title="Home">
@@ -47,7 +50,7 @@ import { SignUpForm } from "../components/react/SignUpForm.tsx";
         </div> -->
         <!-- <p style="font-size: 1.25rem; opacity: 0.5">~ Margaret S</p> -->
       </div>
-      <DataBlock label="ACTIVE MEMBERS" stat="623" description="" />
+      <DataBlock label="ACTIVE MEMBERS" stat={leadCount.toString()} description="" />
     </div>
   </section>
 
