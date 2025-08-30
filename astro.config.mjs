@@ -1,7 +1,6 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import decapCmsOauth from "astro-decap-cms-oauth";
-import node from "@astrojs/node";
 import vercel from "@astrojs/vercel";
 import react from "@astrojs/react";
 
