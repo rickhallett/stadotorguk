@@ -1,14 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import BrutalSection from '../components/astro/BrutalSection.astro';
-import { getAllLeads, type Lead } from '../utils/database';
+import { getLeads, type Lead } from '../utils/database';
 import { getMemberStats } from '../utils/memberStats';
 
-// Get all feed items from the database
-const allLeads = await getAllLeads();
+// Get initial feed items from the database
+const initialLeads = await getLeads(10, 0);
 
 // Filter for leads with comments and format them for the feed
-const feedItems = allLeads
+const feedItems = initialLeads
     .filter((lead: Lead) => lead.comments && lead.comments.trim() !== '')
     .map((lead: Lead, index: number) => {
         const timestamp = new Date(lead.timestamp);
@@ -324,8 +324,10 @@ const totalSupporters = memberStats.total;
 </style>
 
 <script>
-    // Simulate loading more items
-    document.getElementById('loadMore')?.addEventListener('click', function() {
+    let offset = 10; // Initial offset after the first batch
+    const limit = 10;
+
+    document.getElementById('loadMore')?.addEventListener('click', async function() {
         const container = document.querySelector('.feed-container');
         const button = this as HTMLButtonElement;
         
@@ -333,45 +335,53 @@ const totalSupporters = memberStats.total;
         button.disabled = true;
         button.textContent = 'LOADING...';
         
-        // Simulate API call
-        setTimeout(() => {
-            // Mock new items
-            const newItems = [
-                {
-                    username: "Alex P.",
-                    location: "Durlston Road",
-                    timestamp: "4 days ago",
-                    comment: "The noise pollution at night is unbearable. Trucks using residential streets as shortcuts."
-                },
-                {
-                    username: "Claire S.",
-                    location: "Northbrook Road",
-                    timestamp: "5 days ago",
-                    comment: "My disabled mother can't access the shops anymore. This is a disaster for accessibility."
+        const response = await fetch(`/api/get-leads?limit=${limit}&offset=${offset}`);
+        const newLeads = await response.json();
+
+        if (newLeads.length > 0) {
+            newLeads.forEach((lead: any, index: number) => {
+                const timestamp = new Date(lead.timestamp);
+                const now = new Date();
+                const diffInHours = Math.floor((now.getTime() - timestamp.getTime()) / (1000 * 60 * 60));
+                
+                let timeAgo;
+                if (diffInHours < 1) {
+                    timeAgo = 'Just now';
+                } else if (diffInHours < 24) {
+                    timeAgo = `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+                } else {
+                    const diffInDays = Math.floor(diffInHours / 24);
+                    if (diffInDays === 1) {
+                        timeAgo = 'Yesterday';
+                    } else {
+                        timeAgo = `${diffInDays} days ago`;
+                    }
                 }
-            ];
-            
-            // Add new items to feed
-            newItems.forEach((item, index) => {
+
                 const feedItem = document.createElement('div');
-                feedItem.className = 'feed-item';
+                feedItem.className = 'feed-item fade-in';
                 feedItem.style.animationDelay = `${(index + 1) * 0.1}s`;
                 feedItem.innerHTML = `
                     <div class="feed-meta">
-                        <span class="feed-user">${item.username} • ${item.location}</span>
-                        <span class="feed-time">${item.timestamp}</span>
+                        <span class="feed-user">${lead.first_name} • Swanage</span>
+                        <span class="feed-time">${timeAgo}</span>
                     </div>
                     <div class="feed-content">
-                        "${item.comment}"
+                        "${lead.comments}"
                     </div>
                 `;
                 container?.appendChild(feedItem);
             });
-            
-            // Re-enable button
+
+            offset += limit;
+        }
+
+        if (newLeads.length < limit) {
+            button.style.display = 'none'; // Hide button if no more leads
+        } else {
             button.disabled = false;
             button.textContent = 'LOAD MORE VOICES';
-        }, 1000);
+        }
     });
 
     // Counter animation

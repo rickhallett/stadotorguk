@@ -98,6 +98,22 @@ export async function getAllLeads(): Promise<Lead[]> {
   }
 }
 
+export async function getLeads(limit: number, offset: number): Promise<Lead[]> {
+    try {
+        const result = await sql`
+      SELECT * FROM leads 
+      WHERE published = true AND comments IS NOT NULL AND comments != ''
+      ORDER BY timestamp DESC
+      LIMIT ${limit}
+      OFFSET ${offset}
+    `;
+        return result as Lead[];
+    } catch (error) {
+        console.error('Failed to get leads:', error);
+        throw error;
+    }
+}
+
 export async function getMemberStats(): Promise<DatabaseMemberStats> {
   try {
     const now = new Date();
