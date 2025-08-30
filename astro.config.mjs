@@ -6,8 +6,8 @@ import react from "@astrojs/react";
 
 // https://astro.build/config
 export default defineConfig({
-  output: "server", // Use server mode for OAuth integration
-  adapter: vercel({}),
+  output: "server", // Required for OAuth and API endpoints
+  adapter: vercel(),
   integrations: [decapCmsOauth(), react()],
   server: {
     host: true, // Allow external connections

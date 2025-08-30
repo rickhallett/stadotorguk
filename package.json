@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@astrojs/react": "^4.3.0",
-    "@astrojs/vercel": "^8.2.6",
+    "@astrojs/vercel": "^8.2.7",
     "@neondatabase/serverless": "^1.0.1",
     "@octokit/rest": "^22.0.0",
     "@types/node": "^24.3.0",
