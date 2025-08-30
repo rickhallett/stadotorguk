@@ -1,0 +1,522 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BrutalSection from "../components/astro/BrutalSection.astro";
+
+const lastUpdated = "27 August 2025";
+const sections = [
+  { id: "acceptance", title: "Acceptance of Terms" },
+  { id: "usage", title: "Website Usage" },
+  { id: "content", title: "User Content and Submissions" },
+  { id: "evidence", title: "Evidence Submission" },
+  { id: "intellectual", title: "Intellectual Property" },
+  { id: "liability", title: "Liability Disclaimer" },
+  { id: "indemnification", title: "Indemnification" },
+  { id: "modifications", title: "Modifications" },
+  { id: "governing", title: "Governing Law" },
+  { id: "contact", title: "Contact Information" },
+];
+---
+
+<Layout title="Terms and Conditions - Swanage Traffic Alliance">
+  <main>
+    <BrutalSection>
+      <h1 class="brutal-headline">TERMS AND CONDITIONS</h1>
+      <p class="last-updated">Last Updated: {lastUpdated}</p>
+
+      <nav class="toc">
+        <h2>CONTENTS</h2>
+        <ol>
+          {
+            sections.map((section) => (
+              <li>
+                <a href={`#${section.id}`}>{section.title}</a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+
+      <section id="acceptance" class="legal-section">
+        <h2>1. ACCEPTANCE OF TERMS</h2>
+        <p>
+          By accessing and using the Swanage Traffic Alliance (STA) website, you
+          agree to be bound by these Terms and Conditions. If you do not agree
+          with any part of these terms, you must not use our website.
+        </p>
+        <p>
+          These terms apply to all visitors, users, and others who access or use
+          our service. By using this website, you acknowledge that you have
+          read, understood, and agree to be bound by these Terms and Conditions.
+        </p>
+      </section>
+
+      <section id="usage" class="legal-section">
+        <h2>2. WEBSITE USAGE</h2>
+
+        <h3>2.1 Permitted Use</h3>
+        <p>You may use this website for lawful purposes related to:</p>
+        <ul>
+          <li>Learning about traffic issues in Swanage</li>
+          <li>Submitting evidence of traffic violations</li>
+          <li>Participating in community discussions</li>
+          <li>Supporting the STA campaign</li>
+          <li>Accessing public information about road safety</li>
+        </ul>
+
+        <h3>2.2 Prohibited Activities</h3>
+        <p>You must not:</p>
+        <ul>
+          <li>Submit false or misleading information</li>
+          <li>Harass, intimidate, or threaten other users</li>
+          <li>Attempt to compromise website security</li>
+          <li>Use automated systems to scrape content without permission</li>
+          <li>Impersonate others or misrepresent affiliations</li>
+          <li>Upload malicious code or viruses</li>
+          <li>Use the website for any illegal purpose</li>
+          <li>Violate any applicable laws or regulations</li>
+        </ul>
+      </section>
+
+      <section id="content" class="legal-section">
+        <h2>3. USER CONTENT AND SUBMISSIONS</h2>
+
+        <h3>3.1 Content Rights</h3>
+        <p>
+          By submitting content (including evidence, comments, testimonials, and
+          any other materials), you grant STA a non-exclusive, royalty-free,
+          perpetual, irrevocable, and fully sublicensable license to use,
+          reproduce, modify, adapt, publish, translate, create derivative works
+          from, distribute, and display such content throughout the world in any
+          media for campaign purposes.
+        </p>
+        <p>
+          You represent and warrant that you own or have the necessary licenses,
+          rights, consents, and permissions to grant this license.
+        </p>
+
+        <h3>3.2 Content Standards</h3>
+        <p>All submissions must be:</p>
+        <ul>
+          <li>Accurate and truthful</li>
+          <li>Respectful and non-defamatory</li>
+          <li>Free from copyright infringement</li>
+          <li>Relevant to traffic safety concerns</li>
+          <li>Free from hate speech or discriminatory content</li>
+          <li>Compliant with all applicable laws</li>
+        </ul>
+
+        <h3>3.3 Content Removal</h3>
+        <p>
+          We reserve the right to remove any content that violates these terms
+          or that we determine, in our sole discretion, to be inappropriate,
+          offensive, or harmful to our campaign objectives.
+        </p>
+      </section>
+
+      <section id="evidence" class="legal-section">
+        <h2>4. EVIDENCE SUBMISSION</h2>
+
+        <h3>4.1 Accuracy Requirement</h3>
+        <p>
+          Evidence submitted must be genuine, unaltered, and accurately
+          represent the events depicted. False evidence submission may result
+          in:
+        </p>
+        <ul>
+          <li>Immediate removal from the platform</li>
+          <li>Report to relevant authorities</li>
+          <li>Legal action where appropriate</li>
+          <li>Permanent ban from the website</li>
+        </ul>
+
+        <h3>4.2 Privacy Considerations</h3>
+        <p>When submitting evidence:</p>
+        <ul>
+          <li>Blur faces and personal information where possible</li>
+          <li>Focus on traffic violations, not individuals</li>
+          <li>Respect privacy rights of third parties</li>
+          <li>Do not include unnecessary personal details</li>
+          <li>Ensure compliance with data protection laws</li>
+        </ul>
+
+        <h3>4.3 Evidence Usage</h3>
+        <p>Submitted evidence may be used by STA for:</p>
+        <ul>
+          <li>Campaign advocacy and awareness</li>
+          <li>Presentations to local authorities</li>
+          <li>Public safety demonstrations</li>
+          <li>Media and press releases</li>
+          <li>Legal proceedings if necessary</li>
+        </ul>
+      </section>
+
+      <section id="intellectual" class="legal-section">
+        <h2>5. INTELLECTUAL PROPERTY</h2>
+
+        <h3>5.1 STA Property</h3>
+        <p>
+          All STA branding, logos, content, and materials remain our property.
+          You may not use STA intellectual property without written permission.
+          This includes but is not limited to:
+        </p>
+        <ul>
+          <li>The STA logo and brand marks</li>
+          <li>Website design and layout</li>
+          <li>Original content and articles</li>
+          <li>Campaign materials and resources</li>
+        </ul>
+
+        <h3>5.2 User Submissions</h3>
+        <p>
+          You retain ownership of content you submit but grant us usage rights
+          as outlined in Section 3.1. You warrant that your submissions do not
+          infringe upon the intellectual property rights of any third party.
+        </p>
+
+        <h3>5.3 Third-Party Content</h3>
+        <p>
+          Our website may contain links to third-party websites or content. We
+          do not endorse, guarantee, or assume responsibility for the accuracy
+          or reliability of any third-party content.
+        </p>
+      </section>
+
+      <section id="liability" class="legal-section">
+        <h2>6. LIABILITY DISCLAIMER</h2>
+
+        <h3>6.1 No Warranty</h3>
+        <p>
+          This website is provided "as is" without warranties of any kind,
+          either express or implied. We do not guarantee:
+        </p>
+        <ul>
+          <li>Continuous, uninterrupted availability</li>
+          <li>Error-free operation</li>
+          <li>Accuracy of all information</li>
+          <li>Security from unauthorized access</li>
+          <li>Compatibility with all devices and browsers</li>
+        </ul>
+
+        <h3>6.2 Limitation of Liability</h3>
+        <p>
+          STA, its volunteers, officers, and affiliates shall not be liable for
+          any indirect, consequential, special, incidental, or punitive damages
+          arising from:
+        </p>
+        <ul>
+          <li>Your use or inability to use the website</li>
+          <li>Any errors or omissions in content</li>
+          <li>Unauthorized access to your transmissions or data</li>
+          <li>Statements or conduct of any third party on the website</li>
+          <li>Any other matter relating to the website</li>
+        </ul>
+      </section>
+
+      <section id="indemnification" class="legal-section">
+        <h2>7. INDEMNIFICATION</h2>
+        <p>
+          You agree to defend, indemnify, and hold harmless STA, its volunteers,
+          officers, directors, employees, agents, and affiliates from and
+          against any and all claims, damages, obligations, losses, liabilities,
+          costs, or debt, and expenses (including but not limited to attorney's
+          fees) arising from:
+        </p>
+        <ul>
+          <li>Your use of and access to the website</li>
+          <li>Your violation of any term of these Terms and Conditions</li>
+          <li>
+            Your violation of any third-party right, including without
+            limitation any copyright, property, or privacy right
+          </li>
+          <li>Any claim that your content caused damage to a third party</li>
+          <li>Any misleading or false information you provide</li>
+        </ul>
+        <p>
+          This defense and indemnification obligation will survive these Terms
+          and Conditions and your use of the website.
+        </p>
+      </section>
+
+      <section id="modifications" class="legal-section">
+        <h2>8. MODIFICATIONS</h2>
+        <p>
+          We reserve the right to modify, amend, or update these terms at any
+          time without prior notice. Changes will be effective immediately upon
+          posting to the website. Your continued use of the website following
+          the posting of revised Terms and Conditions means that you accept and
+          agree to the changes.
+        </p>
+        <p>
+          We encourage you to periodically review these terms to stay informed
+          of updates. The "Last Updated" date at the top of this page indicates
+          when these terms were last revised.
+        </p>
+      </section>
+
+      <section id="governing" class="legal-section">
+        <h2>9. GOVERNING LAW</h2>
+        <p>
+          These Terms and Conditions are governed by and construed in accordance
+          with the laws of England and Wales. Any disputes arising under or in
+          connection with these terms shall be subject to the exclusive
+          jurisdiction of the courts of England and Wales.
+        </p>
+        <p>
+          You agree to submit to the personal jurisdiction of the courts located
+          in England and Wales for the purpose of litigating all such claims or
+          disputes.
+        </p>
+        <p>
+          If any provision of these Terms and Conditions is found to be
+          unenforceable or invalid, that provision shall be limited or
+          eliminated to the minimum extent necessary so that these Terms and
+          Conditions shall otherwise remain in full force and effect.
+        </p>
+      </section>
+
+      <section id="contact" class="legal-section">
+        <h2>10. CONTACT INFORMATION</h2>
+        <p>
+          For questions, concerns, or inquiries about these Terms and
+          Conditions, please contact us:
+        </p>
+        <div class="contact-info">
+          <p><strong>Email:</strong> admin@swanagetraffic.org.uk</p>
+        </div>
+        <p>We aim to respond to all inquiries within 5 business days.</p>
+      </section>
+
+      <div class="print-notice">
+        <p>
+          This document was last updated on {lastUpdated}. For the most current
+          version, please visit our website at swanagetraffic.org/terms
+        </p>
+      </div>
+    </BrutalSection>
+  </main>
+</Layout>
+
+<style>
+  .brutal-headline {
+    font-size: clamp(2rem, 5vw, 4rem);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .last-updated {
+    font-weight: bold;
+    color: var(--brutal-red);
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 0.875rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 2rem;
+  }
+
+  .toc {
+    background: var(--brutal-concrete);
+    border: 4px solid var(--brutal-black);
+    padding: 2rem;
+    margin: 2rem 0 3rem 0;
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .toc h2 {
+    font-family: "Arial Black", sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  .toc ol {
+    list-style: decimal;
+    padding-left: 2rem;
+  }
+
+  .toc li {
+    margin: 0.5rem 0;
+    font-weight: 500;
+  }
+
+  .toc a {
+    color: var(--brutal-black);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+
+  .toc a:hover {
+    color: var(--brutal-red);
+    transform: translateX(5px);
+  }
+
+  .legal-section {
+    margin: 3rem 0;
+    padding: 2rem;
+    border-left: 8px solid var(--brutal-black);
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.02), transparent);
+  }
+
+  .legal-section h2 {
+    font-family: "Arial Black", sans-serif;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--brutal-black);
+  }
+
+  .legal-section h3 {
+    font-family: "Arial Black", sans-serif;
+    font-size: 1.25rem;
+    margin: 2rem 0 1rem 0;
+    text-transform: uppercase;
+    color: var(--brutal-black);
+  }
+
+  .legal-section p {
+    margin: 1rem 0;
+    line-height: 1.6;
+    max-width: 75ch;
+  }
+
+  .legal-section ul {
+    margin: 1rem 0;
+    padding-left: 2rem;
+    list-style: disc;
+  }
+
+  .legal-section li {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+  }
+
+  .contact-info {
+    background: var(--brutal-concrete);
+    border: 2px solid var(--brutal-black);
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+
+  .contact-info p {
+    margin: 0.5rem 0;
+  }
+
+  .print-notice {
+    display: none;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--brutal-black);
+    text-align: center;
+    font-size: 0.875rem;
+  }
+
+  /* Mobile Responsive Styles */
+  @media (max-width: 768px) {
+    .legal-section {
+      padding: 1rem;
+      margin: 2rem 0;
+      border-left-width: 4px;
+    }
+
+    .toc {
+      padding: 1rem;
+      margin: 1rem 0 2rem 0;
+    }
+
+    .toc h2 {
+      font-size: 1.25rem;
+    }
+
+    .toc ol {
+      padding-left: 1.5rem;
+    }
+
+    .brutal-headline {
+      font-size: 1.75rem;
+    }
+
+    .legal-section h2 {
+      font-size: 1.25rem;
+    }
+
+    .legal-section h3 {
+      font-size: 1rem;
+    }
+
+    .legal-section p,
+    .legal-section li {
+      font-size: 14px;
+    }
+
+    .contact-info {
+      padding: 1rem;
+    }
+  }
+
+  /* Print Styles */
+  @media print {
+    .site-header,
+    .site-footer,
+    .toc {
+      display: none;
+    }
+
+    .legal-section {
+      page-break-inside: avoid;
+      border: none;
+      box-shadow: none;
+      padding: 1rem 0;
+      background: none;
+    }
+
+    .legal-section h2 {
+      page-break-after: avoid;
+    }
+
+    .print-notice {
+      display: block;
+    }
+
+    body {
+      font-size: 12pt;
+      line-height: 1.5;
+      color: black;
+      background: white;
+    }
+
+    .brutal-headline {
+      font-size: 24pt;
+      color: black;
+    }
+
+    .last-updated {
+      color: black;
+    }
+
+    a {
+      color: black;
+      text-decoration: none;
+    }
+  }
+
+  /* Smooth scrolling for anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Target highlight when jumping to section */
+  section:target {
+    animation: highlight 2s ease-in-out;
+  }
+
+  @keyframes highlight {
+    0% {
+      background-color: rgba(255, 215, 0, 0.3);
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
+</style>

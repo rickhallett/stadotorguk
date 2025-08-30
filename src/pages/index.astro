@@ -1,8 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import DataBlock from "../components/DataBlock.astro";
-import BrutalSection from "../components/BrutalSection.astro";
-import ImpactCard from "../components/ImpactCard.astro";
+import DataBlock from "../components/astro/DataBlock.astro";
+import BrutalSection from "../components/astro/BrutalSection.astro";
+import ImpactCard from "../components/astro/ImpactCard.astro";
+import { SignUpForm } from "../components/react/SignUpForm.tsx";
+import { getLeadCount } from "../utils/database";
+
+const leadCount = await getLeadCount();
 ---
 
 <Layout title="Home">
@@ -46,7 +50,11 @@ import ImpactCard from "../components/ImpactCard.astro";
         </div> -->
         <!-- <p style="font-size: 1.25rem; opacity: 0.5">~ Margaret S</p> -->
       </div>
-      <DataBlock label="ACTIVE MEMBERS" stat="623" description="" />
+      <DataBlock
+        label="ACTIVE MEMBERS"
+        stat={leadCount.toString()}
+        description=""
+      />
     </div>
   </section>
 
@@ -133,7 +141,7 @@ import ImpactCard from "../components/ImpactCard.astro";
   </BrutalSection> -->
 
   <!-- CALL TO ACTION -->
-  <!-- <BrutalSection>
+  <BrutalSection>
     <h2
       class="brutal-headline"
       style="font-size: clamp(3rem, 8vw, 5rem); text-align: center;"
@@ -141,34 +149,8 @@ import ImpactCard from "../components/ImpactCard.astro";
       <span></span><br />Join the alliance
     </h2>
 
-    <!-- <div class="action-form">
-      <form id="contactForm">
-        <div class="form-group">
-          <label for="name">NAME</label>
-          <input type="text" id="name" name="name" required />
-        </div>
-        <div class="form-group">
-          <label for="email">EMAIL</label>
-          <input type="email" id="email" name="email" required />
-        </div>
-        <div class="form-group">
-          <label for="postcode">POSTCODE</label>
-          <input type="text" id="postcode" name="postcode" required />
-        </div>
-        <div class="form-group">
-          <label for="message">YOUR STORY (OPTIONAL)</label>
-          <textarea id="message" name="message" rows="4"></textarea>
-        </div>
-        <button type="submit" class="submit-btn"> STAND WITH US </button>
-      </form>
-      <div
-        class="form-confirmation"
-        id="formConfirmation"
-        style="display: none;"
-      >
-        CONFIRMED: YOU ARE NOW PART OF THE ALLIANCE
-      </div>
-    </div> -->
+    <SignUpForm client:load />
+  </BrutalSection>
 </Layout>
 
 <style>
@@ -364,15 +346,166 @@ import ImpactCard from "../components/ImpactCard.astro";
     }
   }
 
-  .form-confirmation {
-    background: var(--brutal-gray); /* Green for success */
+  /* React SignUpForm Styles - moved to global scope */
+  .signup-form-container {
+    max-width: 50%;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .signup-form-container .action-form {
+    background: var(--brutal-white);
+    border: 8px solid var(--brutal-black);
+    box-shadow: 15px 15px 0 var(--brutal-shadow);
+    padding: 3rem;
+    margin: 2rem 0;
+  }
+
+  .signup-form-container .form-group {
+    margin-bottom: 2rem;
+  }
+
+  .signup-form-container .form-group label {
+    display: block;
+    font-family: "Arial Black", sans-serif;
+    font-size: 1.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    margin-bottom: 0.5rem;
+    color: var(--brutal-black);
+  }
+
+  .signup-form-container .form-group input,
+  .signup-form-container .form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 4px solid var(--brutal-black);
+    font-size: 1rem;
+    font-family: "Arial", sans-serif;
+    background: var(--brutal-white);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+  }
+
+  .signup-form-container .form-group input:focus,
+  .signup-form-container .form-group textarea:focus {
+    outline: none;
+    box-shadow: 8px 8px 0 var(--brutal-shadow);
+    transform: translate(-2px, -2px);
+  }
+
+  .signup-form-container .form-group input.error,
+  .signup-form-container .form-group textarea.error {
+    border-color: var(--brutal-red);
+  }
+
+  .signup-form-container .character-counter {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--brutal-gray);
+  }
+
+  .signup-form-container .character-counter .warning {
+    color: var(--brutal-red);
+    font-weight: bold;
+  }
+
+  .signup-form-container .error-message {
+    color: var(--brutal-red);
+    font-weight: bold;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    display: none;
+  }
+
+  .signup-form-container .error-message.show {
+    display: block;
+  }
+
+  .signup-form-container .global-error {
+    background: #ffebee;
+    border: 2px solid var(--brutal-red);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0;
+  }
+
+  .signup-form-container .submit-btn {
+    background: var(--brutal-red);
     color: var(--brutal-white);
+    border: 4px solid var(--brutal-black);
+    padding: 1.5rem 3rem;
+    font-family: "Arial Black", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 8px 8px 0 var(--brutal-black);
+    width: 100%;
+  }
+
+  .signup-form-container .submit-btn:hover:not(:disabled) {
+    transform: translate(-4px, -4px);
+    box-shadow: 12px 12px 0 var(--brutal-black);
+  }
+
+  .signup-form-container .submit-btn:active:not(:disabled) {
+    transform: translate(0, 0);
+    box-shadow: 4px 4px 0 var(--brutal-black);
+  }
+
+  .signup-form-container .submit-btn:disabled {
+    background: var(--brutal-gray);
+    cursor: not-allowed;
+    opacity: 0.7;
+    transform: none;
+    box-shadow: 8px 8px 0 var(--brutal-black);
+  }
+
+  .signup-form-container .form-confirmation {
+    background: var(--brutal-black);
+    color: var(--brutal-white);
+    border: 4px solid var(--brutal-red);
     padding: 2rem;
     text-align: center;
-    font-weight: 900;
+    font-family: "Arial Black", sans-serif;
     font-size: 1.5rem;
+    font-weight: 900;
     text-transform: uppercase;
+    letter-spacing: -2px;
     margin-top: 2rem;
+    animation: confirmSlam 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .signup-form-container .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @keyframes confirmSlam {
+    0% {
+      transform: scale(0) rotate(-5deg);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.1) rotate(2deg);
+    }
+    100% {
+      transform: scale(1) rotate(0);
+      opacity: 1;
+    }
   }
 
   @media (max-width: 768px) {
@@ -401,45 +534,49 @@ import ImpactCard from "../components/ImpactCard.astro";
     .bar-chart {
       height: 200px;
     }
+
+    /* SignUpForm mobile styles */
+    .signup-form-container {
+      max-width: 90%;
+      margin: 0 auto;
+    }
+
+    .signup-form-container .action-form {
+      padding: 1.5rem;
+      margin: 1rem 0;
+      box-shadow: 8px 8px 0 var(--brutal-shadow);
+    }
+
+    .signup-form-container .form-group label {
+      font-size: 1rem;
+    }
+
+    .signup-form-container .submit-btn {
+      font-size: 1.2rem;
+      padding: 1rem 2rem;
+    }
+
+    .signup-form-container .form-confirmation {
+      font-size: 1.2rem;
+      padding: 1.5rem;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .signup-form-container {
+      max-width: 60%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .signup-form-container {
+      max-width: 95%;
+    }
   }
 </style>
 
 <script>
-  // Form handling
-  document
-    .getElementById("contactForm")
-    ?.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const formData = {
-        name: (document.getElementById("name") as HTMLInputElement).value,
-        email: (document.getElementById("email") as HTMLInputElement).value,
-        postcode: (document.getElementById("postcode") as HTMLInputElement)
-          .value,
-        message: (document.getElementById("message") as HTMLTextAreaElement)
-          .value,
-        timestamp: new Date().toISOString(),
-      };
-
-      // Show confirmation
-      const confirmation = document.getElementById("formConfirmation");
-      if (confirmation) {
-        confirmation.style.display = "block";
-      }
-
-      // Reset form
-      (this as HTMLFormElement).reset();
-
-      // Log for demo
-      console.log("Alliance Member Registered:", formData);
-
-      // Hide confirmation after 5 seconds
-      setTimeout(() => {
-        if (confirmation) {
-          confirmation.style.display = "none";
-        }
-      }, 5000);
-    });
+  // Non-form JavaScript functionality remains
 
   // Hide scroll indicator on scroll
   window.addEventListener("scroll", () => {

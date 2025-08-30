@@ -1,0 +1,841 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BrutalSection from "../components/astro/BrutalSection.astro";
+
+const lastUpdated = "27 August 2025";
+const sections = [
+  { id: "introduction", title: "Introduction" },
+  { id: "controller", title: "Data Controller" },
+  { id: "information", title: "Information We Collect" },
+  { id: "collection", title: "How We Collect Information" },
+  { id: "usage", title: "How We Use Your Information" },
+  { id: "legal-basis", title: "Legal Basis for Processing" },
+  { id: "sharing", title: "Data Sharing" },
+  { id: "retention", title: "Data Retention" },
+  { id: "rights", title: "Your Rights" },
+  { id: "cookies", title: "Cookies" },
+  { id: "security", title: "Security" },
+  { id: "children", title: "Children's Privacy" },
+  { id: "transfers", title: "International Transfers" },
+  { id: "changes", title: "Changes to This Policy" },
+  { id: "complaints", title: "Complaints" },
+  { id: "contact", title: "Contact Information" },
+];
+---
+
+<Layout title="Privacy Policy - Swanage Traffic Alliance">
+  <main>
+    <BrutalSection>
+      <h1 class="brutal-headline">PRIVACY POLICY</h1>
+      <p class="last-updated">Last Updated: {lastUpdated}</p>
+
+      <nav class="toc">
+        <h2>CONTENTS</h2>
+        <ol>
+          {
+            sections.map((section) => (
+              <li>
+                <a href={`#${section.id}`}>{section.title}</a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+
+      <section id="introduction" class="legal-section">
+        <h2>1. INTRODUCTION</h2>
+        <p>
+          Swanage Traffic Alliance ("STA", "we", "us", "our") is committed to
+          protecting your privacy. This policy explains how we collect, use, and
+          protect your personal information in compliance with the UK General
+          Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.
+        </p>
+        <p>
+          This Privacy Policy applies to all personal data we process regardless
+          of the media on which that data is stored or whether it relates to
+          past or present employees, workers, customers, clients or supplier
+          contacts, shareholders, website users, or any other data subject.
+        </p>
+        <p>
+          We are committed to being transparent about how we collect and use
+          your data and to meeting our data protection obligations.
+        </p>
+      </section>
+
+      <section id="controller" class="legal-section">
+        <h2>2. DATA CONTROLLER</h2>
+        <p>
+          For the purposes of the UK GDPR and Data Protection Act 2018, the data
+          controller is:
+        </p>
+        <div class="contact-info">
+          <p><strong>Organization:</strong> Swanage Traffic Alliance</p>
+          <p><strong>Email:</strong> johnsilver@swanagetraffic.org.uk</p>
+          <p><strong>Address:</strong> Swanage, Dorset, United Kingdom</p>
+        </div>
+        <p>
+          If you have any questions about this Privacy Policy or our privacy
+          practices, please contact us using the details above.
+        </p>
+      </section>
+
+      <section id="information" class="legal-section">
+        <h2>3. INFORMATION WE COLLECT</h2>
+
+        <h3>3.1 Personal Data</h3>
+        <p>We may collect and process the following personal data:</p>
+        <ul>
+          <li>Names (when provided via forms)</li>
+          <li>Email addresses (for newsletters and updates)</li>
+          <li>Phone numbers (if voluntarily provided)</li>
+          <li>Postal addresses (for campaign materials)</li>
+          <li>Photographs or videos (in evidence submissions)</li>
+          <li>Location data (related to traffic incidents)</li>
+        </ul>
+
+        <h3>3.2 Usage Data</h3>
+        <p>
+          We automatically collect certain information when you visit our
+          website:
+        </p>
+        <ul>
+          <li>IP addresses</li>
+          <li>Browser types and versions</li>
+          <li>Operating system information</li>
+          <li>Pages visited and time spent</li>
+          <li>Referring websites</li>
+          <li>Click-through rates</li>
+          <li>Date and time of visits</li>
+        </ul>
+
+        <h3>3.3 Submitted Content</h3>
+        <p>When you interact with our website, you may provide:</p>
+        <ul>
+          <li>Evidence of traffic violations</li>
+          <li>Community feed posts</li>
+          <li>Campaign testimonials</li>
+          <li>Comments and feedback</li>
+          <li>Survey responses</li>
+        </ul>
+
+        <h3>3.4 Special Category Data</h3>
+        <p>
+          We do not intentionally collect special category data (such as data
+          concerning health, religious beliefs, political opinions, or sexual
+          orientation). If such data is inadvertently submitted, we will delete
+          it unless we have explicit consent to process it.
+        </p>
+      </section>
+
+      <section id="collection" class="legal-section">
+        <h2>4. HOW WE COLLECT INFORMATION</h2>
+
+        <h3>4.1 Direct Collection</h3>
+        <p>We collect information directly from you when you:</p>
+        <ul>
+          <li>Contact us through email or contact forms</li>
+          <li>Post to our community feed</li>
+          <li>Register as a supporter</li>
+        </ul>
+
+        <h3>4.2 Automatic Collection</h3>
+        <p>We collect information automatically through:</p>
+        <ul>
+          <li>Server logs</li>
+          <li>Analytics tools</li>
+          <li>Cookies and similar technologies</li>
+          <li>Pixel tags and web beacons</li>
+        </ul>
+
+        <h3>4.3 Third-Party Sources</h3>
+        <p>We may receive information about you from:</p>
+        <ul>
+          <li>
+            Social media platforms (when you interact with our social media
+            presence)
+          </li>
+          <li>Other supporters who refer you to our campaign</li>
+          <li>Public sources and databases</li>
+        </ul>
+      </section>
+
+      <section id="usage" class="legal-section">
+        <h2>5. HOW WE USE YOUR INFORMATION</h2>
+
+        <p>We process your personal data for the following purposes:</p>
+        <ul>
+          <li>
+            <strong>Campaign Communications:</strong> Sending updates, newsletters,
+            and important announcements about our traffic safety initiatives
+          </li>
+          <li>
+            <strong>Community Engagement:</strong> Facilitating community discussions
+            and sharing supporter stories
+          </li>
+          <li>
+            <strong>Inquiry Response:</strong> Responding to your questions, comments,
+            and requests
+          </li>
+          <li>
+            <strong>Website Improvement:</strong> Analyzing usage patterns to improve
+            website functionality and user experience
+          </li>
+          <li>
+            <strong>Statistical Analysis:</strong> Creating aggregated reports on
+            traffic patterns and safety concerns
+          </li>
+          <li>
+            <strong>Legal Compliance:</strong> Meeting our legal and regulatory obligations
+          </li>
+          <li>
+            <strong>Safety and Security:</strong> Protecting our website, users,
+            and organization from fraud and security threats
+          </li>
+          <li>
+            <strong>Advocacy:</strong> Using evidence and testimonials to advocate
+            for traffic safety improvements with local authorities
+          </li>
+        </ul>
+      </section>
+
+      <section id="legal-basis" class="legal-section">
+        <h2>6. LEGAL BASIS FOR PROCESSING</h2>
+
+        <p>
+          We process your personal data based on one or more of the following
+          legal grounds:
+        </p>
+
+        <h3>6.1 Consent</h3>
+        <p>
+          Where you have given clear consent for us to process your personal
+          data for specific purposes, such as:
+        </p>
+        <ul>
+          <li>Newsletter subscriptions</li>
+          <li>Marketing communications</li>
+          <li>Use of non-essential cookies</li>
+        </ul>
+
+        <h3>6.2 Legitimate Interests</h3>
+        <p>
+          Where necessary for our legitimate interests or those of a third
+          party, provided your interests and fundamental rights do not override
+          those interests. This includes:
+        </p>
+        <ul>
+          <li>Operating our website and ensuring its security</li>
+          <li>Conducting our traffic safety campaign activities</li>
+          <li>Analyzing website usage to improve our services</li>
+          <li>Preventing fraud and ensuring network security</li>
+        </ul>
+
+        <h3>6.3 Legal Obligations</h3>
+        <p>
+          Where processing is necessary to comply with legal obligations, such
+          as:
+        </p>
+        <ul>
+          <li>Responding to lawful requests from law enforcement</li>
+          <li>Complying with court orders</li>
+          <li>Meeting regulatory requirements</li>
+        </ul>
+      </section>
+
+      <section id="sharing" class="legal-section">
+        <h2>7. DATA SHARING</h2>
+
+        <h3>7.1 We DO NOT Sell Your Data</h3>
+        <p>
+          <strong
+            >Your personal information is never sold to third parties for any
+            purpose.</strong
+          >
+        </p>
+
+        <h3>7.2 Limited Sharing</h3>
+        <p>We may share your data with:</p>
+        <ul>
+          <li>
+            <strong>Law Enforcement:</strong> When legally required or to assist
+            with investigations related to traffic violations
+          </li>
+          <li>
+            <strong>Legal Advisors:</strong> Under strict confidentiality agreements
+            when seeking legal advice
+          </li>
+          <li>
+            <strong>Technical Service Providers:</strong> Such as hosting providers,
+            email services, and analytics platforms, under data processing agreements
+          </li>
+          <li>
+            <strong>Local Authorities:</strong> Aggregated, anonymized data to support
+            traffic safety and parking issues improvements
+          </li>
+          <li>
+            <strong>Emergency Services:</strong> If necessary to protect vital interests
+          </li>
+        </ul>
+
+        <h3>7.3 Data Processing Agreements</h3>
+        <p>All third-party processors are required to:</p>
+        <ul>
+          <li>Process data only on our documented instructions</li>
+          <li>Ensure confidentiality of personal data</li>
+          <li>Implement appropriate security measures</li>
+          <li>Assist us in responding to data subject requests</li>
+          <li>Delete or return data at the end of the service</li>
+        </ul>
+      </section>
+
+      <section id="retention" class="legal-section">
+        <h2>8. DATA RETENTION</h2>
+
+        <p>
+          We retain personal data for no longer than necessary for the purposes
+          for which it was collected:
+        </p>
+
+        <ul>
+          <li>
+            <strong>Newsletter subscribers:</strong> Until you unsubscribe or request
+            deletion
+          </li>
+          <li>
+            <strong>Evidence submissions:</strong> 7 years from submission date (for
+            legal purposes)
+          </li>
+          <li><strong>Website analytics:</strong> 26 months</li>
+          <li>
+            <strong>Contact form inquiries:</strong> 2 years from last contact
+          </li>
+          <li>
+            <strong>Community posts:</strong> Indefinitely unless deletion is requested
+          </li>
+          <li><strong>Server logs:</strong> 1 year</li>
+        </ul>
+
+        <p>
+          After the retention period, data is securely deleted or anonymized. We
+          regularly review our data retention practices to ensure compliance.
+        </p>
+      </section>
+
+      <section id="rights" class="legal-section">
+        <h2>9. YOUR RIGHTS</h2>
+
+        <p>
+          Under UK GDPR, you have the following rights regarding your personal
+          data:
+        </p>
+
+        <h3>9.1 Right of Access</h3>
+        <p>
+          You have the right to request copies of your personal data we hold,
+          including information about how we use it.
+        </p>
+
+        <h3>9.2 Right to Rectification</h3>
+        <p>
+          You can request correction of inaccurate or incomplete personal data.
+        </p>
+
+        <h3>9.3 Right to Erasure ('Right to be Forgotten')</h3>
+        <p>
+          You can request deletion of your personal data, subject to certain
+          legal exceptions.
+        </p>
+
+        <h3>9.4 Right to Restriction</h3>
+        <p>
+          You can request that we limit how we process your personal data in
+          certain circumstances.
+        </p>
+
+        <h3>9.5 Right to Data Portability</h3>
+        <p>
+          You can request your data in a structured, commonly used,
+          machine-readable format.
+        </p>
+
+        <h3>9.6 Right to Object</h3>
+        <p>
+          You can object to processing based on legitimate interests, direct
+          marketing, or research purposes.
+        </p>
+
+        <h3>9.7 Rights Related to Automated Decision-Making</h3>
+        <p>
+          You have the right not to be subject to decisions based solely on
+          automated processing that significantly affects you.
+        </p>
+
+        <h3>9.8 How to Exercise Your Rights</h3>
+        <p>
+          To exercise any of these rights, contact us at: <strong
+            >privacy@swanagetraffic.org</strong
+          >
+        </p>
+        <p>
+          We will respond to your request within one month. We may need to
+          verify your identity before processing your request.
+        </p>
+      </section>
+
+      <section id="cookies" class="legal-section">
+        <h2>10. COOKIES</h2>
+
+        <h3>10.1 What Are Cookies?</h3>
+        <p>
+          Cookies are small text files placed on your device when you visit our
+          website. They help us provide you with a better experience and
+          understand how our website is used.
+        </p>
+
+        <h3>10.2 Types of Cookies We Use</h3>
+
+        <h4>Essential Cookies</h4>
+        <p>
+          Required for website functionality. These cannot be disabled without
+          affecting core website features:
+        </p>
+        <ul>
+          <li>Session management</li>
+          <li>Security features</li>
+          <li>User preferences</li>
+        </ul>
+
+        <h4>Analytics Cookies</h4>
+        <p>
+          Help us understand website usage patterns (requires your consent):
+        </p>
+        <ul>
+          <li>Page views and navigation paths</li>
+          <li>Time spent on pages</li>
+          <li>Error reporting</li>
+        </ul>
+
+        <h3>10.3 Managing Cookies</h3>
+        <p>You can control cookies through your browser settings:</p>
+        <ul>
+          <li>Block all cookies</li>
+          <li>Block third-party cookies only</li>
+          <li>Clear cookies when closing your browser</li>
+          <li>Accept cookies from specific websites only</li>
+        </ul>
+        <p>
+          Note: Disabling essential cookies may affect website functionality.
+        </p>
+
+        <h3>10.4 Third-Party Cookies</h3>
+        <p>
+          Some third-party services may set their own cookies. We do not control
+          these cookies and recommend reviewing their privacy policies.
+        </p>
+      </section>
+
+      <section id="security" class="legal-section">
+        <h2>11. SECURITY</h2>
+
+        <p>
+          We implement appropriate technical and organizational measures to
+          protect your personal data:
+        </p>
+
+        <h3>11.1 Technical Measures</h3>
+        <ul>
+          <li>Encryption of data in transit using HTTPS/TLS</li>
+          <li>Secure password policies and authentication systems</li>
+          <li>Regular security updates and patches</li>
+          <li>Firewall protection</li>
+        </ul>
+
+        <h3>11.2 Organizational Measures</h3>
+        <ul>
+          <li>Limited access to personal data on a need-to-know basis</li>
+          <li>Confidentiality agreements with staff and volunteers</li>
+          <li>Regular data protection training</li>
+          <li>Data protection impact assessments for new processes</li>
+          <li>Incident response procedures</li>
+        </ul>
+
+        <h3>11.3 Data Breach Procedures</h3>
+        <p>In the event of a data breach, we will:</p>
+        <ul>
+          <li>Notify the ICO within 72 hours where required</li>
+          <li>
+            Notify affected individuals if there is a high risk to their rights
+          </li>
+          <li>Document the breach and our response</li>
+          <li>Review and improve our security measures</li>
+        </ul>
+      </section>
+
+      <section id="children" class="legal-section">
+        <h2>12. CHILDREN'S PRIVACY</h2>
+
+        <p>
+          Our website is not directed at individuals under the age of 16. We do
+          not knowingly collect personal data from children under 16 years of
+          age.
+        </p>
+        <p>
+          If we discover that we have inadvertently collected personal data from
+          a child under 16 without parental consent, we will promptly delete
+          such information from our systems.
+        </p>
+        <p>
+          If you believe we have collected information from a child under 16,
+          please contact us immediately at privacy@swanagetraffic.org.
+        </p>
+      </section>
+
+      <section id="transfers" class="legal-section">
+        <h2>13. INTERNATIONAL TRANSFERS</h2>
+
+        <p>
+          Your personal data is primarily stored and processed within the United
+          Kingdom.
+        </p>
+        <p>
+          If we need to transfer data outside the UK, we ensure appropriate
+          safeguards are in place:
+        </p>
+        <ul>
+          <li>Adequacy decisions by the UK government</li>
+          <li>Standard contractual clauses approved by the ICO</li>
+          <li>Binding corporate rules where applicable</li>
+          <li>Your explicit consent for specific transfers</li>
+        </ul>
+        <p>
+          Some of our third-party service providers may process data outside the
+          UK. We ensure they provide appropriate security measures and comply
+          with UK GDPR requirements.
+        </p>
+      </section>
+
+      <section id="changes" class="legal-section">
+        <h2>14. CHANGES TO THIS POLICY</h2>
+
+        <p>
+          We may update this Privacy Policy periodically to reflect changes in
+          our practices, technologies, legal requirements, or other factors.
+        </p>
+        <p>When we make significant changes, we will:</p>
+        <ul>
+          <li>Update the "Last Updated" date at the top of this policy</li>
+          <li>Post a notice on our website homepage</li>
+          <li>Email subscribers about significant changes where appropriate</li>
+          <li>Obtain new consent where required by law</li>
+        </ul>
+        <p>
+          We encourage you to review this policy periodically to stay informed
+          about how we protect your information.
+        </p>
+      </section>
+
+      <section id="complaints" class="legal-section">
+        <h2>15. COMPLAINTS</h2>
+
+        <p>If you have concerns about how we handle your personal data:</p>
+
+        <h3>15.1 Contact Us First</h3>
+        <p>
+          We aim to resolve any concerns quickly and fairly. Please contact us
+          at:
+        </p>
+        <div class="contact-info">
+          <p><strong>Email:</strong> privacy@swanagetraffic.org</p>
+          <p>
+            <strong>Post:</strong> Data Protection Officer<br />
+            Swanage Traffic Alliance<br />
+            Swanage, Dorset<br />
+            United Kingdom
+          </p>
+        </div>
+
+        <h3>15.2 Information Commissioner's Office</h3>
+        <p>
+          You have the right to lodge a complaint with the Information
+          Commissioner's Office (ICO):
+        </p>
+        <div class="contact-info">
+          <p><strong>Website:</strong> ico.org.uk</p>
+          <p><strong>Helpline:</strong> Available on ICO website3</p>
+          <p><strong>Live chat:</strong> Available on ICO website</p>
+          <p>
+            <strong>Post:</strong> Information Commissioner's Office<br />
+            Wycliffe House<br />
+            Water Lane<br />
+            Wilmslow<br />
+            Cheshire SK9 5AF
+          </p>
+        </div>
+      </section>
+
+      <section id="contact" class="legal-section">
+        <h2>16. CONTACT INFORMATION</h2>
+
+        <p>
+          For any questions, requests, or concerns regarding this Privacy Policy
+          or our data protection practices:
+        </p>
+
+        <div class="contact-info">
+          <p><strong>Data Protection Contact:</strong></p>
+          <p>Email: admin@swanagetraffic.org.uk</p>
+        </div>
+
+        <p>
+          We aim to respond to all privacy-related inquiries within 5 business
+          days and to formal data subject requests within one month as required
+          by UK GDPR.
+        </p>
+      </section>
+
+      <div class="print-notice">
+        <p>
+          This document was last updated on {lastUpdated}. For the most current
+          version, please visit our website at swanagetraffic.org/privacy
+        </p>
+      </div>
+    </BrutalSection>
+  </main>
+</Layout>
+
+<style>
+  .brutal-headline {
+    font-size: clamp(2rem, 5vw, 4rem);
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .last-updated {
+    font-weight: bold;
+    color: var(--brutal-red);
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 0.875rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 2rem;
+  }
+
+  .toc {
+    background: var(--brutal-concrete);
+    border: 4px solid var(--brutal-black);
+    padding: 2rem;
+    margin: 2rem 0 3rem 0;
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .toc h2 {
+    font-family: "Arial Black", sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  .toc ol {
+    list-style: decimal;
+    padding-left: 2rem;
+  }
+
+  .toc li {
+    margin: 0.5rem 0;
+    font-weight: 500;
+  }
+
+  .toc a {
+    color: var(--brutal-black);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+
+  .toc a:hover {
+    color: var(--brutal-red);
+    transform: translateX(5px);
+  }
+
+  .legal-section {
+    margin: 3rem 0;
+    padding: 2rem;
+    border-left: 8px solid var(--brutal-black);
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.02), transparent);
+  }
+
+  .legal-section h2 {
+    font-family: "Arial Black", sans-serif;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--brutal-black);
+  }
+
+  .legal-section h3 {
+    font-family: "Arial Black", sans-serif;
+    font-size: 1.25rem;
+    margin: 2rem 0 1rem 0;
+    text-transform: uppercase;
+    color: var(--brutal-black);
+  }
+
+  .legal-section h4 {
+    font-family: "Arial", sans-serif;
+    font-size: 1rem;
+    margin: 1.5rem 0 0.5rem 0;
+    font-weight: bold;
+    color: var(--brutal-black);
+  }
+
+  .legal-section p {
+    margin: 1rem 0;
+    line-height: 1.6;
+    max-width: 75ch;
+  }
+
+  .legal-section ul {
+    margin: 1rem 0;
+    padding-left: 2rem;
+    list-style: disc;
+  }
+
+  .legal-section li {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+  }
+
+  .contact-info {
+    background: var(--brutal-concrete);
+    border: 2px solid var(--brutal-black);
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+
+  .contact-info p {
+    margin: 0.5rem 0;
+  }
+
+  .print-notice {
+    display: none;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--brutal-black);
+    text-align: center;
+    font-size: 0.875rem;
+  }
+
+  /* Mobile Responsive Styles */
+  @media (max-width: 768px) {
+    .legal-section {
+      padding: 1rem;
+      margin: 2rem 0;
+      border-left-width: 4px;
+    }
+
+    .toc {
+      padding: 1rem;
+      margin: 1rem 0 2rem 0;
+    }
+
+    .toc h2 {
+      font-size: 1.25rem;
+    }
+
+    .toc ol {
+      padding-left: 1.5rem;
+    }
+
+    .brutal-headline {
+      font-size: 1.75rem;
+    }
+
+    .legal-section h2 {
+      font-size: 1.25rem;
+    }
+
+    .legal-section h3 {
+      font-size: 1rem;
+    }
+
+    .legal-section h4 {
+      font-size: 0.9rem;
+    }
+
+    .legal-section p,
+    .legal-section li {
+      font-size: 14px;
+    }
+
+    .contact-info {
+      padding: 1rem;
+    }
+  }
+
+  /* Print Styles */
+  @media print {
+    .site-header,
+    .site-footer,
+    .toc {
+      display: none;
+    }
+
+    .legal-section {
+      page-break-inside: avoid;
+      border: none;
+      box-shadow: none;
+      padding: 1rem 0;
+      background: none;
+    }
+
+    .legal-section h2 {
+      page-break-after: avoid;
+    }
+
+    .print-notice {
+      display: block;
+    }
+
+    body {
+      font-size: 12pt;
+      line-height: 1.5;
+      color: black;
+      background: white;
+    }
+
+    .brutal-headline {
+      font-size: 24pt;
+      color: black;
+    }
+
+    .last-updated {
+      color: black;
+    }
+
+    a {
+      color: black;
+      text-decoration: none;
+    }
+  }
+
+  /* Smooth scrolling for anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Target highlight when jumping to section */
+  section:target {
+    animation: highlight 2s ease-in-out;
+  }
+
+  @keyframes highlight {
+    0% {
+      background-color: rgba(255, 215, 0, 0.3);
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
+</style>

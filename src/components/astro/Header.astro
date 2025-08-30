@@ -1,0 +1,115 @@
+---
+const currentPath = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="header-content">
+    <div class="logo">
+      <a href="/">
+        <img src="/sta-logo-header.png" alt="Swanage Traffic Alliance Logo" class="header-logo" />
+        STA
+      </a>
+    </div>
+    <nav class="main-nav">
+      <a href="/" class={currentPath === "/" ? "active" : ""}>Home</a>
+      <a href="/feed" class={currentPath === '/feed' ? 'active' : ''}>Feed</a>
+      <a href="/news" class={currentPath === "/news" ? "active" : ""}>News</a>
+      
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    background: var(--brutal-black);
+    color: var(--brutal-white);
+    padding: 1.5rem 2rem;
+    border-bottom: 8px solid var(--brutal-gray); /* Green accent */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo a {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--brutal-white);
+    text-decoration: none;
+    letter-spacing: -0.05em;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .header-logo {
+    height: 40px;
+    width: auto;
+  }
+
+  .logo a:hover {
+    color: #ffd700; /* Golden yellow */
+    transform: scale(1.1);
+  }
+
+  .main-nav {
+    display: flex;
+    gap: 2rem;
+  }
+
+  .main-nav a {
+    color: var(--brutal-white);
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 1rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+  }
+
+  .main-nav a:hover {
+    border-color: var(--brutal-gray); /* Green accent */
+    background: var(--brutal-gray);
+    transform: translateY(-2px);
+  }
+
+  .main-nav a.active {
+    background: var(--brutal-gray); /* Green for active */
+    border-color: var(--brutal-gray);
+  }
+
+  @media (max-width: 768px) {
+    /* Reduce header padding by 50% */
+    .site-header {
+      padding: 0.75rem 1rem;
+    }
+
+    .header-content {
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 0.5rem; /* Reduced from 1rem */
+    }
+    
+    .logo a {
+      font-size: 1.5rem;
+    }
+
+    .main-nav {
+      gap: 0.5rem; /* Reduced from 1rem */
+    }
+
+    .main-nav a {
+      font-size: 0.875rem;
+      padding: 0.25rem 0.5rem;
+    }
+  }
+</style>

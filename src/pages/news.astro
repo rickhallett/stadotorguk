@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import BrutalSection from "../components/BrutalSection.astro";
+import BrutalSection from "../components/astro/BrutalSection.astro";
 import { getCollection } from "astro:content";
 
 // Get all news items from content collection
@@ -60,7 +60,7 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
       BREAKING<br />UPDATES
     </h1>
     <p class="brutal-subhead" style="font-size: clamp(1.2rem, 3vw, 2rem);">
-      FOLLOW THE EVIDENCE TRAIL
+      THE BIG DECISIONS
     </p>
   </section>
 
@@ -305,7 +305,7 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
 
     /* Reset timeline container for mobile card stack */
     .timeline {
-      padding: 2rem 1rem;
+      padding: 2rem 0rem;
     }
 
     /* Transform timeline items into stacked cards */

@@ -34,9 +34,8 @@ The PRD should include:
    - Design requirements
 4. **Implementation Notes** - Code examples and technical approach
 5. **Responsive Design** - Mobile and desktop layouts
-6. **Accessibility Considerations** - WCAG compliance notes
 7. **Animation Specifications** - If applicable
-8. **Success Metrics** - How to measure success
+8. **Success Metrics** - How to measure success (if applicable)
 9. **Future Enhancements** - Potential improvements
 
 ## Examples

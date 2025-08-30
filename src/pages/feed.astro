@@ -1,44 +1,44 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import BrutalSection from '../components/BrutalSection.astro';
-import { getCollection } from 'astro:content';
-import { getMemberStats } from '../utils/memberStats';
+import Layout from "../layouts/Layout.astro";
+import BrutalSection from "../components/astro/BrutalSection.astro";
+import { getLeads, type Lead } from "../utils/database";
+import { getMemberStats } from "../utils/memberStats";
 
-// Get all feed items from content collection
-const feedEntries = await getCollection('feed', ({ data }) => {
-    return data.published !== false; // Only show published items
-});
+// Get initial feed items from the database
+const initialLeads = await getLeads(10, 0);
 
-// Sort by timestamp (newest first) and format for display
-const feedItems = feedEntries
-    .sort((a, b) => new Date(b.data.timestamp).getTime() - new Date(a.data.timestamp).getTime())
-    .map((entry, index) => {
-        const timestamp = new Date(entry.data.timestamp);
-        const now = new Date();
-        const diffInHours = Math.floor((now.getTime() - timestamp.getTime()) / (1000 * 60 * 60));
-        
-        let timeAgo;
-        if (diffInHours < 1) {
-            timeAgo = 'Just now';
-        } else if (diffInHours < 24) {
-            timeAgo = `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
-        } else {
-            const diffInDays = Math.floor(diffInHours / 24);
-            if (diffInDays === 1) {
-                timeAgo = 'Yesterday';
-            } else {
-                timeAgo = `${diffInDays} days ago`;
-            }
-        }
-        
-        return {
-            id: index + 1,
-            username: entry.data.username,
-            location: entry.data.location,
-            timestamp: timeAgo,
-            comment: entry.data.comment
-        };
-    });
+// Filter for leads with comments and format them for the feed
+const feedItems = initialLeads
+  .filter((lead: Lead) => lead.comments && lead.comments.trim() !== "")
+  .map((lead: Lead, index: number) => {
+    const timestamp = new Date(lead.timestamp);
+    const now = new Date();
+    const diffInHours = Math.floor(
+      (now.getTime() - timestamp.getTime()) / (1000 * 60 * 60)
+    );
+
+    let timeAgo;
+    if (diffInHours < 1) {
+      timeAgo = "Just now";
+    } else if (diffInHours < 24) {
+      timeAgo = `${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`;
+    } else {
+      const diffInDays = Math.floor(diffInHours / 24);
+      if (diffInDays === 1) {
+        timeAgo = "Yesterday";
+      } else {
+        timeAgo = `${diffInDays} days ago`;
+      }
+    }
+
+    return {
+      id: index + 1,
+      username: lead.first_name,
+      location: "Swanage", // Location data is not in the leads table, so we'll use a placeholder
+      timestamp: timeAgo,
+      comment: lead.comments,
+    };
+  });
 
 // Get real member statistics with caching
 const memberStats = await getMemberStats();
@@ -47,450 +47,442 @@ const todayUsers = memberStats.today;
 const weekUsers = memberStats.thisWeek;
 const monthUsers = memberStats.thisMonth;
 
-// Fallback data if no content exists
-const fallbackItems = [
-    {
-        id: 1,
-        username: "Sarah M.",
-        location: "High Street",
-        timestamp: "2 hours ago",
-        comment: "Stuck in traffic for 45 minutes trying to get to the doctor's surgery."
-    },
-    {
-        id: 2,
-        username: "John D.",
-        location: "Shore Road",
-        timestamp: "3 hours ago",
-        comment: "Emergency vehicles couldn't get through again today."
-    }
-];
-
-// Use content collection items if available, otherwise use fallback
-const displayItems = feedItems.length > 0 ? feedItems : fallbackItems;
+// Use database items if available, otherwise show a message
+const displayItems = feedItems;
 
 // Use cached total for movement counter (already fetched above)
 const totalSupporters = memberStats.total;
+const showLoadMore = feedItems.length >= 10;
 ---
 
 <Layout title="Feed">
-    <!-- HERO SECTION -->
-    <section class="feed-hero">
-        <h1 class="brutal-headline" style="font-size: clamp(3rem, 8vw, 6rem);">
-            COMMUNITY<br/>VOICES
-        </h1>
-        <p class="brutal-subhead" style="font-size: clamp(1.2rem, 3vw, 2rem);">
-            SILENCED BY THE COUNCIL. HEARD BY US.
-        </p>
-    </section>
+  <!-- HERO SECTION -->
+  <section class="feed-hero">
+    <h1 class="brutal-headline" style="font-size: clamp(3rem, 8vw, 6rem);">
+      COMMUNITY<br />VOICES
+    </h1>
+    <p class="brutal-subhead" style="font-size: clamp(1.2rem, 3vw, 2rem);">
+      SILENCED BY THE COUNCIL. HEARD BY US.
+    </p>
+  </section>
 
-    <!-- OUR MOVEMENT IS GROWING -->
-    <BrutalSection title="OUR MOVEMENT IS GROWING">
-        <div class="movement-section">
-            <div class="movement-number" data-target={totalSupporters}>0</div>
-            <p class="movement-subtitle">VOTERS STANDING WITH US</p>
-            <div class="movement-cta">
-                <a href="/supporters" class="view-supporters-btn">
-                    SEE WHO'S JOINED
-                </a>
-            </div>
-        </div>
-    </BrutalSection>
+  <!-- OUR MOVEMENT IS GROWING -->
+  <BrutalSection title="OUR MOVEMENT IS GROWING">
+    <div class="movement-section">
+      <div class="movement-number" data-target={totalSupporters}>0</div>
+      <p class="movement-subtitle">VOTERS STANDING WITH US</p>
+    </div>
+  </BrutalSection>
 
-    <!-- USER COUNTER -->
-    <BrutalSection title="THE UNCONSULTED MAJORITY">
-        <div class="counter-container">
-            <div class="countdown-alert" role="timer" aria-live="polite" aria-label="Countdown to council vote">
-                <div class="countdown-number" id="daysUntilVote" aria-describedby="countdown-description">--</div>
-                <div class="countdown-label" id="countdown-description">DAYS UNTIL SEPTEMBER 15 VOTE</div>
-            </div>
-            <div class="counter-block counter-total" role="status" aria-label="Total membership count">
-                <div class="data-stat" aria-live="polite">{activeUsers}</div>
-                <div class="counter-label">Total Active Members</div>
-            </div>
-            <div class="statistics-grid" role="region" aria-label="Membership statistics">
-                <div class="counter-block counter-stat" role="status">
-                    <div class="data-stat" aria-label="{todayUsers} members">{todayUsers}</div>
-                    <div class="counter-label">Joined Today</div>
-                </div>
-                <div class="counter-block counter-stat" role="status">
-                    <div class="data-stat" aria-label="{weekUsers} members">{weekUsers}</div>
-                    <div class="counter-label">Joined This Week</div>
-                </div>
-                <div class="counter-block counter-stat" role="status">
-                    <div class="data-stat" aria-label="{monthUsers} members">{monthUsers}</div>
-                    <div class="counter-label">Joined This Month</div>
-                </div>
-            </div>
+  <!-- USER COUNTER -->
+  <BrutalSection title="THE UNCONSULTED MAJORITY">
+    <div class="counter-container">
+      <div
+        class="counter-block counter-total"
+        role="status"
+        aria-label="Total membership count"
+      >
+        <div class="data-stat" aria-live="polite">{activeUsers}</div>
+        <div class="counter-label">Total Active Members</div>
+      </div>
+      <div
+        class="statistics-grid"
+        role="region"
+        aria-label="Membership statistics"
+      >
+        <div class="counter-block counter-stat" role="status">
+          <div class="data-stat" aria-label="{todayUsers} members">
+            {todayUsers}
+          </div>
+          <div class="counter-label">Joined Today</div>
         </div>
-    </BrutalSection>
+        <div class="counter-block counter-stat" role="status">
+          <div class="data-stat" aria-label="{weekUsers} members">
+            {weekUsers}
+          </div>
+          <div class="counter-label">Joined This Week</div>
+        </div>
+        <div class="counter-block counter-stat" role="status">
+          <div class="data-stat" aria-label="{monthUsers} members">
+            {monthUsers}
+          </div>
+          <div class="counter-label">Joined This Month</div>
+        </div>
+      </div>
+    </div>
+  </BrutalSection>
 
-    <!-- FEED -->
-    <BrutalSection title="LATEST REPORTS">
-        <p style="margin-bottom: 2rem; font-size: 1.125rem;">
-            Every story the Town Council ignored. Every concern dismissed under Standing Order 1c. 
-            We're building the evidence trail for judicial review.
-        </p>
-        <div class="feed-container">
-            {displayItems.map((item) => (
-                <div class="feed-item fade-in" data-id={item.id}>
-                    <div class="feed-meta">
-                        <span class="feed-user">{item.username} • {item.location}</span>
-                        <span class="feed-time">{item.timestamp}</span>
-                    </div>
-                    <div class="feed-content">
-                        "{item.comment}"
-                    </div>
-                </div>
-            ))}
-        </div>
-        
-        <div class="load-more-container">
-            <button class="submit-btn" id="loadMore">
-                LOAD MORE VOICES
-            </button>
-        </div>
-    </BrutalSection>
+  <!-- FEED -->
+  <BrutalSection title="LATEST MEMBERS">
+    <div class="feed-container">
+      {
+        displayItems.length > 0 ? (
+          displayItems.map((item) => (
+            <div class="feed-item fade-in" data-id={item.id}>
+              <div class="feed-meta">
+                <span class="feed-user">
+                  {item.username} • {item.location}
+                </span>
+                <span class="feed-time">{item.timestamp}</span>
+              </div>
+              <div class="feed-content">"{item.comment}"</div>
+            </div>
+          ))
+        ) : (
+          <p>No stories yet. Be the first to share yours!</p>
+        )
+      }
+    </div>
 
-    <!-- JOIN CTA -->
-    <BrutalSection background="black">
-        <h2 class="brutal-subhead" style="color: #FFD700; margin-bottom: 2rem;">
-            ADD YOUR VOICE
-        </h2>
-        <p style="font-size: 1.25rem; margin-bottom: 2rem;">
-            Your experience matters. Document the crisis. Join the resistance.
-        </p>
-        <a href="/" class="submit-btn" style="display: inline-block; text-decoration: none;">
-            SHARE YOUR STORY
-        </a>
-    </BrutalSection>
+    <div class="load-more-container">
+      {
+        showLoadMore && (
+          <button class="submit-btn" id="loadMore">
+            LOAD MORE VOICES
+          </button>
+        )
+      }
+    </div>
+  </BrutalSection>
+
+  <!-- JOIN CTA -->
+  <BrutalSection background="black">
+    <h2 class="brutal-subhead" style="color: #FFD700; margin-bottom: 2rem;">
+      ADD YOUR VOICE
+    </h2>
+    <p style="font-size: 1.25rem; margin-bottom: 2rem;">
+      Your experience matters. Document the crisis. Join the resistance.
+    </p>
+    <a
+      href="/"
+      class="submit-btn"
+      style="display: inline-block; text-decoration: none;"
+    >
+      SHARE YOUR STORY
+    </a>
+  </BrutalSection>
 </Layout>
 
 <style>
-    .feed-hero {
-        background: var(--brutal-black);
-        color: var(--brutal-white);
-        padding: 6rem 2rem;
-        text-align: center;
-        border-bottom: 8px solid var(--brutal-gray); /* Green accent */
-    }
+  .feed-hero {
+    background: var(--brutal-black);
+    color: var(--brutal-white);
+    padding: 6rem 2rem;
+    text-align: center;
+    border-bottom: 8px solid var(--brutal-gray); /* Green accent */
+  }
 
-    .feed-hero .brutal-headline {
-        margin-bottom: 1rem;
-    }
+  .feed-hero .brutal-headline {
+    margin-bottom: 1rem;
+  }
 
-    .counter-container {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 0;
-        max-width: 800px;
-        margin: 0 auto;
-    }
+  .counter-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    max-width: 800px;
+    margin: 0 auto;
+  }
 
-    .countdown-alert {
-        background: #FF4500;
-        color: var(--brutal-white);
-        padding: 2rem;
-        border: 4px solid var(--brutal-black);
-        box-shadow: 8px 8px 0 var(--brutal-shadow);
-        text-align: center;
-        animation: pulse 2s ease-in-out infinite;
-    }
+  .countdown-alert {
+    background: #ff4500;
+    color: var(--brutal-white);
+    padding: 2rem;
+    border: 4px solid var(--brutal-black);
+    box-shadow: 8px 8px 0 var(--brutal-shadow);
+    text-align: center;
+    animation: pulse 2s ease-in-out infinite;
+  }
 
-    @keyframes pulse {
-        0%, 100% {
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.02);
-        }
+  @keyframes pulse {
+    0%,
+    100% {
+      transform: scale(1);
     }
-
-    .countdown-number {
-        font-family: 'Arial Black', sans-serif;
-        font-size: 4rem;
-        font-weight: 900;
-        line-height: 1;
+    50% {
+      transform: scale(1.02);
     }
+  }
 
-    .countdown-label {
-        font-size: 1.25rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        margin-top: 0.5rem;
-    }
+  .countdown-number {
+    font-family: "Arial Black", sans-serif;
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1;
+  }
 
-    .counter-total {
-        background: #FFD700 !important;
-        color: var(--brutal-black) !important;
-        padding: 2rem;
-        border: 4px solid var(--brutal-black);
-        box-shadow: 8px 8px 0 var(--brutal-shadow);
-        text-align: center;
-    }
+  .countdown-label {
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0.5rem;
+  }
 
-    .counter-total .data-stat {
-        color: var(--brutal-black) !important;
-    }
+  .counter-total {
+    background: #ffd700 !important;
+    color: var(--brutal-black) !important;
+    padding: 2rem;
+    border: 4px solid var(--brutal-black);
+    box-shadow: 8px 8px 0 var(--brutal-shadow);
+    text-align: center;
+  }
 
+  .counter-total .data-stat {
+    color: var(--brutal-black) !important;
+  }
+
+  .statistics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .counter-stat {
+    background: #0066cc !important;
+    transition: transform 0.2s ease;
+  }
+
+  .counter-stat:hover {
+    transform: scale(1.02);
+  }
+
+  @media (max-width: 768px) {
     .statistics-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
-        margin-top: 16px;
+      grid-template-columns: 1fr;
     }
+  }
 
-    .counter-stat {
-        background: #0066CC !important;
-        transition: transform 0.2s ease;
+  .load-more-container {
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  /* Movement Counter Styles */
+  .movement-section {
+    text-align: center;
+    padding: 3rem 0;
+  }
+
+  .movement-number {
+    font-family: "Arial Black", sans-serif;
+    font-size: clamp(5rem, 12vw, 10rem);
+    color: #ffd700; /* Golden yellow - positive growth */
+    line-height: 1;
+    margin: 1rem 0;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+  }
+
+  .movement-subtitle {
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--brutal-black);
+    margin-bottom: 2rem;
+  }
+
+  .movement-cta {
+    margin-top: 2rem;
+  }
+
+  .view-supporters-btn {
+    display: inline-block;
+    background: var(--brutal-black);
+    color: var(--brutal-white);
+    padding: 1rem 2rem;
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 4px solid var(--brutal-black);
+    box-shadow: 8px 8px 0 var(--brutal-shadow);
+    transition: all 0.2s;
+  }
+
+  .view-supporters-btn:hover {
+    background: var(--brutal-gray);
+    transform: translate(-4px, -4px);
+    box-shadow: 12px 12px 0 var(--brutal-shadow);
+  }
+
+  /* Additional animations for feed items */
+  .feed-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .feed-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    .feed-hero {
+      padding: 4rem 1rem;
     }
-
-    .counter-stat:hover {
-        transform: scale(1.02);
-    }
-
-    @media (max-width: 768px) {
-        .statistics-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    .load-more-container {
-        text-align: center;
-        margin-top: 3rem;
-    }
-
-    /* Movement Counter Styles */
-    .movement-section {
-        text-align: center;
-        padding: 3rem 0;
-    }
-
-    .movement-number {
-        font-family: 'Arial Black', sans-serif;
-        font-size: clamp(5rem, 12vw, 10rem);
-        color: #FFD700; /* Golden yellow - positive growth */
-        line-height: 1;
-        margin: 1rem 0;
-        font-weight: 900;
-        letter-spacing: -0.05em;
-    }
-
-    .movement-subtitle {
-        font-size: clamp(1.2rem, 3vw, 2rem);
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--brutal-black);
-        margin-bottom: 2rem;
-    }
-
-    .movement-cta {
-        margin-top: 2rem;
-    }
-
-    .view-supporters-btn {
-        display: inline-block;
-        background: var(--brutal-black);
-        color: var(--brutal-white);
-        padding: 1rem 2rem;
-        text-decoration: none;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        border: 4px solid var(--brutal-black);
-        box-shadow: 8px 8px 0 var(--brutal-shadow);
-        transition: all 0.2s;
-    }
-
-    .view-supporters-btn:hover {
-        background: var(--brutal-gray);
-        transform: translate(-4px, -4px);
-        box-shadow: 12px 12px 0 var(--brutal-shadow);
-    }
-
-    /* Additional animations for feed items */
-    .feed-item {
-        opacity: 0;
-        transform: translateY(20px);
-        animation: fadeInUp 0.6s ease-out forwards;
-    }
-
-    .feed-item:nth-child(1) { animation-delay: 0.1s; }
-    .feed-item:nth-child(2) { animation-delay: 0.2s; }
-    .feed-item:nth-child(3) { animation-delay: 0.3s; }
-    .feed-item:nth-child(4) { animation-delay: 0.4s; }
-    .feed-item:nth-child(5) { animation-delay: 0.5s; }
-    .feed-item:nth-child(6) { animation-delay: 0.6s; }
-    .feed-item:nth-child(7) { animation-delay: 0.7s; }
-    .feed-item:nth-child(8) { animation-delay: 0.8s; }
-
-    @keyframes fadeInUp {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @media (max-width: 768px) {
-        .feed-hero {
-            padding: 4rem 1rem;
-        }
-    }
+  }
 </style>
 
-<script>
-    // Simulate loading more items
-    document.getElementById('loadMore')?.addEventListener('click', function() {
-        const container = document.querySelector('.feed-container');
-        const button = this as HTMLButtonElement;
-        
-        // Disable button temporarily
-        button.disabled = true;
-        button.textContent = 'LOADING...';
-        
-        // Simulate API call
+<script define:vars={{ initialFeedItems: feedItems }}>
+  document.addEventListener("DOMContentLoaded", () => {
+    const container = document.querySelector(".feed-container");
+    if (!container) return;
+
+    // If there are no initial items, keep the SSR fallback content as-is
+    if (!Array.isArray(initialFeedItems) || initialFeedItems.length === 0) {
+      return;
+    }
+
+    // Capture a template from the first SSR item, then clear SSR items to avoid duplicates
+    const firstItem = container.querySelector(".feed-item");
+    let template = null;
+    if (firstItem) {
+      template = firstItem.cloneNode(true);
+      container.innerHTML = "";
+    } else {
+      // Fallback template if none exists (shouldn't happen with SSR)
+      const t = document.createElement("div");
+      t.className = "feed-item fade-in";
+      t.innerHTML = `
+        <div class="feed-meta">
+          <span class="feed-user"></span>
+          <span class="feed-time"></span>
+        </div>
+        <div class="feed-content"></div>
+      `;
+      template = t;
+    }
+
+    let offset = 0;
+    const limit = 10;
+
+    function formatTimeAgo(timestamp) {
+      const now = new Date();
+      const leadTimestamp = new Date(timestamp);
+      const diffInHours = Math.floor(
+        (now.getTime() - leadTimestamp.getTime()) / (1000 * 60 * 60)
+      );
+
+      if (diffInHours < 1) return "Just now";
+      if (diffInHours < 24)
+        return `${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`;
+
+      const diffInDays = Math.floor(diffInHours / 24);
+      if (diffInDays === 1) return "Yesterday";
+      return `${diffInDays} days ago`;
+    }
+
+    function createFeedItem(item) {
+      const newItem = template.cloneNode(true);
+
+      const userSpan = newItem.querySelector(".feed-user");
+      if (userSpan)
+        userSpan.textContent = `${item.username} • ${item.location}`;
+
+      const timeSpan = newItem.querySelector(".feed-time");
+      if (timeSpan) timeSpan.textContent = item.timestamp;
+
+      const contentDiv = newItem.querySelector(".feed-content");
+      if (contentDiv) contentDiv.textContent = `"${item.comment}"`;
+
+      newItem.setAttribute("data-id", item.id.toString());
+
+      return newItem;
+    }
+
+    function renderItems(items) {
+      items.forEach((item, index) => {
+        const feedItem = createFeedItem(item);
+        container.appendChild(feedItem);
+
+        // Force reflow and apply animation
+        feedItem.offsetHeight;
         setTimeout(() => {
-            // Mock new items
-            const newItems = [
-                {
-                    username: "Alex P.",
-                    location: "Durlston Road",
-                    timestamp: "4 days ago",
-                    comment: "The noise pollution at night is unbearable. Trucks using residential streets as shortcuts."
-                },
-                {
-                    username: "Claire S.",
-                    location: "Northbrook Road",
-                    timestamp: "5 days ago",
-                    comment: "My disabled mother can't access the shops anymore. This is a disaster for accessibility."
-                }
-            ];
-            
-            // Add new items to feed
-            newItems.forEach((item, index) => {
-                const feedItem = document.createElement('div');
-                feedItem.className = 'feed-item';
-                feedItem.style.animationDelay = `${(index + 1) * 0.1}s`;
-                feedItem.innerHTML = `
-                    <div class="feed-meta">
-                        <span class="feed-user">${item.username} • ${item.location}</span>
-                        <span class="feed-time">${item.timestamp}</span>
-                    </div>
-                    <div class="feed-content">
-                        "${item.comment}"
-                    </div>
-                `;
-                container?.appendChild(feedItem);
-            });
-            
-            // Re-enable button
-            button.disabled = false;
-            button.textContent = 'LOAD MORE VOICES';
-        }, 1000);
-    });
-
-    // Counter animation
-    function animateCounter(element: HTMLElement, target: number) {
-        const duration = 2000;
-        const start = 0;
-        const increment = target / (duration / 16);
-        let current = start;
-        
-        const timer = setInterval(() => {
-            current += increment;
-            if (current >= target) {
-                element.textContent = target.toString();
-                clearInterval(timer);
-            } else {
-                element.textContent = Math.floor(current).toString();
-            }
-        }, 16);
+          feedItem.classList.add("visible");
+        }, index * 100);
+      });
     }
 
-    // Movement counter animation
-    function animateMovementCounter() {
-        const counter = document.querySelector('.movement-number') as HTMLElement;
-        if (!counter) return;
-        
-        const target = parseInt(counter.dataset.target || '0');
-        const duration = 2000;
-        const step = target / (duration / 16);
-        let current = 0;
-        
-        const updateCounter = () => {
-            current += step;
-            if (current < target) {
-                counter.textContent = Math.floor(current).toLocaleString();
-                requestAnimationFrame(updateCounter);
-            } else {
-                counter.textContent = target.toLocaleString();
-            }
-        };
-        
-        // Trigger on intersection
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    updateCounter();
-                    observer.unobserve(entry.target);
-                }
-            });
-        });
-        
-        observer.observe(counter);
+    // Render initial items (client-side only; SSR items were cleared to avoid duplicates)
+    renderItems(initialFeedItems);
+    offset = initialFeedItems.length;
+
+    // Load More Button Logic
+    const loadMoreButton = document.getElementById("loadMore");
+    if (loadMoreButton) {
+      if (initialFeedItems.length < limit) {
+        loadMoreButton.style.display = "none";
+      }
+
+      loadMoreButton.addEventListener("click", async function () {
+        this.disabled = true;
+        this.textContent = "LOADING...";
+
+        const response = await fetch(
+          `/api/get-leads?limit=${limit}&offset=${offset}`
+        );
+        const newLeads = await response.json();
+
+        if (newLeads.length > 0) {
+          const formattedLeads = newLeads.map((lead, index) => ({
+            id: offset + index + 1,
+            username: lead.first_name,
+            location: "Swanage",
+            timestamp: formatTimeAgo(lead.timestamp),
+            comment: lead.comments,
+          }));
+          renderItems(formattedLeads);
+          offset += newLeads.length;
+        }
+
+        if (newLeads.length < limit) {
+          this.style.display = "none";
+        } else {
+          this.disabled = false;
+          this.textContent = "LOAD MORE VOICES";
+        }
+      });
     }
 
-    // Animate counters on page load
-    window.addEventListener('DOMContentLoaded', () => {
-        // Animate movement counter
-        animateMovementCounter();
-        
-        // Animate existing counters with staggered delay
-        const counters = document.querySelectorAll('.counter-block .data-stat');
-        counters.forEach((counter, index) => {
-            const target = parseInt(counter.textContent || '0');
-            // Add staggered delay for statistics blocks
-            setTimeout(() => {
-                animateCounter(counter as HTMLElement, target);
-            }, index * 200); // 0.2s delay between each
-        });
+    // Counter Animations
+    function animateCounter(element, target) {
+      const duration = 2000;
+      let current = 0;
+      const increment = target / (duration / 16);
 
-        // Calculate days until September 15, 2025
-        function calculateDaysUntil() {
-            const targetDate = new Date('2025-09-15');
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            targetDate.setHours(0, 0, 0, 0);
-            
-            const diffTime = targetDate - today;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
-            if (diffDays === 0) return 'TODAY';
-            if (diffDays === 1) return 'TOMORROW';
-            if (diffDays < 0) return 'VOTE PASSED';
-            return diffDays.toString();
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          element.textContent = target.toLocaleString();
+          clearInterval(timer);
+        } else {
+          element.textContent = Math.floor(current).toLocaleString();
         }
-        
-        const countdownElement = document.getElementById('daysUntilVote');
-        if (countdownElement) {
-            const daysText = calculateDaysUntil();
-            countdownElement.textContent = daysText;
-            
-            // Add appropriate styling based on countdown status
-            if (daysText === 'TODAY' || daysText === 'TOMORROW') {
-                countdownElement.style.animation = 'pulse 1s ease-in-out infinite';
-            }
-            
-            // Update ARIA label for screen readers
-            const alertDiv = countdownElement.closest('.countdown-alert');
-            if (alertDiv) {
-                const ariaText = daysText === 'TODAY' ? 'Vote is today' : 
-                                daysText === 'TOMORROW' ? 'Vote is tomorrow' :
-                                daysText === 'VOTE PASSED' ? 'The vote has passed' :
-                                `${daysText} days until the vote`;
-                alertDiv.setAttribute('aria-label', ariaText);
-            }
-        }
+      }, 16);
+    }
+
+    const counters = document.querySelectorAll(".counter-block .data-stat");
+    counters.forEach((counter, index) => {
+      const target = parseInt(counter.textContent || "0", 10);
+      setTimeout(() => animateCounter(counter, target), index * 200);
     });
+
+    const movementCounter = document.querySelector(".movement-number");
+    if (movementCounter) {
+      const target = parseInt(movementCounter.dataset.target || "0", 10);
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          animateCounter(movementCounter, target);
+          observer.disconnect();
+        }
+      });
+      observer.observe(movementCounter);
+    }
+  });
 </script>
