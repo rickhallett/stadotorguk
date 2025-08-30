@@ -97,11 +97,16 @@ import { PageCounter } from "../react/PageCounter.tsx";
     <a href="/privacy">Privacy Policy</a>
   </div>
   <div class="footer-bottom">
+    <img src="/sta-logo-footer.png" alt="STA Logo" class="footer-logo" />
     <p>&copy; 2025 Swanage Traffic Alliance</p>
   </div>
 </footer>
 
 <style>
+  .footer-logo {
+    height: 30px;
+    width: auto;
+  }
   .site-footer {
     background: var(--brutal-black);
     color: var(--brutal-white);
@@ -280,6 +285,10 @@ import { PageCounter } from "../react/PageCounter.tsx";
     margin: 0 auto;
     padding-top: 1rem;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
   }
 
   .footer-bottom p {
