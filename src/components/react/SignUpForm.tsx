@@ -111,11 +111,17 @@ export function SignUpForm({
           // Handle non-OK responses
           if (response.status === 409) {
             // Specific error for duplicate email
-            setSubmissionError(result.error || 'This email address has already been registered.');
-            setFieldError('email', 'This email address has already been registered.');
+            setSubmissionError(
+              result.error || "This email address has already been registered."
+            );
+            setFieldError(
+              "email",
+              "This email address has already been registered."
+            );
           } else {
             // General API error
-            const errorMessage = result.error || 'Submission failed. Please try again.';
+            const errorMessage =
+              result.error || "Submission failed. Please try again.";
             setSubmissionError(errorMessage);
 
             if (onSubmitError) {
@@ -123,8 +129,8 @@ export function SignUpForm({
             }
 
             // Handle other field-specific errors if provided
-            if (result.error?.includes('postcode')) {
-              setFieldError('postcode', 'Please check your postcode');
+            if (result.error?.includes("postcode")) {
+              setFieldError("postcode", "Please check your postcode");
             }
           }
         }
@@ -178,11 +184,7 @@ export function SignUpForm({
 
   if (hasSubmitted) {
     return (
-      <div 
-        className="form-confirmation"
-        role="alert"
-        aria-live="polite"
-      >
+      <div className="form-confirmation" role="alert" aria-live="polite">
         CONFIRMED: YOU ARE NOW PART OF THE ALLIANCE
       </div>
     );
@@ -192,11 +194,7 @@ export function SignUpForm({
     <div className={`signup-form-container ${className}`} {...props}>
       <div className="action-form">
         {showConfirmation ? (
-          <div 
-            className="form-confirmation"
-            role="alert"
-            aria-live="polite"
-          >
+          <div className="form-confirmation" role="alert" aria-live="polite">
             CONFIRMED: YOU ARE NOW PART OF THE ALLIANCE
           </div>
         ) : (
@@ -219,6 +217,9 @@ export function SignUpForm({
                 type="text"
                 id="signup-name"
                 name="name"
+                autoComplete="name"
+                inputMode="text"
+                spellCheck={false}
                 value={values.name}
                 onChange={handleInputChange("name")}
                 onBlur={handleInputBlur("name")}
@@ -249,6 +250,8 @@ export function SignUpForm({
                 type="email"
                 id="signup-email"
                 name="email"
+                autoComplete="email"
+                inputMode="email"
                 value={values.email}
                 onChange={handleInputChange("email")}
                 onBlur={handleInputBlur("email")}
@@ -279,6 +282,9 @@ export function SignUpForm({
                 type="text"
                 id="signup-postcode"
                 name="postcode"
+                autoComplete="postal-code"
+                inputMode="text"
+                spellCheck={false}
                 value={values.postcode}
                 onChange={handleInputChange("postcode")}
                 onBlur={handleInputBlur("postcode")}
@@ -313,6 +319,8 @@ export function SignUpForm({
               <textarea
                 id="signup-message"
                 name="message"
+                autoComplete="off"
+                inputMode="text"
                 value={values.message}
                 onChange={handleInputChange("message")}
                 onBlur={handleInputBlur("message")}

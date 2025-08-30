@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import DataBlock from "../components/astro/DataBlock.astro";
 import BrutalSection from "../components/astro/BrutalSection.astro";
 import ImpactCard from "../components/astro/ImpactCard.astro";
-import { SignUpForm } from "../components/react/SignUpForm.tsx";
+import { SignUpForm } from "../components/react/SignUpForm";
 import { getLeadCount } from "../utils/database";
 
 const leadCount = await getLeadCount();
@@ -407,7 +407,7 @@ const leadCount = await getLeadCount();
     color: var(--brutal-gray);
   }
 
-  .signup-form-container .character-counter .warning {
+  .signup-form-container .character-counter.warning {
     color: var(--brutal-red);
     font-weight: bold;
   }
@@ -467,6 +467,13 @@ const leadCount = await getLeadCount();
     box-shadow: 8px 8px 0 var(--brutal-black);
   }
 
+  /* Privacy note under submit button */
+  .signup-form-container .privacy-note {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--brutal-gray);
+  }
+
   .signup-form-container .form-confirmation {
     background: var(--brutal-black);
     color: var(--brutal-white);
@@ -508,6 +515,21 @@ const leadCount = await getLeadCount();
     }
   }
 
+  /* Tablet/small-device breakpoint to ensure mobile styles apply on ~800px widths */
+  @media (max-width: 900px) {
+    .signup-form-container {
+      max-width: 100%;
+      margin: 0 auto;
+    }
+    .signup-form-container .action-form {
+      padding: 1.5rem; /* smaller than desktop 3rem */
+      margin: 1rem 0;
+    }
+    .signup-form-container .submit-btn {
+      white-space: nowrap;
+    }
+  }
+
   @media (max-width: 768px) {
     /* Reduce hero section padding and height dramatically */
     .hero {
@@ -537,28 +559,47 @@ const leadCount = await getLeadCount();
 
     /* SignUpForm mobile styles */
     .signup-form-container {
-      max-width: 90%;
+      max-width: 100%;
       margin: 0 auto;
     }
 
     .signup-form-container .action-form {
-      padding: 1.5rem;
-      margin: 1rem 0;
+      padding: 1.25rem;
+      margin: 0.75rem 0;
       box-shadow: 8px 8px 0 var(--brutal-shadow);
+      border-width: 6px;
     }
 
     .signup-form-container .form-group label {
-      font-size: 1rem;
+      font-size: 0.95rem;
+      letter-spacing: -1px;
+      margin-bottom: 0.35rem;
     }
 
     .signup-form-container .submit-btn {
-      font-size: 1.2rem;
-      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      padding: 1rem 1.25rem;
+      white-space: nowrap; /* keep on one row */
     }
 
     .signup-form-container .form-confirmation {
       font-size: 1.2rem;
       padding: 1.5rem;
+    }
+
+    /* Inputs and textarea should span nearly full width on mobile */
+    .signup-form-container .form-group input,
+    .signup-form-container .form-group textarea {
+      width: 100%;
+      padding: 0.9rem;
+      font-size: 1rem;
+      border-width: 3px;
+    }
+
+    /* Character counter smaller on mobile and right-aligned */
+    .signup-form-container .character-counter {
+      font-size: 0.8rem;
+      text-align: right;
     }
   }
 
@@ -570,7 +611,26 @@ const leadCount = await getLeadCount();
 
   @media (max-width: 480px) {
     .signup-form-container {
-      max-width: 95%;
+      max-width: 100%;
+    }
+
+    /* Extra-small screens polish */
+    .signup-form-container .action-form {
+      padding: 1.25rem;
+      border-width: 6px;
+    }
+    .signup-form-container .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .signup-form-container .submit-btn {
+      font-size: 1rem;
+    }
+    .signup-form-container .character-counter {
+      font-size: 0.75rem;
+      text-align: right;
+    }
+    .signup-form-container .privacy-note {
+      font-size: 0.4rem;
     }
   }
 </style>

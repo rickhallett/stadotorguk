@@ -294,6 +294,22 @@ body {
     padding: 1rem; /* Reduced from 2rem */
   }
 
+  /* Ensure form uses tighter spacing on mobile screens */
+  .action-form {
+    padding: 1.25rem;
+    margin: 1rem auto;
+    max-width: 100%;
+  }
+
+  /* Lighten input borders and labels slightly on small screens */
+  .form-group label {
+    margin-bottom: 0.35rem;
+  }
+  .form-group input,
+  .form-group textarea {
+    border-width: 3px;
+  }
+
   /* Increase data block height and adjust typography for mobile */
   .data-block {
     margin: 1rem 0; /* Reduced from 2rem 0 */
@@ -336,6 +352,15 @@ body {
 
   .user-counter {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Extra-small phones */
+@media (max-width: 480px) {
+  .action-form {
+    padding: 1rem;
+    margin: 0.75rem auto;
+    max-width: 100%;
   }
 }
 
