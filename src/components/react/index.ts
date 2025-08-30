@@ -6,6 +6,8 @@
 export { SignUpForm } from './SignUpForm';
 export type { SignUpFormProps } from './SignUpForm';
 
+export { PageCounter } from './PageCounter';
+export type { PageCounterProps } from './PageCounter';
+
 // Additional component exports will go here as they are created
-// export { PageCounter } from './PageCounter';
 // export { NavigationMenu } from './NavigationMenu';

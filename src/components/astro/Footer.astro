@@ -1,5 +1,5 @@
 ---
-import PageCounter from './PageCounter.astro';
+import { PageCounter } from '../react/PageCounter.tsx';
 ---
 
 <footer class="site-footer">
@@ -89,7 +89,7 @@ import PageCounter from './PageCounter.astro';
     </div>
   </div>
   <div class="footer-stats">
-    <PageCounter />
+    <PageCounter client:load />
   </div>
   <div class="footer-legal">
     <a href="/terms">Terms & Conditions</a>
