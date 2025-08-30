@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import type { BaseComponentProps } from '../../types';
+import React, { useState, useEffect, useCallback } from "react";
+import type { BaseComponentProps } from "../../types";
 
 export interface PageCounterProps extends BaseComponentProps {
   initialCount?: number;
@@ -18,12 +18,12 @@ interface CounterResponse {
 
 export function PageCounter({
   initialCount = 0,
-  apiEndpoint = '/api/counter',
-  label = 'SITE VIEWS',
+  apiEndpoint = "/api/counter",
+  label = " SITE VIEWS",
   incrementOnMount = true,
   onCountUpdate,
   onError,
-  className = '',
+  className = "",
   ...props
 }: PageCounterProps) {
   const [count, setCount] = useState<number>(initialCount);
@@ -32,28 +32,31 @@ export function PageCounter({
 
   // Format count with thousand separators
   const formatCount = useCallback((num: number): string => {
-    return new Intl.NumberFormat('en-GB').format(num);
+    return new Intl.NumberFormat("en-GB").format(num);
   }, []);
 
   // Fetch current count from server
   const fetchCount = useCallback(async (): Promise<number | null> => {
     try {
-      const response = await fetch(`${apiEndpoint}?action=read&t=${Date.now()}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        `${apiEndpoint}?action=read&t=${Date.now()}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.ok) {
         const data: CounterResponse = await response.json();
         return data.count || 0;
       } else {
-        console.error('Failed to fetch counter:', response.status);
+        console.error("Failed to fetch counter:", response.status);
         return null;
       }
     } catch (err) {
-      console.error('Error fetching counter:', err);
+      console.error("Error fetching counter:", err);
       return null;
     }
   }, [apiEndpoint]);
@@ -61,53 +64,62 @@ export function PageCounter({
   // Increment counter on server
   const incrementCount = useCallback(async (): Promise<number | null> => {
     try {
-      console.log('📡 Sending increment request...');
-      
-      const response = await fetch(`${apiEndpoint}?action=increment&t=${Date.now()}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache',
-        },
-      });
+      console.log("📡 Sending increment request...");
+
+      const response = await fetch(
+        `${apiEndpoint}?action=increment&t=${Date.now()}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Cache-Control": "no-cache",
+          },
+        }
+      );
 
       if (response.ok) {
         const data: CounterResponse = await response.json();
         return data.count || null;
       } else {
-        console.error('Failed to increment counter:', response.status);
+        console.error("Failed to increment counter:", response.status);
         return null;
       }
     } catch (err) {
-      console.error('Failed to increment counter:', err);
+      console.error("Failed to increment counter:", err);
       return null;
     }
   }, [apiEndpoint]);
 
   // Update count with animation
-  const updateCount = useCallback((newCount: number) => {
-    setCount(newCount);
-    setIsUpdated(true);
-    
-    if (onCountUpdate) {
-      onCountUpdate(newCount);
-    }
+  const updateCount = useCallback(
+    (newCount: number) => {
+      setCount(newCount);
+      setIsUpdated(true);
 
-    // Remove animation class after animation completes
-    setTimeout(() => {
-      setIsUpdated(false);
-    }, 600);
-  }, [onCountUpdate]);
+      if (onCountUpdate) {
+        onCountUpdate(newCount);
+      }
+
+      // Remove animation class after animation completes
+      setTimeout(() => {
+        setIsUpdated(false);
+      }, 600);
+    },
+    [onCountUpdate]
+  );
 
   // Handle errors
-  const handleError = useCallback((errorMessage: string) => {
-    console.error('PageCounter error:', errorMessage);
-    setError(true);
-    
-    if (onError) {
-      onError(errorMessage);
-    }
-  }, [onError]);
+  const handleError = useCallback(
+    (errorMessage: string) => {
+      console.error("PageCounter error:", errorMessage);
+      setError(true);
+
+      if (onError) {
+        onError(errorMessage);
+      }
+    },
+    [onError]
+  );
 
   // Effect to handle initial load and increment
   useEffect(() => {
@@ -122,7 +134,7 @@ export function PageCounter({
             setCount(fetchedCount);
             setError(false);
           } else {
-            handleError('Failed to fetch initial count');
+            handleError("Failed to fetch initial count");
           }
         }
       }
@@ -135,7 +147,7 @@ export function PageCounter({
           setError(false);
         } else if (error === false) {
           // Only show error if we weren't already in error state
-          handleError('Failed to increment counter');
+          handleError("Failed to increment counter");
         }
       }
     };
@@ -145,20 +157,28 @@ export function PageCounter({
     return () => {
       mounted = false;
     };
-  }, [initialCount, incrementOnMount, fetchCount, incrementCount, updateCount, handleError, error]);
+  }, [
+    initialCount,
+    incrementOnMount,
+    fetchCount,
+    incrementCount,
+    updateCount,
+    handleError,
+    error,
+  ]);
 
   return (
-    <div 
+    <div
       className={`counter-block ${className}`}
       data-api-url={apiEndpoint}
       {...props}
     >
       <div className="counter-content">
-        <span 
-          className={`counter-number ${isUpdated ? 'counter-updated' : ''}`}
+        <span
+          className={`counter-number ${isUpdated ? "counter-updated" : ""}`}
           data-count={count}
         >
-          {error ? '---' : formatCount(count)}
+          {error ? "---" : formatCount(count)}
         </span>
         <span className="counter-label">{label}</span>
       </div>
@@ -167,7 +187,6 @@ export function PageCounter({
           !
         </span>
       )}
-
     </div>
   );
 }
