@@ -33,7 +33,7 @@ export interface FormValidationRule {
   customValidator?: (value: string) => string | null;
 }
 
-export interface FormValidationSchema {
+export type FormValidationSchema = {
   [K in keyof SignUpFormValues]: FormValidationRule;
 }
 

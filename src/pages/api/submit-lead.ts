@@ -2,7 +2,7 @@
 // Creates lead entries in Neon database with GitHub backup
 
 import type { APIRoute } from "astro";
-import crypto from "crypto";
+import { randomBytes } from "crypto";
 import { config } from "dotenv";
 
 import {
@@ -83,8 +83,8 @@ export const POST: APIRoute = async ({ request }) => {
       .toISOString()
       .replace("T", " ")
       .substring(0, 16);
-    const submission_id = "sub_" + crypto.randomBytes(6).toString("hex");
-    const user_id = "usr_" + crypto.randomBytes(6).toString("hex");
+    const submission_id = "sub_" + randomBytes(6).toString("hex");
+    const user_id = "usr_" + randomBytes(6).toString("hex");
 
     // Determine visitor type from postcode
     const visitor_type = determineVisitorType(data.postcode);
@@ -106,10 +106,8 @@ export const POST: APIRoute = async ({ request }) => {
     };
 
     // Primary: Save to Neon database
-    let leadId: number;
     try {
-      leadId = await createLead(leadData);
-      console.log(`Lead saved to database with ID: ${leadId}`);
+      await createLead(leadData);
     } catch (dbError: any) {
       console.error("Database save failed:", dbError);
       return new Response(

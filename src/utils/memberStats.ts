@@ -33,7 +33,6 @@ export async function getMemberStats(options = { useCache: true }): Promise<Memb
       const age = Date.now() - new Date(cache.lastUpdated).getTime();
       
       if (age < CACHE_DURATION) {
-        console.log('Using cached member stats');
         return cache;
       }
     } catch (error) {
@@ -42,7 +41,6 @@ export async function getMemberStats(options = { useCache: true }): Promise<Memb
   }
   
   // Compute fresh stats from database
-  console.log('Computing fresh member stats from database...');
   const stats = await computeMemberStats();
   
   // Save to cache
@@ -52,7 +50,6 @@ export async function getMemberStats(options = { useCache: true }): Promise<Memb
       fs.mkdirSync(cacheDir, { recursive: true });
     }
     fs.writeFileSync(CACHE_FILE, JSON.stringify(stats, null, 2));
-    console.log('Cached member stats written');
   } catch (error) {
     console.warn('Failed to write cache:', error);
   }

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swanage Traffic Alliance - Minimalist Bold Website Colors</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @media print {
+        @page {
+          size: A5;
+          margin: 0;
+        }
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
+      }
+
+      body {
+        font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+        background: #ffffff;
+        color: #0066cc;
+        width: 148mm;
+        height: 210mm;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .container {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+        grid-template-rows: 1fr 2fr 3fr 2fr 1fr;
+        padding: 12mm;
+        gap: 0;
+      }
+
+      .header {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 3mm;
+      }
+
+      .company-logo {
+        position: absolute;
+        top: 6mm;
+        left: 6mm;
+        width: 25mm;
+        height: auto;
+        z-index: 10;
+        filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.9))
+          drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
+      }
+
+      .logo {
+        font-size: 9pt;
+        font-weight: 700;
+        letter-spacing: 3pt;
+        text-transform: uppercase;
+        color: #0066cc;
+        position: relative;
+        padding-bottom: 3mm;
+      }
+
+      .logo::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: #4caf50;
+        opacity: 1;
+      }
+
+      .headline {
+        grid-column: 2;
+        grid-row: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+      }
+
+      .headline h1 {
+        font-size: 36pt;
+        font-weight: 900;
+        line-height: 0.9;
+        letter-spacing: -1pt;
+        color: #0066cc;
+        position: relative;
+        text-transform: uppercase;
+      }
+
+      .headline::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -5mm;
+        width: 4px;
+        height: 100%;
+        background: #ffd700;
+        opacity: 1;
+      }
+
+      .content {
+        grid-column: 2;
+        grid-row: 3;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+        position: relative;
+      }
+
+      .statement {
+        font-size: 16pt;
+        font-weight: 700;
+        line-height: 1.3;
+        margin-bottom: 8mm;
+        color: #0066cc;
+        position: relative;
+        padding: 0 3mm;
+      }
+
+      .statement::after {
+        content: "";
+        position: absolute;
+        bottom: -5mm;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 25mm;
+        height: 2px;
+        background: #4caf50;
+        opacity: 0.7;
+      }
+
+      /* Bold emphasis block */
+      .emphasis-block {
+        background: #fff8dc;
+        border: 4px solid #4caf50;
+        border-left: 8mm solid #4caf50;
+        padding: 6mm;
+        margin: 8mm 0;
+        text-align: center;
+        position: relative;
+        box-shadow: 5px 5px 0 rgba(0, 102, 204, 0.2);
+      }
+
+      .emphasis-block::before {
+        content: "";
+        position: absolute;
+        top: -4px;
+        left: -4px;
+        right: -4px;
+        height: 4px;
+        background: #0066cc;
+        opacity: 0.3;
+      }
+
+      .emphasis-text {
+        font-size: 20pt;
+        font-weight: 900;
+        color: #0066cc;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        margin-bottom: 3mm;
+        line-height: 1.1;
+      }
+
+      .emphasis-subtext {
+        font-size: 11pt;
+        font-weight: 600;
+        color: #0066cc;
+        line-height: 1.4;
+        opacity: 0.8;
+      }
+
+      .action {
+        grid-column: 2;
+        grid-row: 4;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+      }
+
+      .qr-container {
+        margin-bottom: 6mm;
+        position: relative;
+      }
+
+      .qr-container::before {
+        content: "";
+        position: absolute;
+        top: -4mm;
+        left: -4mm;
+        right: -4mm;
+        bottom: -4mm;
+        border: 3px solid #ffd700;
+        opacity: 1;
+      }
+
+      .qr-code {
+        width: 32mm;
+        height: 32mm;
+        border: 4px solid #0066cc;
+        margin-bottom: 4mm;
+        background: #ffffff;
+        position: relative;
+        box-shadow: 4px 4px 0 rgba(0, 102, 204, 0.2);
+        padding: 2mm;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .qr-code img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .website {
+        font-size: 14pt;
+        font-weight: 900;
+        color: #0066cc;
+        margin-bottom: 3mm;
+        position: relative;
+        text-transform: uppercase;
+        letter-spacing: 0.5pt;
+      }
+
+      .website::before {
+        content: "";
+        position: absolute;
+        bottom: -2mm;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: #4caf50;
+        opacity: 1;
+      }
+
+      .contact {
+        font-size: 9pt;
+        font-weight: 600;
+        color: #0066cc;
+        opacity: 0.8;
+      }
+
+      .footer {
+        grid-column: 1 / -1;
+        grid-row: 5;
+        display: flex;
+        align-items: end;
+        justify-content: center;
+        text-align: center;
+        border-top: 4px solid #0066cc;
+        padding-top: 4mm;
+        position: relative;
+        background: #0066cc;
+        color: #ffffff;
+        margin: 0 -12mm -12mm -12mm;
+        padding-left: 12mm;
+        padding-right: 12mm;
+      }
+
+      .footer::before {
+        content: "";
+        position: absolute;
+        top: -4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50mm;
+        height: 6px;
+        background: #4caf50;
+      }
+
+      .tagline {
+        font-size: 10pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5pt;
+        color: #ffffff;
+      }
+
+      /* Bold accent elements */
+      .accent-element {
+        position: absolute;
+        opacity: 0.6;
+      }
+
+      .accent-1 {
+        width: 25mm;
+        height: 4px;
+        background: #ffd700;
+        top: 22mm;
+        right: 8mm;
+        transform: rotate(15deg);
+      }
+
+      .accent-2 {
+        width: 6mm;
+        height: 6mm;
+        background: #4caf50;
+        bottom: 35mm;
+        left: 8mm;
+        border-radius: 50%;
+      }
+
+      .accent-3 {
+        width: 3px;
+        height: 20mm;
+        background: #0066cc;
+        top: 65mm;
+        right: 12mm;
+      }
+
+      /* Bold contrast elements */
+      .contrast-block {
+        position: absolute;
+        left: 1mm;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 3mm;
+        height: 50mm;
+        background: #0066cc;
+        opacity: 0.15;
+      }
+
+      .contrast-block::after {
+        content: "";
+        position: absolute;
+        top: 15mm;
+        left: 0;
+        width: 3mm;
+        height: 20mm;
+        background: #4caf50;
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Bold accent elements -->
+      <div class="accent-element accent-1"></div>
+      <div class="accent-element accent-2"></div>
+      <div class="accent-element accent-3"></div>
+      <div class="contrast-block"></div>
+
+      <div class="header">
+        <img src="../public/logo-v3.png" alt="STA Logo" class="company-logo" />
+        <div class="logo">Swanage Traffic Alliance</div>
+      </div>
+
+      <div class="headline">
+        <h1>Your Voice<br />Matters</h1>
+      </div>
+
+      <div class="content">
+        <div class="statement">
+          Community-powered group amplifying voices on traffic and council
+          accountability.
+        </div>
+
+        <div class="emphasis-block">
+          <div class="emphasis-text">We Listen. We Act.</div>
+          <div class="emphasis-subtext">
+            Organized advocacy through transparent communication and systematic
+            engagement.
+          </div>
+        </div>
+      </div>
+
+      <div class="action">
+        <div class="qr-container">
+          <div class="qr-code">
+            <img
+              src="sta-qr-code.png"
+              alt="QR Code for Swanage Traffic Alliance"
+            />
+          </div>
+        </div>
+        <div class="website">swanagetraffic.org.uk</div>
+        <div class="contact">admin@swanagetraffic.org.uk</div>
+      </div>
+
+      <div class="footer">
+        <div class="tagline">Together We Hold Power To Account</div>
+      </div>
+    </div>
+  </body>
+</html>

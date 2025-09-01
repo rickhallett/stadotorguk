@@ -11,7 +11,7 @@ import type {
  */
 export function useFormValidation<T extends Record<string, string>>(
   initialValues: T,
-  validationSchema: FormValidationSchema
+  validationSchema: Record<keyof T, FormValidationRule>
 ): UseFormValidationHookReturn<T> {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Record<keyof T, string>>({} as Record<keyof T, string>);
@@ -23,7 +23,7 @@ export function useFormValidation<T extends Record<string, string>>(
 
   // Validate a single field
   const validateField = useCallback((field: keyof T, value: string): string => {
-    const rule = validationSchema[field] as FormValidationRule;
+    const rule = validationSchema[field];
     if (!rule) return '';
 
     // Required validation

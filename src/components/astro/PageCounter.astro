@@ -13,7 +13,6 @@ let error = false;
 
 try {
   const apiUrl = `${apiBaseUrl}/api/counter?action=read`;
-  console.log(`Fetching counter from: ${apiUrl}`);
 
   const response = await fetch(apiUrl, {
     method: "GET",
@@ -60,7 +59,6 @@ const formattedCount = new Intl.NumberFormat("en-GB").format(count);
     const apiUrl = counterBlock?.getAttribute("data-api-url");
 
     if (apiUrl) {
-      console.log("📡 Sending increment request...");
       // Increment the counter asynchronously (with cache busting)
       fetch(`${apiUrl}?action=increment&t=${Date.now()}`, {
         method: "POST",

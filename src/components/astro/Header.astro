@@ -6,15 +6,18 @@ const currentPath = Astro.url.pathname;
   <div class="header-content">
     <div class="logo">
       <a href="/">
-        <img src="/sta-logo-header.png" alt="Swanage Traffic Alliance Logo" class="header-logo" />
+        <img
+          src="/logo-v3.png"
+          alt="Swanage Traffic Alliance Logo"
+          class="header-logo"
+        />
         STA
       </a>
     </div>
     <nav class="main-nav">
       <a href="/" class={currentPath === "/" ? "active" : ""}>Home</a>
-      <a href="/feed" class={currentPath === '/feed' ? 'active' : ''}>Feed</a>
+      <a href="/feed" class={currentPath === "/feed" ? "active" : ""}>Feed</a>
       <a href="/news" class={currentPath === "/news" ? "active" : ""}>News</a>
-      
     </nav>
   </div>
 </header>
@@ -53,6 +56,8 @@ const currentPath = Astro.url.pathname;
   .header-logo {
     height: 40px;
     width: auto;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8))
+      drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
   }
 
   .logo a:hover {
@@ -98,7 +103,7 @@ const currentPath = Astro.url.pathname;
       justify-content: space-between;
       gap: 0.5rem; /* Reduced from 1rem */
     }
-    
+
     .logo a {
       font-size: 1.5rem;
     }
