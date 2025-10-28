@@ -6,7 +6,18 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     // Check authorization
     const authHeader = request.headers.get("authorization");
-    const expectedToken = `Bearer ${import.meta.env.ADMIN_SECRET || process.env.ADMIN_SECRET}`;
+    const adminSecret = import.meta.env.ADMIN_SECRET || process.env.ADMIN_SECRET;
+    const expectedToken = `Bearer ${adminSecret}`;
+
+    // Debug logging (remove after fixing)
+    console.log("Auth Debug:", {
+      hasAuthHeader: !!authHeader,
+      hasAdminSecret: !!adminSecret,
+      authHeaderLength: authHeader?.length,
+      expectedTokenLength: expectedToken.length,
+      authHeaderPrefix: authHeader?.slice(0, 20),
+      expectedTokenPrefix: expectedToken.slice(0, 20),
+    });
 
     if (authHeader !== expectedToken) {
       return new Response(

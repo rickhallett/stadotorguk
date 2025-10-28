@@ -14,20 +14,97 @@ interface SyntheticLead {
 
 // UK first names weighted by popularity
 const UK_FIRST_NAMES = [
-  "Oliver", "George", "Harry", "Jack", "Jacob", "Noah", "Charlie", "Muhammad",
-  "Thomas", "Oscar", "William", "James", "Leo", "Alfie", "Henry", "Joshua",
-  "Olivia", "Amelia", "Isla", "Emily", "Poppy", "Ava", "Isabella", "Jessica",
-  "Lily", "Sophie", "Grace", "Sophia", "Mia", "Evie", "Ruby", "Ella",
-  "Sarah", "Emma", "Laura", "Rachel", "Hannah", "Lucy", "Katie", "Rebecca",
-  "John", "David", "Michael", "Paul", "Andrew", "Mark", "Peter", "Richard"
+  "Oliver",
+  "George",
+  "Harry",
+  "Jack",
+  "Jacob",
+  "Noah",
+  "Charlie",
+  "Muhammad",
+  "Thomas",
+  "Oscar",
+  "William",
+  "James",
+  "Leo",
+  "Alfie",
+  "Henry",
+  "Joshua",
+  "Olivia",
+  "Amelia",
+  "Isla",
+  "Emily",
+  "Poppy",
+  "Ava",
+  "Isabella",
+  "Jessica",
+  "Lily",
+  "Sophie",
+  "Grace",
+  "Sophia",
+  "Mia",
+  "Evie",
+  "Ruby",
+  "Ella",
+  "Sarah",
+  "Emma",
+  "Laura",
+  "Rachel",
+  "Hannah",
+  "Lucy",
+  "Katie",
+  "Rebecca",
+  "John",
+  "David",
+  "Michael",
+  "Paul",
+  "Andrew",
+  "Mark",
+  "Peter",
+  "Richard",
 ];
 
 const UK_LAST_NAMES = [
-  "Smith", "Jones", "Williams", "Taylor", "Brown", "Davies", "Evans", "Wilson",
-  "Thomas", "Roberts", "Johnson", "Lewis", "Walker", "Robinson", "Wood", "Thompson",
-  "White", "Watson", "Jackson", "Wright", "Green", "Harris", "Cooper", "King",
-  "Lee", "Martin", "Clarke", "James", "Morgan", "Hughes", "Edwards", "Hill",
-  "Moore", "Clark", "Harrison", "Scott", "Young", "Morris", "Hall", "Ward"
+  "Smith",
+  "Jones",
+  "Williams",
+  "Taylor",
+  "Brown",
+  "Davies",
+  "Evans",
+  "Wilson",
+  "Thomas",
+  "Roberts",
+  "Johnson",
+  "Lewis",
+  "Walker",
+  "Robinson",
+  "Wood",
+  "Thompson",
+  "White",
+  "Watson",
+  "Jackson",
+  "Wright",
+  "Green",
+  "Harris",
+  "Cooper",
+  "King",
+  "Lee",
+  "Martin",
+  "Clarke",
+  "James",
+  "Morgan",
+  "Hughes",
+  "Edwards",
+  "Hill",
+  "Moore",
+  "Clark",
+  "Harrison",
+  "Scott",
+  "Young",
+  "Morris",
+  "Hall",
+  "Ward",
 ];
 
 function getRandomElement<T>(array: T[]): T {
@@ -35,12 +112,18 @@ function getRandomElement<T>(array: T[]): T {
 }
 
 function generateEmail(firstName: string, lastName: string): string {
-  const domains = ["gmail.com", "outlook.com", "yahoo.co.uk", "hotmail.co.uk", "btinternet.com"];
+  const domains = [
+    "gmail.com",
+    "outlook.com",
+    "yahoo.co.uk",
+    "hotmail.co.uk",
+    "btinternet.com",
+  ];
   const formats = [
     `${firstName.toLowerCase()}.${lastName.toLowerCase()}`,
     `${firstName.toLowerCase()}${lastName.toLowerCase()}`,
     `${firstName.toLowerCase()}_${lastName.toLowerCase()}`,
-    `${firstName.toLowerCase()}${Math.floor(Math.random() * 999)}`
+    `${firstName.toLowerCase()}${Math.floor(Math.random() * 999)}`,
   ];
 
   return `${getRandomElement(formats)}@${getRandomElement(domains)}`;
@@ -51,9 +134,13 @@ function selectRandomLeads(leads: Lead[], count: number = 3): Lead[] {
   return shuffled.slice(0, Math.min(count, leads.length));
 }
 
-function calculateNGramSimilarity(text1: string, text2: string, n: number = 3): number {
+function calculateNGramSimilarity(
+  text1: string,
+  text2: string,
+  n: number = 3
+): number {
   const getNGrams = (text: string): Set<string> => {
-    const normalized = text.toLowerCase().replace(/[^a-z0-9\s]/g, '');
+    const normalized = text.toLowerCase().replace(/[^a-z0-9\s]/g, "");
     const ngrams = new Set<string>();
     for (let i = 0; i <= normalized.length - n; i++) {
       ngrams.add(normalized.slice(i, i + n));
@@ -64,19 +151,27 @@ function calculateNGramSimilarity(text1: string, text2: string, n: number = 3): 
   const ngrams1 = getNGrams(text1);
   const ngrams2 = getNGrams(text2);
 
-  const intersection = new Set([...ngrams1].filter(x => ngrams2.has(x)));
+  const intersection = new Set([...ngrams1].filter((x) => ngrams2.has(x)));
   const union = new Set([...ngrams1, ...ngrams2]);
 
   return union.size === 0 ? 0 : (intersection.size / union.size) * 100;
 }
 
-function isCommentUnique(newComment: string, existingLeads: Lead[], threshold: number = 20): boolean {
+function isCommentUnique(
+  newComment: string,
+  existingLeads: Lead[],
+  threshold: number = 20
+): boolean {
   for (const lead of existingLeads) {
     if (!lead.comments) continue;
 
     const similarity = calculateNGramSimilarity(newComment, lead.comments);
     if (similarity > threshold) {
-      console.log(`❌ Comment too similar (${similarity.toFixed(1)}%) to existing: "${lead.comments.slice(0, 50)}..."`);
+      console.log(
+        `❌ Comment too similar (${similarity.toFixed(
+          1
+        )}%) to existing: "${lead.comments.slice(0, 50)}..."`
+      );
       return false;
     }
   }
@@ -92,9 +187,12 @@ async function generateCommentWithLLM(sampleLeads: Lead[]): Promise<string> {
   const anthropic = new Anthropic({ apiKey });
 
   const exampleComments = sampleLeads
-    .filter(lead => lead.comments)
-    .map((lead, idx) => `${idx + 1}. "${lead.comments}" (${lead.visitor_type || 'Local'})`)
-    .join('\n');
+    .filter((lead) => lead.comments)
+    .map(
+      (lead, idx) =>
+        `${idx + 1}. "${lead.comments}" (${lead.visitor_type || "Local"})`
+    )
+    .join("\n");
 
   const prompt = `You are helping generate realistic community feedback for the Swanage Traffic Alliance website - a local activism group concerned about traffic congestion in Swanage, Dorset, UK.
 
@@ -121,9 +219,9 @@ Respond with ONLY the comment text, no quotes, no preamble, no explanation.`;
     messages: [
       {
         role: "user",
-        content: prompt
-      }
-    ]
+        content: prompt,
+      },
+    ],
   });
 
   const content = message.content[0];
@@ -131,30 +229,45 @@ Respond with ONLY the comment text, no quotes, no preamble, no explanation.`;
     throw new Error("Unexpected response type from Claude");
   }
 
-  return content.text.trim().replace(/^["']|["']$/g, '');
+  return content.text.trim().replace(/^["']|["']$/g, "");
 }
 
-export async function generateSyntheticLead(dryRun: boolean = true): Promise<SyntheticLead | null> {
+export async function generateSyntheticLead(
+  dryRun: boolean = true
+): Promise<SyntheticLead | null> {
   try {
     console.log("\n🤖 Starting synthetic lead generation...\n");
 
     // Fetch all existing leads
     console.log("📥 Fetching existing leads from database...");
     const allLeads = await getAllLeads();
-    const leadsWithComments = allLeads.filter(lead => lead.comments && lead.comments.trim() !== '');
+    const leadsWithComments = allLeads.filter(
+      (lead) => lead.comments && lead.comments.trim() !== ""
+    );
     console.log(`✅ Found ${leadsWithComments.length} leads with comments\n`);
 
     if (leadsWithComments.length < 3) {
-      console.log("❌ Not enough existing comments to generate from (need at least 3)");
+      console.log(
+        "❌ Not enough existing comments to generate from (need at least 3)"
+      );
       return null;
     }
 
     // Select random sample
-    const sampleSize = Math.min(5, Math.max(3, Math.floor(leadsWithComments.length * 0.1)));
+    const sampleSize = Math.min(
+      5,
+      Math.max(3, Math.floor(leadsWithComments.length * 0.1))
+    );
     const selectedLeads = selectRandomLeads(leadsWithComments, sampleSize);
-    console.log(`🎲 Selected ${selectedLeads.length} random leads as examples:\n`);
+    console.log(
+      `🎲 Selected ${selectedLeads.length} random leads as examples:\n`
+    );
     selectedLeads.forEach((lead, idx) => {
-      console.log(`   ${idx + 1}. ${lead.first_name} (${lead.visitor_type}): "${lead.comments?.slice(0, 60)}..."`);
+      console.log(
+        `   ${idx + 1}. ${lead.first_name} (${
+          lead.visitor_type
+        }): "${lead.comments?.slice(0, 60)}..."`
+      );
     });
 
     // Generate comment with LLM
@@ -174,7 +287,9 @@ export async function generateSyntheticLead(dryRun: boolean = true): Promise<Syn
       }
 
       if (attempts >= maxAttempts) {
-        console.log(`❌ Failed to generate unique comment after ${maxAttempts} attempts`);
+        console.log(
+          `❌ Failed to generate unique comment after ${maxAttempts} attempts`
+        );
         return null;
       }
 
@@ -212,11 +327,13 @@ export async function generateSyntheticLead(dryRun: boolean = true): Promise<Syn
       lastName,
       email,
       visitorType,
-      comment
+      comment,
     };
 
     console.log("\n✨ Generated Synthetic Lead:");
-    console.log(`   Name: ${syntheticLead.firstName} ${syntheticLead.lastName}`);
+    console.log(
+      `   Name: ${syntheticLead.firstName} ${syntheticLead.lastName}`
+    );
     console.log(`   Email: ${syntheticLead.email}`);
     console.log(`   Type: ${syntheticLead.visitorType}`);
     console.log(`   Comment: "${syntheticLead.comment}"`);
@@ -226,7 +343,6 @@ export async function generateSyntheticLead(dryRun: boolean = true): Promise<Syn
     }
 
     return syntheticLead;
-
   } catch (error) {
     console.error("\n❌ Error generating synthetic lead:", error);
     throw error;
@@ -235,7 +351,7 @@ export async function generateSyntheticLead(dryRun: boolean = true): Promise<Syn
 
 // Run standalone if executed directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  generateSyntheticLead(true)
+  generateSyntheticLead(false)
     .then((result) => {
       if (result) {
         console.log("\n✅ Generation test completed successfully");

@@ -12,7 +12,8 @@
     "test-migration": "bun run scripts/test-migration.ts",
     "simulate-traffic": "tsx scripts/simulate-traffic.ts",
     "generate-lead": "npx tsx scripts/generate-synthetic-lead.ts",
-    "schedule-leads": "npx tsx scripts/schedule-synthetic-leads.ts"
+    "schedule-leads": "npx tsx scripts/schedule-synthetic-leads.ts",
+    "test-live-generation": "npx tsx scripts/test-live-generation.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.67.1",
