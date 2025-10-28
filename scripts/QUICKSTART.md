@@ -77,7 +77,11 @@ Each synthetic lead includes:
 - **Name**: Random UK name (e.g., "Sarah Thompson")
 - **Email**: Generated email (e.g., sarah.thompson@gmail.com)
 - **Visitor Type**: Matches existing distribution (mostly "Local")
-- **Comment**: Unique traffic-related comment (~15-40 words)
+- **Comment**: Unique traffic-related comment (variable length: 10-200 words)
+  - Short comments (40%): Quick, punchy observations
+  - Medium comments (30%): More detailed concerns
+  - Long comments (20%): In-depth reasoning
+  - Very long comments (10%): Comprehensive analysis
 - **Source**: Tagged as `synthetic` in database
 
 ## Cost
