@@ -106,6 +106,11 @@ npm run schedule-leads-production
   - Lunch (12-2 PM): 1.8x weight
   - Afternoon (3-5 PM): 1.2x weight
   - Evening (6-9 PM): 1.6x weight
+- Exponential backoff retry on failures:
+  - 1st retry: 5 seconds
+  - 2nd retry: 10 seconds
+  - 3rd retry: 20 seconds
+  - After 3 failures: extends next interval by 50%
 
 **Sample Output:**
 ```
@@ -266,6 +271,31 @@ The scheduler outputs detailed logs:
 - Next scheduled time
 - Sleep/wake notifications
 
+## Retry Logic
+
+The scheduler includes intelligent retry with exponential backoff:
+
+### When Retries Occur
+- **Failed uniqueness check** - Could not generate sufficiently unique comment
+- **Server errors (5xx)** - API endpoint temporarily unavailable
+- **Network errors** - Connection issues
+
+### Retry Schedule
+1. **First retry**: 5 seconds
+2. **Second retry**: 10 seconds (2^1 × 5s)
+3. **Third retry**: 20 seconds (2^2 × 5s)
+4. **After max retries**: Skips cycle, extends next interval by 50%
+
+### Example Output
+```
+🎲 [19:04:57] Attempting to generate synthetic lead...
+❌ Generation failed: Failed to generate unique lead
+⏳ Retrying in 5 seconds with fresh random samples...
+
+🎲 [19:05:02] Attempting to generate synthetic lead (retry 1/3)...
+✅ Successfully generated lead #512
+```
+
 ## Troubleshooting
 
 **"ANTHROPIC_API_KEY not found"**
@@ -277,13 +307,14 @@ The scheduler outputs detailed logs:
 - Use format: `Bearer YOUR_SECRET` in Authorization header
 
 **"Failed to generate unique comment"**
-- Indicates 3 failed attempts due to similarity
-- Increase temperature in `generateCommentWithLLM()`
-- Reduce similarity threshold in `isCommentUnique()`
+- Normal behavior when database has many similar comments
+- Scheduler will automatically retry with exponential backoff
+- Each retry samples different existing leads for variety
+- If all retries fail, scheduler extends next interval and continues
 
 **Scheduler not running**
 - Check `API_URL` is correct
-- Verify dev server is running on specified port
+- Verify dev server is running on specified port (for local mode)
 - Ensure not in nighttime hours (8 AM - 10 PM only)
 
 ## Security Notes
