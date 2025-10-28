@@ -9,26 +9,11 @@ export const POST: APIRoute = async ({ request }) => {
     const adminSecret = import.meta.env.ADMIN_SECRET || process.env.ADMIN_SECRET;
     const expectedToken = `Bearer ${adminSecret}`;
 
-    // Debug logging (remove after fixing)
-    const debugInfo = {
-      hasAuthHeader: !!authHeader,
-      hasAdminSecret: !!adminSecret,
-      authHeaderLength: authHeader?.length,
-      expectedTokenLength: expectedToken.length,
-      authHeaderPrefix: authHeader?.slice(0, 20),
-      expectedTokenPrefix: expectedToken.slice(0, 20),
-      match: authHeader === expectedToken,
-      envKeys: Object.keys(import.meta.env).filter(k => k.includes('ADMIN') || k.includes('SECRET')),
-      processEnvKeys: Object.keys(process.env).filter(k => k.includes('ADMIN') || k.includes('SECRET'))
-    };
-    console.log("Auth Debug:", JSON.stringify(debugInfo, null, 2));
-
     if (authHeader !== expectedToken) {
       return new Response(
         JSON.stringify({
           success: false,
-          error: "Unauthorized",
-          debug: debugInfo // Include debug in response temporarily
+          error: "Unauthorized"
         }),
         {
           status: 401,
