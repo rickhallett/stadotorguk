@@ -10,9 +10,12 @@
     "astro": "astro",
     "migrate-leads": "tsx scripts/migrate-leads.ts",
     "test-migration": "bun run scripts/test-migration.ts",
-    "simulate-traffic": "tsx scripts/simulate-traffic.ts"
+    "simulate-traffic": "tsx scripts/simulate-traffic.ts",
+    "generate-lead": "npx tsx scripts/generate-synthetic-lead.ts",
+    "schedule-leads": "npx tsx scripts/schedule-synthetic-leads.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.67.1",
     "@astrojs/react": "^4.3.0",
     "@astrojs/vercel": "^8.2.7",
     "@neondatabase/serverless": "^1.0.1",

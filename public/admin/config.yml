@@ -1,0 +1,23 @@
+backend:
+  name: github
+  repo: rickhallett/stadotorguk
+  branch: dev
+  site_domain: localhost:4321 # Will be updated for production
+  base_url: http://localhost:4321 # Will be updated for production
+  auth_endpoint: oauth
+
+# Media files will be stored in the repo under public/uploads
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  # News Updates Collection
+  - name: "news"
+    label: "News Updates"
+    folder: "src/content/news"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Date", name: "date", widget: "datetime", format: "YYYY-MM-DD"}
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Content", name: "body", widget: "markdown"}
