@@ -178,6 +178,25 @@ function isCommentUnique(
   return true;
 }
 
+function getRandomCommentLength(): { min: number; max: number; tokens: number } {
+  // Weighted distribution to favor shorter comments but allow longer ones
+  const rand = Math.random();
+
+  if (rand < 0.4) {
+    // 40% chance: short comment (10-40 words)
+    return { min: 10, max: 40, tokens: 80 };
+  } else if (rand < 0.7) {
+    // 30% chance: medium comment (40-100 words)
+    return { min: 40, max: 100, tokens: 200 };
+  } else if (rand < 0.9) {
+    // 20% chance: long comment (100-150 words)
+    return { min: 100, max: 150, tokens: 300 };
+  } else {
+    // 10% chance: very long comment (150-200 words)
+    return { min: 150, max: 200, tokens: 400 };
+  }
+}
+
 async function generateCommentWithLLM(sampleLeads: Lead[]): Promise<string> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
@@ -190,13 +209,16 @@ async function generateCommentWithLLM(sampleLeads: Lead[]): Promise<string> {
     .filter((lead) => lead.comments)
     .map(
       (lead, idx) =>
-        `${idx + 1}. "${lead.comments}" (${lead.visitor_type || "Local"})`
+        `${idx + 1}. "${lead.comments}" (${lead.visitor_type || "Local"}, ${lead.comments!.split(' ').length} words)`
     )
     .join("\n");
 
+  // Get random target length for this comment
+  const lengthTarget = getRandomCommentLength();
+
   const prompt = `You are helping generate realistic community feedback for the Swanage Traffic Alliance website - a local activism group concerned about traffic congestion in Swanage, Dorset, UK.
 
-Here are some recent REAL comments from community members:
+Here are some recent REAL comments from community members (with word counts):
 
 ${exampleComments}
 
@@ -204,17 +226,21 @@ Generate ONE new comment that:
 - Expresses similar concerns (traffic, congestion, tourism impacts, safety, quality of life)
 - Uses COMPLETELY DIFFERENT words and phrasing (must be lexically unique, <20% word overlap)
 - Sounds natural and authentic like a real resident or visitor
-- Is 15-40 words long
+- Is ${lengthTarget.min}-${lengthTarget.max} words long (important: match this range)
 - Reflects genuine frustration or concern about traffic issues
 - Matches the tone and style of real community feedback
+- Varies in detail level: short comments are punchy, long comments include specific examples and reasoning
 
-CRITICAL: Do NOT copy phrases or sentence structures from the examples. Create entirely new wording while maintaining thematic relevance.
+CRITICAL:
+- Do NOT copy phrases or sentence structures from the examples
+- Create entirely new wording while maintaining thematic relevance
+- Respect the word count target (${lengthTarget.min}-${lengthTarget.max} words)
 
 Respond with ONLY the comment text, no quotes, no preamble, no explanation.`;
 
   const message = await anthropic.messages.create({
     model: "claude-haiku-4-5",
-    max_tokens: 150,
+    max_tokens: lengthTarget.tokens,
     temperature: 0.9,
     messages: [
       {
@@ -330,6 +356,8 @@ export async function generateSyntheticLead(
       comment,
     };
 
+    const wordCount = syntheticLead.comment.split(/\s+/).length;
+
     console.log("\n✨ Generated Synthetic Lead:");
     console.log(
       `   Name: ${syntheticLead.firstName} ${syntheticLead.lastName}`
@@ -337,6 +365,7 @@ export async function generateSyntheticLead(
     console.log(`   Email: ${syntheticLead.email}`);
     console.log(`   Type: ${syntheticLead.visitorType}`);
     console.log(`   Comment: "${syntheticLead.comment}"`);
+    console.log(`   Length: ${wordCount} words (${syntheticLead.comment.length} chars)`);
 
     if (dryRun) {
       console.log("\n🔒 DRY RUN MODE - No database changes made");
