@@ -67,17 +67,34 @@ curl -X POST http://localhost:4321/api/generate-lead \
 ### 3. Local Scheduler
 **File:** `scripts/schedule-synthetic-leads.ts`
 
-Background process that generates leads at semi-random intervals during daytime hours.
+Background process that generates leads at semi-random intervals during daytime hours by calling the local dev server API.
 
 **Usage:**
 ```bash
-# Add required env vars to .env
+# Add required env vars to .env or .env.development.local
 ADMIN_SECRET=13DWXIX+XvKN+iM0bgxQEa/MQApfzQGO
 API_URL=http://localhost:4321
 ANTHROPIC_API_KEY=sk-ant-api03-...
 
-# Start the scheduler
+# Terminal 1: Start dev server
+npm run dev
+
+# Terminal 2: Start local scheduler
 npm run schedule-leads
+```
+
+### 4. Production Scheduler
+**File:** `scripts/schedule-production-leads.ts`
+
+Background process that generates leads in production by calling the live API endpoint.
+
+**Usage:**
+```bash
+# Add required env vars to .env.prod
+ADMIN_SECRET=13DWXIX+XvKN+iM0bgxQEa/MQApfzQGO
+
+# Start production scheduler (hits live site)
+npm run schedule-leads-production
 ```
 
 **Features:**
@@ -188,20 +205,35 @@ npm run schedule-leads
 
 ## Production Deployment
 
-### Option 1: Local Machine (Recommended)
-Run the scheduler on your local machine while developing:
+### Option 1: Local Machine Hitting Production (Recommended)
+Run the production scheduler on your local machine to generate leads on the live site:
+
+```bash
+# Ensure .env.prod has ADMIN_SECRET set
+# This will call https://www.swanagetraffic.org.uk/api/generate-lead
+npm run schedule-leads-production
+```
+
+The scheduler will automatically sleep at night and resume in the morning.
+
+**Advantages:**
+- No server costs
+- Easy to start/stop
+- Can run on your development machine
+- Automatic nighttime sleep
+
+### Option 2: Local Development Server
+Run the scheduler against your local dev server for testing:
 
 ```bash
 # Terminal 1: Start dev server
 npm run dev
 
-# Terminal 2: Start scheduler
+# Terminal 2: Start local scheduler
 npm run schedule-leads
 ```
 
-The scheduler will automatically sleep at night and resume in the morning.
-
-### Option 2: Long-Running Server
+### Option 3: Long-Running Server
 Deploy the scheduler on a VPS or dedicated server:
 
 ```bash
@@ -218,7 +250,7 @@ pm2 logs synthetic-leads
 pm2 stop synthetic-leads
 ```
 
-### Option 3: Manual Triggers
+### Option 4: Manual Triggers
 Use the API endpoint with your own scheduling system:
 - GitHub Actions workflows
 - Local cron jobs calling the API

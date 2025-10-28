@@ -13,6 +13,7 @@
     "simulate-traffic": "tsx scripts/simulate-traffic.ts",
     "generate-lead": "npx tsx scripts/generate-synthetic-lead.ts",
     "schedule-leads": "npx tsx scripts/schedule-synthetic-leads.ts",
+    "schedule-leads-production": "npx tsx scripts/schedule-production-leads.ts",
     "test-live-generation": "npx tsx scripts/test-live-generation.ts"
   },
   "dependencies": {

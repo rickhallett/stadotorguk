@@ -1,12 +1,14 @@
 import { config } from "dotenv";
 
-config({ path: [".env.local", ".env"] });
+// Load production environment variables
+config({ path: [".env.prod", ".env"] });
 
-const API_URL = process.env.API_URL || "http://localhost:4321";
+const PRODUCTION_API_URL = "https://www.swanagetraffic.org.uk";
 const ADMIN_SECRET = process.env.ADMIN_SECRET;
 
 if (!ADMIN_SECRET) {
   console.error("❌ ADMIN_SECRET not found in environment variables");
+  console.error("   Please set ADMIN_SECRET in .env.prod");
   process.exit(1);
 }
 
@@ -78,7 +80,7 @@ async function generateLead(): Promise<void> {
   try {
     console.log(`\n🎲 [${new Date().toLocaleTimeString()}] Attempting to generate synthetic lead...`);
 
-    const response = await fetch(`${API_URL}/api/generate-lead`, {
+    const response = await fetch(`${PRODUCTION_API_URL}/api/generate-lead`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${ADMIN_SECRET}`,
@@ -137,12 +139,12 @@ async function scheduleNextGeneration(): Promise<void> {
 }
 
 // Start the scheduler
-console.log("🤖 Synthetic Lead Scheduler Started (LOCAL/DEV MODE)");
-console.log("====================================================");
-console.log(`API URL: ${API_URL}`);
+console.log("🤖 Synthetic Lead Scheduler Started (PRODUCTION MODE)");
+console.log("======================================================");
+console.log(`API URL: ${PRODUCTION_API_URL}`);
 console.log(`Active hours: ${DAYTIME_START}:00 - ${DAYTIME_END}:00`);
 console.log(`Interval range: ${MIN_INTERVAL_MINUTES} - ${MAX_INTERVAL_MINUTES} minutes`);
-console.log("====================================================\n");
+console.log("======================================================\n");
 
 scheduleNextGeneration();
 
