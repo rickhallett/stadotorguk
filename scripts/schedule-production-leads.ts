@@ -76,9 +76,13 @@ function getNextWakeTime(): number {
   return 0;
 }
 
-async function generateLead(): Promise<void> {
+async function generateLead(retryCount: number = 0): Promise<boolean> {
+  const MAX_RETRIES = 3;
+  const BASE_DELAY = 5000; // 5 seconds
+
   try {
-    console.log(`\n🎲 [${new Date().toLocaleTimeString()}] Attempting to generate synthetic lead...`);
+    const attemptText = retryCount > 0 ? ` (retry ${retryCount}/${MAX_RETRIES})` : "";
+    console.log(`\n🎲 [${new Date().toLocaleTimeString()}] Attempting to generate synthetic lead${attemptText}...`);
 
     const response = await fetch(`${PRODUCTION_API_URL}/api/generate-lead`, {
       method: "POST",
@@ -91,7 +95,16 @@ async function generateLead(): Promise<void> {
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
       console.error(`❌ API request failed (${response.status}):`, errorData.error);
-      return;
+
+      // Retry on server errors or rate limits
+      if (response.status >= 500 && retryCount < MAX_RETRIES) {
+        const delay = BASE_DELAY * Math.pow(2, retryCount);
+        console.log(`⏳ Retrying in ${delay / 1000} seconds...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return generateLead(retryCount + 1);
+      }
+
+      return false;
     }
 
     const data = await response.json();
@@ -101,11 +114,34 @@ async function generateLead(): Promise<void> {
       console.log(`   Name: ${data.lead.name}`);
       console.log(`   Type: ${data.lead.type}`);
       console.log(`   Comment: ${data.lead.commentLength} chars`);
+      return true;
     } else {
+      // Failed to generate unique lead
       console.error(`❌ Generation failed:`, data.error);
+
+      // Retry with exponential backoff
+      if (retryCount < MAX_RETRIES) {
+        const delay = BASE_DELAY * Math.pow(2, retryCount);
+        console.log(`⏳ Retrying in ${delay / 1000} seconds with fresh random samples...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return generateLead(retryCount + 1);
+      } else {
+        console.error(`❌ Max retries (${MAX_RETRIES}) reached. Skipping this generation cycle.`);
+        return false;
+      }
     }
   } catch (error) {
     console.error("❌ Error calling generation API:", error);
+
+    // Retry on network errors
+    if (retryCount < MAX_RETRIES) {
+      const delay = BASE_DELAY * Math.pow(2, retryCount);
+      console.log(`⏳ Retrying in ${delay / 1000} seconds...`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return generateLead(retryCount + 1);
+    }
+
+    return false;
   }
 }
 
@@ -125,14 +161,24 @@ async function scheduleNextGeneration(): Promise<void> {
   }
 
   // Generate a lead
-  await generateLead();
+  const success = await generateLead();
 
   // Calculate next interval
   const nextInterval = getWeightedInterval();
   const nextTime = new Date(Date.now() + nextInterval);
 
-  console.log(`⏰ Next generation scheduled for ${nextTime.toLocaleTimeString()}`);
-  console.log(`   (in ${(nextInterval / 1000 / 60).toFixed(1)} minutes)\n`);
+  if (success) {
+    console.log(`⏰ Next generation scheduled for ${nextTime.toLocaleTimeString()}`);
+    console.log(`   (in ${(nextInterval / 1000 / 60).toFixed(1)} minutes)\n`);
+  } else {
+    // If generation failed after all retries, wait a bit longer before next attempt
+    const extendedInterval = Math.min(nextInterval * 1.5, MAX_INTERVAL_MINUTES * 60 * 1000);
+    const extendedTime = new Date(Date.now() + extendedInterval);
+    console.log(`⏰ Next generation scheduled for ${extendedTime.toLocaleTimeString()} (extended interval)`);
+    console.log(`   (in ${(extendedInterval / 1000 / 60).toFixed(1)} minutes)\n`);
+    setTimeout(scheduleNextGeneration, extendedInterval);
+    return;
+  }
 
   // Schedule next generation
   setTimeout(scheduleNextGeneration, nextInterval);
