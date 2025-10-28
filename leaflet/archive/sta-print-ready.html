@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STA Leaflet - Print Ready</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    @page {
+      size: 154mm 216mm;
+      margin: 0;
+    }
+
+    html, body {
+      width: 154mm;
+      height: 216mm;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+      background: #ffffff;
+      color: #0066cc;
+      position: relative;
+    }
+
+    /* All elements with absolute positioning to prevent overflow */
+    .logo {
+      position: absolute;
+      top: 9mm;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 9pt;
+      font-weight: 700;
+      letter-spacing: 3pt;
+      text-transform: uppercase;
+      text-align: center;
+      color: #0066cc;
+    }
+
+    .company-logo {
+      position: absolute;
+      top: 9mm;
+      left: 9mm;
+      width: 25mm;
+      height: auto;
+      z-index: 10;
+    }
+
+    .headline {
+      position: absolute;
+      top: 30mm;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      width: 110mm;
+    }
+
+    .headline h1 {
+      font-size: 36pt;
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -1pt;
+      color: #0066cc;
+      text-transform: uppercase;
+    }
+
+    .statement {
+      position: absolute;
+      top: 80mm;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110mm;
+      font-size: 16pt;
+      font-weight: 700;
+      line-height: 1.3;
+      color: #0066cc;
+      text-align: center;
+    }
+
+    .emphasis-block {
+      position: absolute;
+      top: 110mm;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110mm;
+      background: #fff8dc;
+      border: 4px solid #4caf50;
+      border-left: 8mm solid #4caf50;
+      padding: 6mm;
+      text-align: center;
+    }
+
+    .emphasis-text {
+      font-size: 20pt;
+      font-weight: 900;
+      color: #0066cc;
+      text-transform: uppercase;
+      letter-spacing: 1pt;
+      margin-bottom: 3mm;
+      line-height: 1.1;
+    }
+
+    .emphasis-subtext {
+      font-size: 11pt;
+      font-weight: 600;
+      color: #0066cc;
+      line-height: 1.4;
+    }
+
+    .qr-code {
+      position: absolute;
+      top: 153mm;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 32mm;
+      height: 32mm;
+      border: 4px solid #0066cc;
+      background: #ffffff;
+      padding: 2mm;
+    }
+
+    .qr-code img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .website {
+      position: absolute;
+      top: 188mm;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14pt;
+      font-weight: 900;
+      color: #0066cc;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .contact {
+      position: absolute;
+      top: 195mm;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 9pt;
+      font-weight: 600;
+      color: #0066cc;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 12mm;
+      background: #0066cc;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .tagline {
+      font-size: 10pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5pt;
+    }
+
+    .accent-1 {
+      position: absolute;
+      width: 25mm;
+      height: 4px;
+      background: #ffd700;
+      top: 22mm;
+      right: 8mm;
+      transform: rotate(15deg);
+      opacity: 0.6;
+    }
+
+    .accent-2 {
+      position: absolute;
+      width: 6mm;
+      height: 6mm;
+      background: #4caf50;
+      bottom: 35mm;
+      left: 8mm;
+      border-radius: 50%;
+      opacity: 0.6;
+    }
+
+    @media print {
+      html, body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <img src="../public/logo-v3.png" alt="STA Logo" class="company-logo">
+  
+  <div class="logo">Swanage Traffic Alliance</div>
+  
+  <div class="accent-1"></div>
+  <div class="accent-2"></div>
+  
+  <div class="headline">
+    <h1>Your Voice<br>Matters</h1>
+  </div>
+  
+  <div class="statement">
+    Community-powered group amplifying voices on traffic and council accountability.
+  </div>
+  
+  <div class="emphasis-block">
+    <div class="emphasis-text">We Listen. We Act.</div>
+    <div class="emphasis-subtext">
+      Organized advocacy through transparent communication and systematic engagement.
+    </div>
+  </div>
+  
+  <div class="qr-code">
+    <img src="sta-qr-code.png" alt="QR Code">
+  </div>
+  
+  <div class="website">swanagetraffic.org.uk</div>
+  <div class="contact">admin@swanagetraffic.org.uk</div>
+  
+  <div class="footer">
+    <div class="tagline">Together We Hold Power To Account</div>
+  </div>
+</body>
+</html>

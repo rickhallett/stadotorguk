@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swanage Traffic Alliance - Infographic Design</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @media print {
+        @page {
+          size: A5;
+          margin: 0;
+        }
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f8f9fa;
+        color: #2c3e50;
+        width: 148mm;
+        height: 210mm;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .infographic {
+        width: 100%;
+        height: 100%;
+        padding: 8mm;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        position: relative;
+      }
+
+      .content-wrapper {
+        background: #ffffff;
+        height: 100%;
+        border-radius: 4mm;
+        padding: 6mm;
+        box-shadow: 0 4mm 8mm rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Header with icon */
+      .header {
+        text-align: center;
+        margin-bottom: 4mm;
+        padding-bottom: 3mm;
+        border-bottom: 2px solid #e9ecef;
+      }
+
+      .icon {
+        font-size: 24pt;
+        margin-bottom: 2mm;
+        color: #005bc5;
+      }
+
+      .title {
+        font-size: 16pt;
+        font-weight: 700;
+        color: #005bc5;
+        margin-bottom: 1mm;
+      }
+
+      .subtitle {
+        font-size: 9pt;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 0.5pt;
+      }
+
+      /* Problem section */
+      .problem-section {
+        background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+        color: white;
+        padding: 3mm;
+        border-radius: 2mm;
+        margin-bottom: 4mm;
+        text-align: center;
+      }
+
+      .problem-icon {
+        font-size: 18pt;
+        margin-bottom: 1mm;
+      }
+
+      .problem-text {
+        font-size: 12pt;
+        font-weight: 600;
+      }
+
+      /* Stats dashboard */
+      .stats-dashboard {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 3mm;
+        margin-bottom: 4mm;
+      }
+
+      .main-stat {
+        background: linear-gradient(135deg, #74b9ff, #0984e3);
+        color: white;
+        padding: 4mm;
+        border-radius: 2mm;
+        text-align: center;
+        position: relative;
+      }
+
+      .stat-number {
+        font-size: 32pt;
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 1mm;
+      }
+
+      .stat-label {
+        font-size: 9pt;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 0.5pt;
+      }
+
+      .growth-indicator {
+        position: absolute;
+        top: 2mm;
+        right: 2mm;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 1mm;
+        border-radius: 1mm;
+        font-size: 8pt;
+      }
+
+      .secondary-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 2mm;
+      }
+
+      .mini-stat {
+        background: #f8f9fa;
+        border: 2px solid #e9ecef;
+        padding: 2mm;
+        border-radius: 2mm;
+        text-align: center;
+        flex: 1;
+      }
+
+      .mini-number {
+        font-size: 18pt;
+        font-weight: 700;
+        color: #00a651;
+        line-height: 1;
+      }
+
+      .mini-label {
+        font-size: 7pt;
+        color: #6c757d;
+        text-transform: uppercase;
+        margin-top: 1mm;
+      }
+
+      /* Process flow */
+      .process-flow {
+        margin-bottom: 4mm;
+      }
+
+      .flow-title {
+        font-size: 11pt;
+        font-weight: 600;
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 3mm;
+      }
+
+      .flow-steps {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+      }
+
+      .flow-step {
+        text-align: center;
+        flex: 1;
+        position: relative;
+      }
+
+      .step-icon {
+        width: 12mm;
+        height: 12mm;
+        background: linear-gradient(135deg, #00a651, #00d2d3);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1mm auto;
+        font-size: 10pt;
+        font-weight: 700;
+      }
+
+      .step-text {
+        font-size: 7pt;
+        font-weight: 600;
+        color: #2c3e50;
+        text-transform: uppercase;
+        line-height: 1.2;
+      }
+
+      .flow-arrow {
+        position: absolute;
+        top: 6mm;
+        font-size: 12pt;
+        color: #bdc3c7;
+        z-index: 1;
+      }
+
+      .arrow-1 {
+        left: 25%;
+      }
+      .arrow-2 {
+        left: 75%;
+      }
+
+      /* Call to action */
+      .cta-section {
+        background: linear-gradient(135deg, #ffd700, #f39c12);
+        padding: 4mm;
+        border-radius: 2mm;
+        text-align: center;
+        margin-bottom: 3mm;
+      }
+
+      .cta-title {
+        font-size: 14pt;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 2mm;
+      }
+
+      .qr-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 3mm;
+      }
+
+      .qr-placeholder {
+        width: 22mm;
+        height: 22mm;
+        background: white;
+        border: 2px solid #2c3e50;
+        border-radius: 2mm;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 7pt;
+        font-weight: 600;
+        color: #2c3e50;
+      }
+
+      .qr-info {
+        text-align: left;
+      }
+
+      .website {
+        font-size: 11pt;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 1mm;
+      }
+
+      .contact {
+        font-size: 8pt;
+        color: #6c757d;
+      }
+
+      /* Footer */
+      .footer {
+        margin-top: auto;
+        text-align: center;
+        padding-top: 2mm;
+        border-top: 1px solid #e9ecef;
+      }
+
+      .tagline {
+        font-size: 8pt;
+        color: #6c757d;
+        font-style: italic;
+      }
+
+      /* Data visualization elements */
+      .progress-bar {
+        width: 100%;
+        height: 4mm;
+        background: #e9ecef;
+        border-radius: 2mm;
+        overflow: hidden;
+        margin-top: 1mm;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #00a651, #00d2d3);
+        width: 83%;
+        border-radius: 2mm;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="infographic">
+      <div class="content-wrapper">
+        <!-- Header -->
+        <div class="header">
+          <div class="icon">🚗</div>
+          <div class="title">Traffic Crisis Analysis</div>
+          <div class="subtitle">Swanage Traffic Alliance</div>
+        </div>
+
+        <!-- Problem identification -->
+        <div class="problem-section">
+          <div class="problem-icon">⚠️</div>
+          <div class="problem-text">Traffic Chaos Affects Everyone</div>
+        </div>
+
+        <!-- Stats dashboard -->
+        <div class="stats-dashboard">
+          <div class="main-stat">
+            <div class="growth-indicator">📈 +15%</div>
+            <div class="stat-number">416</div>
+            <div class="stat-label">Active Members</div>
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+          </div>
+
+          <div class="secondary-stats">
+            <div class="mini-stat">
+              <div class="mini-number">1</div>
+              <div class="mini-label">Unified Voice</div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-number">100%</div>
+              <div class="mini-label">Community</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Process flow -->
+        <div class="process-flow">
+          <div class="flow-title">How We Create Change</div>
+          <div class="flow-steps">
+            <div class="flow-step">
+              <div class="step-icon">👂</div>
+              <div class="step-text">Listen to<br />Community</div>
+            </div>
+            <div class="flow-arrow arrow-1">→</div>
+            <div class="flow-step">
+              <div class="step-icon">📢</div>
+              <div class="step-text">Channel<br />Concerns</div>
+            </div>
+            <div class="flow-arrow arrow-2">→</div>
+            <div class="flow-step">
+              <div class="step-icon">⚡</div>
+              <div class="step-text">Drive<br />Action</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Call to action -->
+        <div class="cta-section">
+          <div class="cta-title">Join Our Data-Driven Movement</div>
+          <div class="qr-container">
+            <div class="qr-placeholder">SCAN<br />CODE</div>
+            <div class="qr-info">
+              <div class="website">swanagetraffic.org.uk</div>
+              <div class="contact">Admin@swanagetraffic.org.uk</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+          <div class="tagline">Together We Hold Power To Account</div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

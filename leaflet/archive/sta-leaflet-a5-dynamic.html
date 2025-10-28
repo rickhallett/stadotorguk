@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swanage Traffic Alliance - Dynamic Layout</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary-blue: #005bc5;
+        --highlight-green: #00a651;
+        --bold-yellow: #ffd700;
+        --soft-cream: #fff8dc;
+        --white: #ffffff;
+        --brutal-shadow: rgba(0, 91, 197, 0.3);
+      }
+
+      @media print {
+        @page {
+          size: A5;
+          margin: 0;
+        }
+
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
+      }
+
+      body {
+        font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+        background: var(--white);
+        color: var(--primary-blue);
+        width: 148mm;
+        height: 210mm;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .leaflet-container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        padding: 8mm;
+        background: var(--white);
+      }
+
+      /* Diagonal hero banner */
+      .hero-banner {
+        position: absolute;
+        top: 5mm;
+        left: -10mm;
+        right: -10mm;
+        height: 25mm;
+        background: var(--bold-yellow);
+        transform: rotate(-2deg);
+        border: 4px solid var(--primary-blue);
+        box-shadow: 3mm 3mm 0 var(--brutal-shadow);
+        z-index: 10;
+      }
+
+      .hero-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(2deg);
+        text-align: center;
+        color: var(--primary-blue);
+        width: 100%;
+      }
+
+      .hero-text {
+        font-size: 18pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: -0.3pt;
+        line-height: 0.9;
+      }
+
+      .hero-sub {
+        font-size: 9pt;
+        font-weight: 700;
+        margin-top: 1mm;
+        text-transform: uppercase;
+      }
+
+      /* Floating problem statement */
+      .problem-float {
+        position: absolute;
+        top: 35mm;
+        right: 8mm;
+        width: 50mm;
+        background: var(--primary-blue);
+        color: var(--white);
+        padding: 4mm 3mm;
+        border: 3px solid var(--primary-blue);
+        transform: rotate(1deg);
+        box-shadow: -2mm 2mm 0 var(--brutal-shadow);
+      }
+
+      .problem-text {
+        font-size: 12pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        line-height: 1;
+        text-align: center;
+      }
+
+      /* Organic stats cluster */
+      .stats-cluster {
+        position: absolute;
+        top: 55mm;
+        left: 12mm;
+        width: 70mm;
+      }
+
+      .stat-bubble {
+        position: absolute;
+        background: var(--soft-cream);
+        border: 3px solid var(--highlight-green);
+        border-radius: 50%;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .stat-main {
+        width: 35mm;
+        height: 35mm;
+        top: 0;
+        left: 0;
+        transform: rotate(-5deg);
+      }
+
+      .stat-secondary {
+        width: 25mm;
+        height: 25mm;
+        top: 15mm;
+        right: 0;
+        transform: rotate(8deg);
+        background: var(--highlight-green);
+        color: var(--white);
+        border-color: var(--primary-blue);
+      }
+
+      .stat-number {
+        font-size: 20pt;
+        font-weight: 900;
+        line-height: 0.8;
+      }
+
+      .stat-number-small {
+        font-size: 16pt;
+        font-weight: 900;
+        line-height: 0.8;
+      }
+
+      .stat-label {
+        font-size: 7pt;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-top: 1mm;
+        letter-spacing: 0.2pt;
+      }
+
+      /* Flowing solution text */
+      .solution-flow {
+        position: absolute;
+        top: 100mm;
+        left: 8mm;
+        right: 8mm;
+        text-align: center;
+      }
+
+      .solution-text {
+        font-size: 14pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: var(--highlight-green);
+        line-height: 1.1;
+        margin-bottom: 2mm;
+      }
+
+      .solution-sub {
+        font-size: 8pt;
+        font-weight: 600;
+        color: var(--primary-blue);
+        margin-bottom: 4mm;
+      }
+
+      /* Asymmetric QR section */
+      .qr-container {
+        position: absolute;
+        bottom: 25mm;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+      }
+
+      .join-text {
+        font-size: 24pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: var(--primary-blue);
+        margin-bottom: 3mm;
+        letter-spacing: -0.5pt;
+        transform: rotate(-1deg);
+      }
+
+      /* Massive central QR */
+      .qr-placeholder {
+        width: 45mm;
+        height: 45mm;
+        background: var(--white);
+        border: 4px solid var(--primary-blue);
+        margin: 0 auto 3mm auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10pt;
+        text-align: center;
+        color: var(--primary-blue);
+        font-weight: 900;
+        flex-direction: column;
+        gap: 1mm;
+        text-transform: uppercase;
+        box-shadow: 3mm 3mm 0 var(--brutal-shadow);
+        transform: rotate(2deg);
+      }
+
+      .qr-placeholder::before {
+        content: "📱";
+        font-size: 24pt;
+        display: block;
+      }
+
+      /* Scattered contact info */
+      .contact-left {
+        position: absolute;
+        bottom: 8mm;
+        left: 8mm;
+        background: var(--bold-yellow);
+        color: var(--primary-blue);
+        padding: 2mm 3mm;
+        border: 2px solid var(--primary-blue);
+        font-size: 10pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        transform: rotate(-2deg);
+      }
+
+      .contact-right {
+        position: absolute;
+        bottom: 8mm;
+        right: 8mm;
+        background: var(--highlight-green);
+        color: var(--white);
+        padding: 2mm 3mm;
+        border: 2px solid var(--primary-blue);
+        font-size: 8pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        transform: rotate(3deg);
+      }
+
+      /* Decorative elements */
+      .accent-stripe {
+        position: absolute;
+        width: 100%;
+        height: 4px;
+        background: var(--highlight-green);
+        transform: rotate(-1deg);
+      }
+
+      .stripe-1 {
+        top: 80mm;
+        left: -5mm;
+      }
+
+      .stripe-2 {
+        bottom: 50mm;
+        right: -5mm;
+        transform: rotate(2deg);
+        background: var(--bold-yellow);
+      }
+
+      /* Organic shapes for visual interest */
+      .shape-blob {
+        position: absolute;
+        background: var(--soft-cream);
+        opacity: 0.3;
+        border-radius: 50%;
+        z-index: -1;
+      }
+
+      .blob-1 {
+        width: 30mm;
+        height: 25mm;
+        top: 70mm;
+        right: 5mm;
+        transform: rotate(15deg);
+      }
+
+      .blob-2 {
+        width: 20mm;
+        height: 35mm;
+        bottom: 60mm;
+        left: 10mm;
+        transform: rotate(-20deg);
+      }
+
+      /* Print optimization */
+      @media print {
+        .hero-banner {
+          box-shadow: 2mm 2mm 0 var(--brutal-shadow);
+        }
+
+        .problem-float {
+          box-shadow: -1.5mm 1.5mm 0 var(--brutal-shadow);
+        }
+
+        .qr-placeholder {
+          box-shadow: 2mm 2mm 0 var(--brutal-shadow);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="leaflet-container">
+      <!-- Background decorative elements -->
+      <div class="shape-blob blob-1"></div>
+      <div class="shape-blob blob-2"></div>
+      <div class="accent-stripe stripe-1"></div>
+      <div class="accent-stripe stripe-2"></div>
+
+      <!-- Diagonal hero banner -->
+      <div class="hero-banner">
+        <div class="hero-content">
+          <div class="hero-text">Your Voice<br />Matters</div>
+          <div class="hero-sub">Swanage Traffic Alliance</div>
+        </div>
+      </div>
+
+      <!-- Floating problem statement -->
+      <div class="problem-float">
+        <div class="problem-text">Enough<br />Traffic<br />Chaos</div>
+      </div>
+
+      <!-- Organic stats cluster -->
+      <div class="stats-cluster">
+        <div class="stat-bubble stat-main">
+          <span class="stat-number">416</span>
+          <div class="stat-label">Strong</div>
+        </div>
+        <div class="stat-bubble stat-secondary">
+          <span class="stat-number-small">1</span>
+          <div class="stat-label">Voice</div>
+        </div>
+      </div>
+
+      <!-- Flowing solution text -->
+      <div class="solution-flow">
+        <div class="solution-text">We Listen.<br />We Act.</div>
+        <div class="solution-sub">Community-powered change for Swanage</div>
+      </div>
+
+      <!-- Central QR section -->
+      <div class="qr-container">
+        <div class="join-text">Join Us</div>
+        <div class="qr-placeholder">
+          <span>Scan<br />Now</span>
+        </div>
+      </div>
+
+      <!-- Scattered contact info -->
+      <div class="contact-left">swanagetraffic.org.uk</div>
+      <div class="contact-right">Admin@<br />swanagetraffic<br />.org.uk</div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swanage Traffic Alliance - Minimalist Typography Evolution</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @media print {
+        @page {
+          size: A5;
+          margin: 0;
+        }
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
+      }
+
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background: #ffffff;
+        color: #005bc5;
+        width: 148mm;
+        height: 210mm;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .container {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+        grid-template-rows: 1fr 2fr 3fr 2fr 1fr;
+        padding: 12mm;
+        gap: 0;
+      }
+
+      .header {
+        grid-column: 2;
+        grid-row: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo {
+        font-size: 7pt;
+        font-weight: 200;
+        letter-spacing: 3pt;
+        text-transform: uppercase;
+        color: #999;
+        position: relative;
+      }
+
+      .logo::after {
+        content: "COMMUNITY VOICE";
+        position: absolute;
+        top: 3mm;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 5pt;
+        font-weight: 100;
+        letter-spacing: 1pt;
+        color: #ccc;
+        white-space: nowrap;
+      }
+
+      .headline {
+        grid-column: 2;
+        grid-row: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+      }
+
+      .headline-container {
+        position: relative;
+      }
+
+      .headline h1 {
+        font-size: 36pt;
+        font-weight: 100;
+        line-height: 0.9;
+        letter-spacing: -1pt;
+        position: relative;
+      }
+
+      .headline-accent {
+        position: absolute;
+        font-size: 12pt;
+        font-weight: 700;
+        color: #005bc5;
+        text-transform: uppercase;
+        letter-spacing: 2pt;
+      }
+
+      .accent-top {
+        top: -4mm;
+        right: 0;
+        font-size: 8pt;
+        color: #666;
+      }
+
+      .accent-bottom {
+        bottom: -4mm;
+        left: 0;
+        font-size: 10pt;
+        color: #005bc5;
+        opacity: 0.7;
+      }
+
+      .content {
+        grid-column: 2;
+        grid-row: 3;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+        position: relative;
+      }
+
+      .statement-container {
+        position: relative;
+        margin-bottom: 8mm;
+      }
+
+      .statement-label {
+        font-size: 6pt;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1.5pt;
+        color: #999;
+        margin-bottom: 2mm;
+      }
+
+      .statement {
+        font-size: 13pt;
+        font-weight: 300;
+        line-height: 1.5;
+        color: #333;
+        position: relative;
+      }
+
+      .statement-emphasis {
+        font-weight: 500;
+        color: #005bc5;
+      }
+
+      .stats-section {
+        position: relative;
+      }
+
+      .stats-label-top {
+        font-size: 6pt;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1.5pt;
+        color: #999;
+        margin-bottom: 2mm;
+      }
+
+      .stats {
+        font-size: 56pt;
+        font-weight: 100;
+        color: #005bc5;
+        line-height: 0.8;
+        letter-spacing: -2pt;
+        position: relative;
+        margin-bottom: 1mm;
+      }
+
+      .stats-qualifier {
+        position: absolute;
+        top: 0;
+        right: -8mm;
+        font-size: 12pt;
+        font-weight: 300;
+        color: #666;
+        transform: rotate(90deg);
+        transform-origin: left center;
+      }
+
+      .stats-label {
+        font-size: 8pt;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #666;
+        margin-top: 1mm;
+        position: relative;
+      }
+
+      .stats-sublabel {
+        font-size: 6pt;
+        font-weight: 200;
+        color: #999;
+        margin-top: 1mm;
+        letter-spacing: 0.5pt;
+      }
+
+      .action {
+        grid-column: 2;
+        grid-row: 4;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+      }
+
+      .action-label {
+        font-size: 6pt;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1.5pt;
+        color: #999;
+        margin-bottom: 3mm;
+      }
+
+      .qr-container {
+        margin-bottom: 4mm;
+        position: relative;
+      }
+
+      .qr-placeholder {
+        width: 30mm;
+        height: 30mm;
+        border: 1px solid #005bc5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 7pt;
+        font-weight: 300;
+        color: #666;
+        margin-bottom: 3mm;
+        letter-spacing: 0.5pt;
+      }
+
+      .contact-section {
+        position: relative;
+      }
+
+      .website {
+        font-size: 12pt;
+        font-weight: 400;
+        color: #005bc5;
+        margin-bottom: 2mm;
+        letter-spacing: -0.2pt;
+      }
+
+      .contact-label {
+        font-size: 5pt;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #ccc;
+        margin-bottom: 1mm;
+      }
+
+      .contact {
+        font-size: 8pt;
+        font-weight: 300;
+        color: #666;
+        letter-spacing: 0.2pt;
+      }
+
+      .footer {
+        grid-column: 1 / -1;
+        grid-row: 5;
+        display: flex;
+        align-items: end;
+        justify-content: center;
+        text-align: center;
+        border-top: 1px solid #005bc5;
+        padding-top: 3mm;
+        position: relative;
+      }
+
+      .footer::before {
+        content: "MISSION STATEMENT";
+        position: absolute;
+        top: -2mm;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 5pt;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #ccc;
+        background: #ffffff;
+        padding: 0 2mm;
+      }
+
+      .tagline {
+        font-size: 9pt;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #666;
+        position: relative;
+      }
+
+      .tagline-emphasis {
+        font-weight: 500;
+        color: #005bc5;
+      }
+
+      /* Typography rhythm lines */
+      .rhythm-line {
+        position: absolute;
+        height: 1px;
+        background: #005bc5;
+        opacity: 0.05;
+        left: 0;
+        right: 0;
+      }
+
+      .line-1 {
+        top: 25%;
+      }
+      .line-2 {
+        top: 50%;
+      }
+      .line-3 {
+        top: 75%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Typography rhythm lines -->
+      <div class="rhythm-line line-1"></div>
+      <div class="rhythm-line line-2"></div>
+      <div class="rhythm-line line-3"></div>
+
+      <div class="header">
+        <div class="logo">Swanage Traffic Alliance</div>
+      </div>
+
+      <div class="headline">
+        <div class="headline-container">
+          <div class="headline-accent accent-top">URGENT</div>
+          <h1>Your Voice<br />Matters</h1>
+          <div class="headline-accent accent-bottom">NOW</div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="statement-container">
+          <div class="statement-label">Our Mission</div>
+          <div class="statement">
+            <span class="statement-emphasis">Community-powered</span> group
+            amplifying voices on traffic and
+            <span class="statement-emphasis">council accountability</span>.
+          </div>
+        </div>
+
+        <div class="stats-section">
+          <div class="stats-label-top">Current Membership</div>
+          <div class="stats">
+            416
+            <div class="stats-qualifier">ACTIVE</div>
+          </div>
+          <div class="stats-label">Members Strong</div>
+          <div class="stats-sublabel">Growing daily • United voice</div>
+        </div>
+      </div>
+
+      <div class="action">
+        <div class="action-label">Join the Movement</div>
+        <div class="qr-container">
+          <div class="qr-placeholder">QR CODE</div>
+        </div>
+        <div class="contact-section">
+          <div class="website">swanagetraffic.org.uk</div>
+          <div class="contact-label">Direct Contact</div>
+          <div class="contact">Admin@swanagetraffic.org.uk</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="tagline">
+          Together We <span class="tagline-emphasis">Hold Power</span> To
+          Account
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

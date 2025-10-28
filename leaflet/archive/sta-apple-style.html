@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swanage Traffic Alliance - Apple Launch Style</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @media print {
+        @page {
+          size: A5;
+          margin: 0;
+        }
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: #ffffff;
+        color: #1d1d1f;
+        width: 148mm;
+        height: 210mm;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 15mm 12mm;
+        justify-content: space-between;
+      }
+
+      /* Massive hero with generous whitespace */
+      .hero-section {
+        text-align: center;
+        margin-top: 8mm;
+      }
+
+      .overline {
+        font-size: 9pt;
+        font-weight: 400;
+        color: #86868b;
+        letter-spacing: 0.5pt;
+        text-transform: uppercase;
+        margin-bottom: 3mm;
+      }
+
+      .hero-headline {
+        font-size: 42pt;
+        font-weight: 600;
+        line-height: 0.95;
+        letter-spacing: -1pt;
+        color: #1d1d1f;
+        margin-bottom: 6mm;
+      }
+
+      .hero-subtext {
+        font-size: 16pt;
+        font-weight: 400;
+        color: #424245;
+        line-height: 1.3;
+        max-width: 80mm;
+        margin: 0 auto;
+      }
+
+      /* Clean feature highlight */
+      .feature-section {
+        text-align: center;
+        margin: 12mm 0;
+      }
+
+      .feature-statement {
+        font-size: 20pt;
+        font-weight: 500;
+        color: #005bc5;
+        line-height: 1.2;
+        margin-bottom: 8mm;
+      }
+
+      .feature-description {
+        font-size: 12pt;
+        font-weight: 400;
+        color: #6e6e73;
+        line-height: 1.4;
+        max-width: 70mm;
+        margin: 0 auto;
+      }
+
+      /* Apple-style CTA section */
+      .cta-section {
+        text-align: center;
+        margin-top: 8mm;
+      }
+
+      .cta-pretext {
+        font-size: 10pt;
+        font-weight: 400;
+        color: #86868b;
+        margin-bottom: 4mm;
+      }
+
+      .qr-container {
+        margin-bottom: 6mm;
+      }
+
+      .qr-placeholder {
+        width: 35mm;
+        height: 35mm;
+        background: #f5f5f7;
+        border-radius: 6mm;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 8pt;
+        font-weight: 500;
+        color: #86868b;
+        letter-spacing: 0.3pt;
+      }
+
+      .primary-link {
+        font-size: 14pt;
+        font-weight: 500;
+        color: #005bc5;
+        text-decoration: none;
+        margin-bottom: 2mm;
+        display: block;
+      }
+
+      .secondary-text {
+        font-size: 9pt;
+        font-weight: 400;
+        color: #86868b;
+      }
+
+      /* Minimal footer */
+      .footer {
+        text-align: center;
+        margin-top: auto;
+        padding-top: 8mm;
+        border-top: 0.5px solid #d2d2d7;
+      }
+
+      .footer-text {
+        font-size: 8pt;
+        font-weight: 400;
+        color: #86868b;
+        letter-spacing: 0.2pt;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="hero-section">
+        <div class="overline">Swanage Traffic Alliance</div>
+        <h1 class="hero-headline">Your Voice<br />Matters</h1>
+        <div class="hero-subtext">
+          Community-powered advocacy for traffic accountability.
+        </div>
+      </div>
+
+      <div class="feature-section">
+        <div class="feature-statement">We Listen. We Act.</div>
+        <div class="feature-description">
+          Amplifying community voices to create meaningful change through
+          organized action.
+        </div>
+      </div>
+
+      <div class="cta-section">
+        <div class="cta-pretext">Join the movement</div>
+        <div class="qr-container">
+          <div class="qr-placeholder">QR CODE</div>
+        </div>
+        <a href="#" class="primary-link">swanagetraffic.org.uk</a>
+        <div class="secondary-text">Admin@swanagetraffic.org.uk</div>
+      </div>
+
+      <div class="footer">
+        <div class="footer-text">Together We Hold Power To Account</div>
+      </div>
+    </div>
+  </body>
+</html>

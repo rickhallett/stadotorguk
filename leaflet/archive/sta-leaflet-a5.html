@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swanage Traffic Alliance - Community Leaflet</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary-blue: #005bc5;
+        --highlight-green: #00a651;
+        --bold-yellow: #ffd700;
+        --soft-cream: #fff8dc;
+        --white: #ffffff;
+        --brutal-shadow: rgba(0, 91, 197, 0.3);
+      }
+
+      @media print {
+        @page {
+          size: A5;
+          margin: 0;
+        }
+
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
+      }
+
+      body {
+        font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+        background: var(--white);
+        color: var(--primary-blue);
+        width: 148mm;
+        height: 210mm;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .leaflet-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 8mm;
+        background: var(--white);
+      }
+
+      /* Header with logo area */
+      .header {
+        background: var(--primary-blue);
+        color: var(--white);
+        padding: 4mm 3mm;
+        margin-bottom: 3mm;
+        border: 2px solid var(--primary-blue);
+        position: relative;
+      }
+
+      .header::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--highlight-green);
+      }
+
+      .logo-text {
+        font-size: 16pt;
+        font-weight: 900;
+        letter-spacing: -0.5pt;
+        text-transform: uppercase;
+        text-align: center;
+      }
+
+      .tagline {
+        font-size: 8pt;
+        font-weight: 400;
+        text-align: center;
+        margin-top: 1mm;
+        opacity: 0.9;
+      }
+
+      /* Main headline */
+      .headline {
+        background: var(--bold-yellow);
+        color: var(--primary-blue);
+        padding: 3mm;
+        margin-bottom: 3mm;
+        text-align: center;
+        border: 2px solid var(--primary-blue);
+        box-shadow: 3mm 3mm 0 var(--brutal-shadow);
+      }
+
+      .headline h1 {
+        font-size: 18pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: -0.3pt;
+        line-height: 1.1;
+      }
+
+      /* Content sections */
+      .content-section {
+        margin-bottom: 3mm;
+        flex: 1;
+      }
+
+      .intro-text {
+        background: var(--soft-cream);
+        border-left: 4mm solid var(--highlight-green);
+        padding: 3mm;
+        margin-bottom: 3mm;
+      }
+
+      .intro-text p {
+        font-size: 10pt;
+        line-height: 1.4;
+        font-weight: 700;
+      }
+
+      .stats-highlight {
+        background: var(--primary-blue);
+        color: var(--white);
+        padding: 2mm 3mm;
+        text-align: center;
+        margin: 2mm 0;
+        border: 2px solid var(--primary-blue);
+      }
+
+      .stats-number {
+        font-size: 24pt;
+        font-weight: 900;
+        color: var(--bold-yellow);
+        display: block;
+      }
+
+      .stats-label {
+        font-size: 8pt;
+        text-transform: uppercase;
+        letter-spacing: 0.5pt;
+        margin-top: 1mm;
+      }
+
+      /* Action items */
+      .action-list {
+        list-style: none;
+        margin: 3mm 0;
+      }
+
+      .action-list li {
+        background: var(--white);
+        border: 2px solid var(--primary-blue);
+        padding: 2mm 3mm;
+        margin-bottom: 2mm;
+        position: relative;
+        font-size: 9pt;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+
+      .action-list li::before {
+        content: "→";
+        color: var(--highlight-green);
+        font-weight: 900;
+        font-size: 12pt;
+        margin-right: 2mm;
+      }
+
+      /* Call to action */
+      .cta-section {
+        background: var(--highlight-green);
+        color: var(--white);
+        padding: 3mm;
+        text-align: center;
+        border: 2px solid var(--primary-blue);
+        box-shadow: 2mm 2mm 0 var(--brutal-shadow);
+      }
+
+      .cta-title {
+        font-size: 14pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin-bottom: 2mm;
+      }
+
+      .website {
+        font-size: 11pt;
+        font-weight: 900;
+        background: var(--white);
+        color: var(--primary-blue);
+        padding: 1mm 2mm;
+        display: inline-block;
+        margin: 1mm 0;
+        border: 1px solid var(--primary-blue);
+      }
+
+      .contact-info {
+        font-size: 8pt;
+        margin-top: 2mm;
+        opacity: 0.9;
+      }
+
+      /* QR Code placeholder */
+      .qr-placeholder {
+        width: 20mm;
+        height: 20mm;
+        background: var(--white);
+        border: 2px solid var(--primary-blue);
+        margin: 2mm auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 6pt;
+        text-align: center;
+        color: var(--primary-blue);
+        font-weight: 700;
+      }
+
+      /* Footer */
+      .footer {
+        background: var(--primary-blue);
+        color: var(--white);
+        padding: 2mm 3mm;
+        text-align: center;
+        margin-top: auto;
+        border: 2px solid var(--primary-blue);
+      }
+
+      .footer-quote {
+        font-size: 10pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        font-style: italic;
+      }
+
+      /* Print optimization */
+      @media print {
+        .leaflet-container {
+          padding: 5mm;
+        }
+
+        .headline {
+          box-shadow: 2mm 2mm 0 var(--brutal-shadow);
+        }
+
+        .cta-section {
+          box-shadow: 1.5mm 1.5mm 0 var(--brutal-shadow);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="leaflet-container">
+      <!-- Header -->
+      <div class="header">
+        <div class="logo-text">Swanage Traffic Alliance</div>
+        <div class="tagline">Community-Powered. Data-Driven.</div>
+      </div>
+
+      <!-- Main Headline -->
+      <div class="headline">
+        <h1>Your Road. Your Voice.<br />Make It Count.</h1>
+      </div>
+
+      <!-- Introduction -->
+      <div class="content-section">
+        <div class="intro-text">
+          <p>
+            <strong>We are Swanage Traffic Alliance:</strong> a
+            community-powered group amplifying your voice on parking, traffic
+            woes, and the fair use of council highway funds.
+          </p>
+        </div>
+
+        <div class="stats-highlight">
+          <span class="stats-number">416</span>
+          <div class="stats-label">Strong—and Growing</div>
+        </div>
+
+        <p
+          style="
+            font-size: 9pt;
+            line-height: 1.4;
+            margin-bottom: 3mm;
+            font-weight: 600;
+          "
+        >
+          We bring together locals, tracking council actions, pushing for
+          clarity, and driving change.
+        </p>
+      </div>
+
+      <!-- Action Items -->
+      <div class="content-section">
+        <h2
+          style="
+            font-size: 12pt;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 2mm;
+            color: var(--primary-blue);
+          "
+        >
+          Here's How to Get Involved:
+        </h2>
+
+        <ul class="action-list">
+          <li>
+            <strong>Stay in the loop:</strong> Get regular updates on what's
+            happening locally—news, decisions, progress.
+          </li>
+          <li>
+            <strong>Stay heard:</strong> Your messages reach SPC via us. We
+            channel community concerns into meaningful accountability.
+          </li>
+          <li>
+            <strong>Stand together:</strong> Join the Alliance and add strength
+            to your voice.
+          </li>
+        </ul>
+      </div>
+
+      <!-- Call to Action -->
+      <div class="cta-section">
+        <div class="cta-title">Join Now</div>
+
+        <div class="qr-placeholder">QR CODE<br />PLACEHOLDER</div>
+
+        <div class="website">swanagetraffic.org.uk</div>
+
+        <div class="contact-info">
+          Admin@swanagetraffic.org.uk<br />
+          Get in touch and be part of the change.
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <div class="footer-quote">
+          "Together, we hold decisions to account."
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

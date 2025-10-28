@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swanage Traffic Alliance - Concert Poster Style</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @media print {
+        @page {
+          size: A5;
+          margin: 0;
+        }
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
+      }
+
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background: #000000;
+        color: #ffffff;
+        width: 148mm;
+        height: 210mm;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .poster {
+        width: 100%;
+        height: 100%;
+        padding: 12mm;
+        display: flex;
+        flex-direction: column;
+        background: radial-gradient(
+          ellipse at center,
+          #1a1a2e 0%,
+          #000000 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Concert poster lighting effects */
+      .poster::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+            circle at 30% 20%,
+            rgba(0, 91, 197, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 70% 80%,
+            rgba(255, 215, 0, 0.05) 0%,
+            transparent 50%
+          );
+        animation: subtle-pulse 8s ease-in-out infinite alternate;
+        z-index: -1;
+      }
+
+      @keyframes subtle-pulse {
+        0% {
+          opacity: 0.3;
+        }
+        100% {
+          opacity: 0.6;
+        }
+      }
+
+      /* Venue/Date header */
+      .venue-info {
+        text-align: center;
+        margin-bottom: 15mm;
+        border-bottom: 2px solid #333;
+        padding-bottom: 3mm;
+      }
+
+      .venue-name {
+        font-size: 8pt;
+        font-weight: 700;
+        letter-spacing: 2pt;
+        text-transform: uppercase;
+        color: #ffd700;
+        margin-bottom: 1mm;
+      }
+
+      .event-date {
+        font-size: 6pt;
+        font-weight: 400;
+        color: #ccc;
+        letter-spacing: 1pt;
+        text-transform: uppercase;
+      }
+
+      /* Main act - huge typography */
+      .main-act {
+        text-align: center;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 10mm 0;
+      }
+
+      .headline-act {
+        font-size: 54pt;
+        font-weight: 900;
+        line-height: 0.85;
+        letter-spacing: -2pt;
+        text-transform: uppercase;
+        color: #ffffff;
+        margin-bottom: 8mm;
+        text-shadow: 3px 3px 0px rgba(0, 91, 197, 0.5);
+      }
+
+      .act-accent {
+        color: #ffd700;
+        text-shadow: 3px 3px 0px rgba(255, 215, 0, 0.5);
+      }
+
+      /* Support act */
+      .support-info {
+        text-align: center;
+        margin-bottom: 15mm;
+      }
+
+      .support-label {
+        font-size: 7pt;
+        font-weight: 500;
+        letter-spacing: 1pt;
+        text-transform: uppercase;
+        color: #888;
+        margin-bottom: 2mm;
+      }
+
+      .support-act {
+        font-size: 18pt;
+        font-weight: 700;
+        letter-spacing: 1pt;
+        text-transform: uppercase;
+        color: #005bc5;
+        text-shadow: 2px 2px 0px rgba(0, 91, 197, 0.3);
+      }
+
+      .support-description {
+        font-size: 11pt;
+        font-weight: 400;
+        color: #ccc;
+        margin-top: 3mm;
+        line-height: 1.4;
+        max-width: 70mm;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* Ticket info section */
+      .ticket-section {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid #333;
+        padding: 6mm;
+        margin: 8mm 0;
+        text-align: center;
+        position: relative;
+      }
+
+      .ticket-section::before {
+        content: "TICKETS";
+        position: absolute;
+        top: -1mm;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #000000;
+        color: #ffd700;
+        font-size: 6pt;
+        font-weight: 700;
+        letter-spacing: 1pt;
+        padding: 0 2mm;
+      }
+
+      .ticket-info {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6mm;
+        margin-top: 2mm;
+      }
+
+      .qr-placeholder {
+        width: 28mm;
+        height: 28mm;
+        background: #ffffff;
+        color: #000000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 7pt;
+        font-weight: 700;
+        letter-spacing: 0.5pt;
+        border: 2px solid #ffd700;
+        position: relative;
+      }
+
+      .qr-placeholder::after {
+        content: "SCAN";
+        position: absolute;
+        bottom: -4mm;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 5pt;
+        font-weight: 700;
+        color: #ffd700;
+        letter-spacing: 1pt;
+      }
+
+      .ticket-details {
+        text-align: left;
+      }
+
+      .ticket-price {
+        font-size: 14pt;
+        font-weight: 900;
+        color: #ffd700;
+        margin-bottom: 2mm;
+        text-transform: uppercase;
+      }
+
+      .ticket-outlet {
+        font-size: 9pt;
+        font-weight: 400;
+        color: #ffffff;
+        margin-bottom: 1mm;
+      }
+
+      .ticket-contact {
+        font-size: 7pt;
+        font-weight: 400;
+        color: #ccc;
+      }
+
+      /* Venue footer */
+      .venue-footer {
+        text-align: center;
+        border-top: 2px solid #333;
+        padding-top: 4mm;
+        margin-top: auto;
+      }
+
+      .venue-quote {
+        font-size: 10pt;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 2mm;
+        text-transform: uppercase;
+        letter-spacing: 0.5pt;
+      }
+
+      .venue-details {
+        font-size: 6pt;
+        font-weight: 400;
+        color: #666;
+        letter-spacing: 0.5pt;
+        text-transform: uppercase;
+      }
+
+      /* Stage lighting effects */
+      .light-beam {
+        position: absolute;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(255, 215, 0, 0.1),
+          transparent
+        );
+        pointer-events: none;
+        opacity: 0.6;
+      }
+
+      .beam-1 {
+        top: 0;
+        left: 20%;
+        width: 60mm;
+        height: 80mm;
+        transform: rotate(15deg);
+      }
+
+      .beam-2 {
+        bottom: 0;
+        right: 15%;
+        width: 40mm;
+        height: 60mm;
+        transform: rotate(-25deg);
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(0, 91, 197, 0.1),
+          transparent
+        );
+      }
+    </style>
+  </head>
+  <body>
+    <div class="poster">
+      <!-- Stage lighting effects -->
+      <div class="light-beam beam-1"></div>
+      <div class="light-beam beam-2"></div>
+
+      <div class="venue-info">
+        <div class="venue-name">Swanage Traffic Alliance</div>
+        <div class="event-date">Live • 2024 • Community Action</div>
+      </div>
+
+      <div class="main-act">
+        <h1 class="headline-act">
+          Your <span class="act-accent">Voice</span><br />
+          Matters
+        </h1>
+      </div>
+
+      <div class="support-info">
+        <div class="support-label">Featuring</div>
+        <div class="support-act">Community Power</div>
+        <div class="support-description">
+          Amplifying local voices through organized advocacy and transparent
+          action.
+        </div>
+      </div>
+
+      <div class="ticket-section">
+        <div class="ticket-info">
+          <div class="qr-placeholder">QR<br />CODE</div>
+          <div class="ticket-details">
+            <div class="ticket-price">Free Entry</div>
+            <div class="ticket-outlet">swanagetraffic.org.uk</div>
+            <div class="ticket-contact">Admin@swanagetraffic.org.uk</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="venue-footer">
+        <div class="venue-quote">Together We Hold Power To Account</div>
+        <div class="venue-details">All Ages Welcome • Community Event</div>
+      </div>
+    </div>
+  </body>
+</html>

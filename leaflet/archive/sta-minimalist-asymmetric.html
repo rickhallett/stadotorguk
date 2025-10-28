@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swanage Traffic Alliance - Minimalist Asymmetric Evolution</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @media print {
+        @page {
+          size: A5;
+          margin: 0;
+        }
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
+      }
+
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background: #ffffff;
+        color: #005bc5;
+        width: 148mm;
+        height: 210mm;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .container {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 2fr 5fr 1fr;
+        grid-template-rows: 1fr 3fr 4fr 3fr 1fr;
+        padding: 12mm;
+        gap: 0;
+        position: relative;
+      }
+
+      /* Asymmetric grid lines */
+      .grid-line {
+        position: absolute;
+        background: #005bc5;
+        opacity: 0.03;
+        z-index: -1;
+      }
+
+      .vertical-line {
+        width: 1px;
+        top: 0;
+        bottom: 0;
+      }
+
+      .horizontal-line {
+        height: 1px;
+        left: 0;
+        right: 0;
+      }
+
+      .v-line-1 {
+        left: 25%;
+      }
+      .v-line-2 {
+        left: 70%;
+      }
+      .h-line-1 {
+        top: 20%;
+      }
+      .h-line-2 {
+        top: 65%;
+      }
+
+      .header {
+        grid-column: 1 / 3;
+        grid-row: 1;
+        display: flex;
+        align-items: end;
+        justify-content: flex-start;
+        padding-left: 3mm;
+      }
+
+      .logo {
+        font-size: 8pt;
+        font-weight: 300;
+        letter-spacing: 2pt;
+        text-transform: uppercase;
+        color: #666;
+        writing-mode: horizontal-tb;
+      }
+
+      .headline {
+        grid-column: 2;
+        grid-row: 2;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        text-align: left;
+        padding-left: 8mm;
+      }
+
+      .headline h1 {
+        font-size: 38pt;
+        font-weight: 100;
+        line-height: 0.9;
+        letter-spacing: -0.8pt;
+      }
+
+      .content {
+        grid-column: 1;
+        grid-row: 3;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: left;
+        padding-right: 5mm;
+      }
+
+      .statement {
+        font-size: 11pt;
+        font-weight: 300;
+        line-height: 1.6;
+        text-align: justify;
+        hyphens: auto;
+      }
+
+      .stats-area {
+        grid-column: 2 / 4;
+        grid-row: 3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .stats-container {
+        text-align: center;
+        position: relative;
+      }
+
+      .stats {
+        font-size: 72pt;
+        font-weight: 100;
+        color: #005bc5;
+        line-height: 0.7;
+        letter-spacing: -3pt;
+      }
+
+      .stats-label {
+        font-size: 9pt;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #666;
+        margin-top: 3mm;
+        position: relative;
+      }
+
+      .stats-label::before {
+        content: "";
+        position: absolute;
+        top: -1mm;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20mm;
+        height: 1px;
+        background: #005bc5;
+        opacity: 0.2;
+      }
+
+      .action {
+        grid-column: 1 / 3;
+        grid-row: 4;
+        display: flex;
+        align-items: center;
+        gap: 8mm;
+        padding-left: 3mm;
+      }
+
+      .qr-container {
+        flex-shrink: 0;
+      }
+
+      .qr-placeholder {
+        width: 25mm;
+        height: 25mm;
+        border: 1px solid #005bc5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 7pt;
+        font-weight: 300;
+        color: #666;
+      }
+
+      .contact-info {
+        flex: 1;
+        text-align: left;
+      }
+
+      .contact-label {
+        font-size: 6pt;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #999;
+        margin-bottom: 2mm;
+      }
+
+      .website {
+        font-size: 14pt;
+        font-weight: 400;
+        color: #005bc5;
+        margin-bottom: 2mm;
+        letter-spacing: -0.3pt;
+      }
+
+      .contact {
+        font-size: 8pt;
+        font-weight: 300;
+        color: #666;
+        line-height: 1.4;
+      }
+
+      .footer {
+        grid-column: 3;
+        grid-row: 4 / 6;
+        display: flex;
+        align-items: end;
+        justify-content: center;
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        padding-bottom: 8mm;
+      }
+
+      .tagline {
+        font-size: 8pt;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #666;
+      }
+
+      /* Asymmetric accent elements */
+      .accent-dot {
+        position: absolute;
+        width: 3mm;
+        height: 3mm;
+        background: #005bc5;
+        border-radius: 50%;
+        opacity: 0.2;
+      }
+
+      .dot-1 {
+        top: 30mm;
+        right: 25mm;
+      }
+
+      .dot-2 {
+        bottom: 45mm;
+        left: 18mm;
+        width: 2mm;
+        height: 2mm;
+      }
+
+      .accent-line {
+        position: absolute;
+        background: #005bc5;
+        opacity: 0.1;
+      }
+
+      .line-diagonal {
+        top: 25mm;
+        left: 35mm;
+        width: 30mm;
+        height: 1px;
+        transform: rotate(15deg);
+      }
+
+      .line-short {
+        bottom: 35mm;
+        right: 15mm;
+        width: 15mm;
+        height: 1px;
+      }
+
+      /* Offset content blocks */
+      .content-offset {
+        position: relative;
+      }
+
+      .content-offset::before {
+        content: "";
+        position: absolute;
+        left: -2mm;
+        top: -2mm;
+        bottom: -2mm;
+        width: 1px;
+        background: #005bc5;
+        opacity: 0.1;
+      }
+
+      .stats-offset {
+        position: relative;
+      }
+
+      .stats-offset::after {
+        content: "";
+        position: absolute;
+        right: -3mm;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1px;
+        height: 40mm;
+        background: #005bc5;
+        opacity: 0.1;
+      }
+
+      .action-offset {
+        position: relative;
+      }
+
+      .action-offset::before {
+        content: "";
+        position: absolute;
+        top: -3mm;
+        left: 0;
+        right: 20mm;
+        height: 1px;
+        background: #005bc5;
+        opacity: 0.1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Asymmetric grid lines -->
+      <div class="grid-line vertical-line v-line-1"></div>
+      <div class="grid-line vertical-line v-line-2"></div>
+      <div class="grid-line horizontal-line h-line-1"></div>
+      <div class="grid-line horizontal-line h-line-2"></div>
+
+      <!-- Accent elements -->
+      <div class="accent-dot dot-1"></div>
+      <div class="accent-dot dot-2"></div>
+      <div class="accent-line line-diagonal"></div>
+      <div class="accent-line line-short"></div>
+
+      <div class="header">
+        <div class="logo">Swanage Traffic Alliance</div>
+      </div>
+
+      <div class="headline">
+        <h1>Your Voice<br />Matters</h1>
+      </div>
+
+      <div class="content content-offset">
+        <div class="statement">
+          Community-powered group amplifying voices on traffic and council
+          accountability. We channel concerns into meaningful action through
+          organized advocacy.
+        </div>
+      </div>
+
+      <div class="stats-area">
+        <div class="stats-container stats-offset">
+          <div class="stats">416</div>
+          <div class="stats-label">Members Strong</div>
+        </div>
+      </div>
+
+      <div class="action action-offset">
+        <div class="qr-container">
+          <div class="qr-placeholder">QR CODE</div>
+        </div>
+        <div class="contact-info">
+          <div class="contact-label">Connect With Us</div>
+          <div class="website">swanagetraffic.org.uk</div>
+          <div class="contact">Admin@swanagetraffic.org.uk</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="tagline">Together We Hold Power To Account</div>
+      </div>
+    </div>
+  </body>
+</html>

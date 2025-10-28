@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swanage Traffic Alliance - Minimalist Design</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @media print {
+        @page {
+          size: A5;
+          margin: 0;
+        }
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
+      }
+
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background: #ffffff;
+        color: #005bc5;
+        width: 148mm;
+        height: 210mm;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .container {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+        grid-template-rows: 1fr 2fr 3fr 2fr 1fr;
+        padding: 12mm;
+        gap: 0;
+      }
+
+      .header {
+        grid-column: 2;
+        grid-row: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo {
+        font-size: 8pt;
+        font-weight: 300;
+        letter-spacing: 2pt;
+        text-transform: uppercase;
+        color: #666;
+      }
+
+      .headline {
+        grid-column: 2;
+        grid-row: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .headline h1 {
+        font-size: 32pt;
+        font-weight: 100;
+        line-height: 1.1;
+        letter-spacing: -0.5pt;
+      }
+
+      .content {
+        grid-column: 2;
+        grid-row: 3;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+      }
+
+      .statement {
+        font-size: 14pt;
+        font-weight: 300;
+        line-height: 1.4;
+        margin-bottom: 8mm;
+      }
+
+      .stats {
+        font-size: 48pt;
+        font-weight: 100;
+        color: #005bc5;
+        margin: 6mm 0;
+        letter-spacing: -1pt;
+      }
+
+      .stats-label {
+        font-size: 9pt;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #666;
+        margin-top: 2mm;
+      }
+
+      .action {
+        grid-column: 2;
+        grid-row: 4;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .qr-container {
+        margin-bottom: 4mm;
+      }
+
+      .qr-placeholder {
+        width: 30mm;
+        height: 30mm;
+        border: 1px solid #005bc5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 8pt;
+        font-weight: 300;
+        color: #666;
+        margin-bottom: 3mm;
+      }
+
+      .website {
+        font-size: 11pt;
+        font-weight: 400;
+        color: #005bc5;
+        margin-bottom: 2mm;
+      }
+
+      .contact {
+        font-size: 8pt;
+        font-weight: 300;
+        color: #666;
+      }
+
+      .footer {
+        grid-column: 1 / -1;
+        grid-row: 5;
+        display: flex;
+        align-items: end;
+        justify-content: center;
+        text-align: center;
+        border-top: 1px solid #005bc5;
+        padding-top: 3mm;
+      }
+
+      .tagline {
+        font-size: 9pt;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="logo">Swanage Traffic Alliance</div>
+      </div>
+
+      <div class="headline">
+        <h1>Your Voice<br />Matters</h1>
+      </div>
+
+      <div class="content">
+        <div class="statement">
+          Community-powered group amplifying voices on traffic and council
+          accountability.
+        </div>
+
+        <div>
+          <div class="stats">416</div>
+          <div class="stats-label">Members Strong</div>
+        </div>
+      </div>
+
+      <div class="action">
+        <div class="qr-container">
+          <div class="qr-placeholder">QR CODE</div>
+        </div>
+        <div class="website">swanagetraffic.org.uk</div>
+        <div class="contact">Admin@swanagetraffic.org.uk</div>
+      </div>
+
+      <div class="footer">
+        <div class="tagline">Together We Hold Power To Account</div>
+      </div>
+    </div>
+  </body>
+</html>

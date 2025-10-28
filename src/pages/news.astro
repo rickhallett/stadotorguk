@@ -32,22 +32,7 @@ const newsItems = newsEntries
   });
 
 // Fallback data if no content exists
-const fallbackItems = [
-  {
-    id: 1,
-    date: "JAN 15, 2024",
-    title: "COUNCIL IGNORES 1,200 SIGNATURES",
-    content:
-      "Despite overwhelming opposition from residents, the council voted 7-3 to proceed with the Shore Road closure.",
-  },
-  {
-    id: 2,
-    date: "JAN 22, 2024",
-    title: "EMERGENCY SERVICES SOUND ALARM",
-    content:
-      "Dorset Fire and Rescue issued an unprecedented warning about response times doubling.",
-  },
-];
+const fallbackItems: any[] = [];
 
 // Use content collection items if available, otherwise use fallback
 const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
@@ -70,7 +55,7 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
       <!-- Ongoing indicator at top -->
       <div class="timeline-ongoing">
         <div class="timeline-marker ongoing-marker"></div>
-        <div class="ongoing-text">THE FIGHT CONTINUES...</div>
+        <div class="ongoing-text">THE CHALLENGES CONTINUE...</div>
       </div>
 
       {
@@ -96,12 +81,12 @@ const displayItems = newsItems.length > 0 ? newsItems : fallbackItems;
     <div class="info-grid">
       <div class="info-card">
         <h3>NEXT SESSION</h3>
-        <p class="info-detail">SEPT 1</p>
-        <p>Planning & Consultation Meeting</p>
+        <p class="info-detail">MAR 4 2026</p>
+        <p>Traffic Management Advisory Committee</p>
       </div>
       <div class="info-card">
         <h3>LOOKING AHEAD</h3>
-        <p class="info-detail">SEPT 15</p>
+        <p class="info-detail">NOV 17 2025</p>
         <p>Full Council Meeting</p>
       </div>
     </div>

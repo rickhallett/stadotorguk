@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swanage Traffic Alliance - Pharmaceutical Style</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @media print {
+        @page {
+          size: A5;
+          margin: 0;
+        }
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
+      }
+
+      body {
+        font-family: "Arial", "Helvetica Neue", sans-serif;
+        background: #ffffff;
+        color: #2c2c2c;
+        width: 148mm;
+        height: 210mm;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .package-insert {
+        width: 100%;
+        height: 100%;
+        padding: 8mm;
+        background: #ffffff;
+        border: 1px solid #ddd;
+        position: relative;
+      }
+
+      /* Pharmaceutical header */
+      .pharma-header {
+        border: 2px solid #005bc5;
+        padding: 3mm;
+        margin-bottom: 6mm;
+        background: #f8f9fa;
+      }
+
+      .brand-name {
+        font-size: 20pt;
+        font-weight: 700;
+        color: #005bc5;
+        text-transform: uppercase;
+        letter-spacing: 0.5pt;
+        margin-bottom: 1mm;
+      }
+
+      .generic-name {
+        font-size: 10pt;
+        font-weight: 400;
+        color: #666;
+        font-style: italic;
+        margin-bottom: 2mm;
+      }
+
+      .strength-info {
+        font-size: 8pt;
+        font-weight: 600;
+        color: #2c2c2c;
+        text-transform: uppercase;
+        letter-spacing: 0.5pt;
+      }
+
+      /* Indication section */
+      .indication-section {
+        margin-bottom: 8mm;
+      }
+
+      .section-title {
+        font-size: 9pt;
+        font-weight: 700;
+        color: #2c2c2c;
+        text-transform: uppercase;
+        letter-spacing: 0.5pt;
+        margin-bottom: 3mm;
+        padding-bottom: 1mm;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .indication-text {
+        font-size: 10pt;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #2c2c2c;
+        text-align: justify;
+      }
+
+      /* Active ingredient */
+      .active-ingredient {
+        background: #e8f4f8;
+        border: 1px solid #005bc5;
+        padding: 4mm;
+        margin: 6mm 0;
+        text-align: center;
+      }
+
+      .ingredient-label {
+        font-size: 7pt;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #005bc5;
+        margin-bottom: 2mm;
+      }
+
+      .ingredient-name {
+        font-size: 24pt;
+        font-weight: 700;
+        color: #2c2c2c;
+        text-transform: uppercase;
+        letter-spacing: -0.5pt;
+        margin-bottom: 2mm;
+      }
+
+      .ingredient-accent {
+        color: #005bc5;
+      }
+
+      .ingredient-description {
+        font-size: 9pt;
+        font-weight: 400;
+        color: #666;
+        line-height: 1.4;
+      }
+
+      /* Dosage and administration */
+      .dosage-section {
+        margin-bottom: 8mm;
+      }
+
+      .dosage-text {
+        font-size: 10pt;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #2c2c2c;
+        text-align: justify;
+      }
+
+      /* Patient information */
+      .patient-info {
+        background: #fff3cd;
+        border: 2px solid #ffc107;
+        padding: 4mm;
+        margin: 6mm 0;
+      }
+
+      .warning-label {
+        font-size: 8pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #d63384;
+        margin-bottom: 2mm;
+      }
+
+      .warning-text {
+        font-size: 9pt;
+        font-weight: 400;
+        line-height: 1.4;
+        color: #2c2c2c;
+      }
+
+      /* Contact information */
+      .contact-section {
+        border: 2px solid #28a745;
+        background: #d4edda;
+        padding: 4mm;
+        margin: 6mm 0;
+      }
+
+      .contact-header {
+        font-size: 8pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #155724;
+        margin-bottom: 3mm;
+        text-align: center;
+      }
+
+      .qr-medical {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4mm;
+        margin-bottom: 3mm;
+      }
+
+      .qr-placeholder {
+        width: 25mm;
+        height: 25mm;
+        border: 2px solid #28a745;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 6pt;
+        font-weight: 700;
+        color: #155724;
+        letter-spacing: 0.5pt;
+      }
+
+      .medical-contacts {
+        flex: 1;
+      }
+
+      .contact-line {
+        font-size: 8pt;
+        font-weight: 500;
+        color: #155724;
+        margin-bottom: 1mm;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .contact-label {
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.3pt;
+        min-width: 15mm;
+      }
+
+      /* Manufacturer info */
+      .manufacturer-section {
+        margin-top: auto;
+        border-top: 2px solid #ddd;
+        padding-top: 3mm;
+        background: #f8f9fa;
+        padding: 3mm;
+      }
+
+      .manufacturer-name {
+        font-size: 7pt;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #2c2c2c;
+        margin-bottom: 1mm;
+      }
+
+      .batch-info {
+        font-size: 6pt;
+        font-weight: 400;
+        color: #666;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      /* Regulatory stamps */
+      .regulatory-stamp {
+        position: absolute;
+        top: 5mm;
+        right: 5mm;
+        width: 15mm;
+        height: 15mm;
+        border: 2px solid #dc3545;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 5pt;
+        font-weight: 700;
+        color: #dc3545;
+        text-transform: uppercase;
+        letter-spacing: 0.3pt;
+        line-height: 1.1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="package-insert">
+      <!-- Regulatory approval stamp -->
+      <div class="regulatory-stamp">Community<br />Approved<br />2024</div>
+
+      <div class="pharma-header">
+        <div class="brand-name">Your Voice Matters</div>
+        <div class="generic-name">Community Advocacy Formula</div>
+        <div class="strength-info">Maximum Strength • Community Action</div>
+      </div>
+
+      <div class="indication-section">
+        <div class="section-title">Indication</div>
+        <div class="indication-text">
+          Indicated for the treatment of civic disengagement and local
+          government accountability deficiency. Effective in amplifying
+          community voices and promoting transparent democratic processes.
+        </div>
+      </div>
+
+      <div class="active-ingredient">
+        <div class="ingredient-label">Active Ingredient</div>
+        <div class="ingredient-name">
+          Community <span class="ingredient-accent">Voice</span>
+        </div>
+        <div class="ingredient-description">
+          Concentrated local advocacy extract with proven efficacy in council
+          accountability
+        </div>
+      </div>
+
+      <div class="dosage-section">
+        <div class="section-title">Dosage and Administration</div>
+        <div class="dosage-text">
+          Join organized community action through digital platform. Recommended
+          usage: Regular engagement with local advocacy initiatives. Best
+          results when combined with peer community members.
+        </div>
+      </div>
+
+      <div class="patient-info">
+        <div class="warning-label">Important Information</div>
+        <div class="warning-text">
+          This initiative is designed for community members seeking effective
+          local representation. May cause increased civic awareness and
+          engagement with local governance processes.
+        </div>
+      </div>
+
+      <div class="contact-section">
+        <div class="contact-header">For More Information</div>
+
+        <div class="qr-medical">
+          <div class="qr-placeholder">QR<br />CODE</div>
+          <div class="medical-contacts">
+            <div class="contact-line">
+              <span class="contact-label">Website:</span>
+              <span>swanagetraffic.org.uk</span>
+            </div>
+            <div class="contact-line">
+              <span class="contact-label">Email:</span>
+              <span>Admin@swanagetraffic.org.uk</span>
+            </div>
+            <div class="contact-line">
+              <span class="contact-label">Status:</span>
+              <span>Active Treatment</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="manufacturer-section">
+        <div class="manufacturer-name">Swanage Traffic Alliance</div>
+        <div class="batch-info">
+          <span>Batch: STA-2024-001</span>
+          <span>"Together We Hold Power To Account"</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

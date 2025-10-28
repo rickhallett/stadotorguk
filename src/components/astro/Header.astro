@@ -17,6 +17,7 @@ const currentPath = Astro.url.pathname;
     <nav class="main-nav">
       <a href="/" class={currentPath === "/" ? "active" : ""}>Home</a>
       <a href="/feed" class={currentPath === "/feed" ? "active" : ""}>Feed</a>
+      <a href="/in-focus" class={currentPath === "/in-focus" ? "active" : ""}>In Focus</a>
       <a href="/news" class={currentPath === "/news" ? "active" : ""}>News</a>
     </nav>
   </div>

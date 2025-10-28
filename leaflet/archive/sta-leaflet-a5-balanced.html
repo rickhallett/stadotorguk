@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swanage Traffic Alliance - Balanced Dynamic Layout</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary-blue: #005bc5;
+        --highlight-green: #00a651;
+        --bold-yellow: #ffd700;
+        --soft-cream: #fff8dc;
+        --white: #ffffff;
+        --brutal-shadow: rgba(0, 91, 197, 0.3);
+      }
+
+      @media print {
+        @page {
+          size: A5;
+          margin: 0;
+        }
+
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
+      }
+
+      body {
+        font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+        background: var(--white);
+        color: var(--primary-blue);
+        width: 148mm;
+        height: 210mm;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .leaflet-container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        padding: 6mm;
+        background: var(--white);
+      }
+
+      /* Angled hero banner - more compact */
+      .hero-banner {
+        position: absolute;
+        top: 3mm;
+        left: -5mm;
+        right: -5mm;
+        height: 22mm;
+        background: var(--bold-yellow);
+        transform: rotate(-1.5deg);
+        border: 3px solid var(--primary-blue);
+        box-shadow: 2mm 2mm 0 var(--brutal-shadow);
+        z-index: 10;
+      }
+
+      .hero-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(1.5deg);
+        text-align: center;
+        color: var(--primary-blue);
+        width: 100%;
+      }
+
+      .hero-text {
+        font-size: 20pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: -0.4pt;
+        line-height: 0.85;
+      }
+
+      .hero-sub {
+        font-size: 8pt;
+        font-weight: 700;
+        margin-top: 1mm;
+        text-transform: uppercase;
+      }
+
+      /* Overlapping problem section */
+      .problem-section {
+        position: absolute;
+        top: 20mm;
+        right: 6mm;
+        width: 55mm;
+        background: var(--primary-blue);
+        color: var(--white);
+        padding: 4mm 3mm;
+        border: 3px solid var(--primary-blue);
+        transform: rotate(0.8deg);
+        box-shadow: -2mm 2mm 0 var(--brutal-shadow);
+        z-index: 5;
+      }
+
+      .problem-text {
+        font-size: 13pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        line-height: 1;
+        text-align: center;
+      }
+
+      /* Expanded stats with more content */
+      .stats-area {
+        position: absolute;
+        top: 45mm;
+        left: 6mm;
+        width: 80mm;
+        height: 35mm;
+      }
+
+      .stat-main {
+        position: absolute;
+        width: 40mm;
+        height: 40mm;
+        background: var(--soft-cream);
+        border: 4px solid var(--highlight-green);
+        border-radius: 50%;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        top: -5mm;
+        left: 0;
+        transform: rotate(-3deg);
+        box-shadow: 2mm 2mm 0 var(--brutal-shadow);
+      }
+
+      .stat-number {
+        font-size: 24pt;
+        font-weight: 900;
+        line-height: 0.8;
+        color: var(--primary-blue);
+      }
+
+      .stat-label {
+        font-size: 8pt;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-top: 1mm;
+        letter-spacing: 0.2pt;
+        color: var(--primary-blue);
+      }
+
+      /* Additional info boxes */
+      .info-box-1 {
+        position: absolute;
+        top: 10mm;
+        right: 5mm;
+        width: 25mm;
+        height: 15mm;
+        background: var(--highlight-green);
+        color: var(--white);
+        border: 2px solid var(--primary-blue);
+        padding: 2mm;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: rotate(2deg);
+        font-size: 8pt;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .info-box-2 {
+        position: absolute;
+        top: 30mm;
+        right: 25mm;
+        width: 20mm;
+        height: 12mm;
+        background: var(--bold-yellow);
+        color: var(--primary-blue);
+        border: 2px solid var(--primary-blue);
+        padding: 1.5mm;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: rotate(-1.5deg);
+        font-size: 7pt;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      /* Mission statement */
+      .mission-section {
+        position: absolute;
+        top: 85mm;
+        left: 6mm;
+        right: 6mm;
+        background: var(--soft-cream);
+        border-left: 6mm solid var(--highlight-green);
+        padding: 3mm 4mm;
+        transform: rotate(-0.5deg);
+        box-shadow: 2mm 2mm 0 var(--brutal-shadow);
+      }
+
+      .mission-text {
+        font-size: 11pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: var(--primary-blue);
+        line-height: 1.1;
+        text-align: center;
+      }
+
+      .mission-sub {
+        font-size: 8pt;
+        font-weight: 600;
+        color: var(--primary-blue);
+        margin-top: 1mm;
+        text-align: center;
+      }
+
+      /* Action section with QR */
+      .action-section {
+        position: absolute;
+        bottom: 25mm;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        width: 80mm;
+      }
+
+      .join-text {
+        font-size: 18pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: var(--primary-blue);
+        margin-bottom: 2mm;
+        letter-spacing: -0.3pt;
+        transform: rotate(-0.8deg);
+      }
+
+      /* QR code - smaller but still prominent */
+      .qr-placeholder {
+        width: 35mm;
+        height: 35mm;
+        background: var(--white);
+        border: 3px solid var(--primary-blue);
+        margin: 0 auto 2mm auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 8pt;
+        text-align: center;
+        color: var(--primary-blue);
+        font-weight: 900;
+        flex-direction: column;
+        gap: 1mm;
+        text-transform: uppercase;
+        box-shadow: 2mm 2mm 0 var(--brutal-shadow);
+        transform: rotate(1.2deg);
+      }
+
+      .qr-placeholder::before {
+        content: "📱";
+        font-size: 18pt;
+        display: block;
+      }
+
+      /* Contact info - more integrated */
+      .contact-main {
+        background: var(--bold-yellow);
+        color: var(--primary-blue);
+        padding: 2mm 4mm;
+        border: 2px solid var(--primary-blue);
+        font-size: 11pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        transform: rotate(-0.5deg);
+        margin-bottom: 1mm;
+        display: inline-block;
+      }
+
+      .contact-email {
+        background: var(--highlight-green);
+        color: var(--white);
+        padding: 1.5mm 3mm;
+        border: 2px solid var(--primary-blue);
+        font-size: 8pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        transform: rotate(1deg);
+        display: inline-block;
+      }
+
+      /* Footer tagline */
+      .footer-section {
+        position: absolute;
+        bottom: 6mm;
+        left: 6mm;
+        right: 6mm;
+        background: var(--primary-blue);
+        color: var(--white);
+        padding: 2.5mm;
+        text-align: center;
+        border: 2px solid var(--primary-blue);
+        transform: rotate(0.3deg);
+      }
+
+      .footer-text {
+        font-size: 9pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.1pt;
+      }
+
+      /* Decorative accents - smaller */
+      .accent-dot {
+        position: absolute;
+        width: 8mm;
+        height: 8mm;
+        background: var(--bold-yellow);
+        border-radius: 50%;
+        border: 2px solid var(--primary-blue);
+        opacity: 0.7;
+      }
+
+      .dot-1 {
+        top: 65mm;
+        right: 12mm;
+        transform: rotate(15deg);
+      }
+
+      .dot-2 {
+        top: 75mm;
+        left: 85mm;
+        background: var(--highlight-green);
+        transform: rotate(-10deg);
+      }
+
+      /* Print optimization */
+      @media print {
+        .hero-banner {
+          box-shadow: 1.5mm 1.5mm 0 var(--brutal-shadow);
+        }
+
+        .problem-section {
+          box-shadow: -1.5mm 1.5mm 0 var(--brutal-shadow);
+        }
+
+        .stat-main {
+          box-shadow: 1.5mm 1.5mm 0 var(--brutal-shadow);
+        }
+
+        .mission-section {
+          box-shadow: 1.5mm 1.5mm 0 var(--brutal-shadow);
+        }
+
+        .qr-placeholder {
+          box-shadow: 1.5mm 1.5mm 0 var(--brutal-shadow);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="leaflet-container">
+      <!-- Decorative dots -->
+      <div class="accent-dot dot-1"></div>
+      <div class="accent-dot dot-2"></div>
+
+      <!-- Angled hero banner -->
+      <div class="hero-banner">
+        <div class="hero-content">
+          <div class="hero-text">Your Voice<br />Matters</div>
+          <div class="hero-sub">Swanage Traffic Alliance</div>
+        </div>
+      </div>
+
+      <!-- Overlapping problem statement -->
+      <div class="problem-section">
+        <div class="problem-text">Traffic<br />Problems?<br />We Act</div>
+      </div>
+
+      <!-- Info boxes -->
+      <div class="info-box-1">Community<br />Powered</div>
+      <div class="info-box-2">Data<br />Driven</div>
+
+      <!-- Stats area -->
+      <div class="stats-area">
+        <div class="stat-main">
+          <span class="stat-number">416</span>
+          <div class="stat-label">Members & Growing</div>
+        </div>
+      </div>
+
+      <!-- Mission statement -->
+      <div class="mission-section">
+        <div class="mission-text">We Listen. We Channel. We Act.</div>
+        <div class="mission-sub">
+          Amplifying community voices on parking, traffic & council
+          accountability
+        </div>
+      </div>
+
+      <!-- Action section with QR -->
+      <div class="action-section">
+        <div class="join-text">Join The Movement</div>
+        <div class="qr-placeholder">
+          <span>Scan<br />To Join</span>
+        </div>
+        <div class="contact-main">swanagetraffic.org.uk</div>
+        <br />
+        <div class="contact-email">Admin@swanagetraffic.org.uk</div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer-section">
+        <div class="footer-text">Together We Hold Power To Account</div>
+      </div>
+    </div>
+  </body>
+</html>

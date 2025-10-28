@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swanage Traffic Alliance - Protest Design</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @media print {
+        @page {
+          size: A5;
+          margin: 0;
+        }
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
+      }
+
+      body {
+        font-family: "Arial Black", "Impact", Arial, sans-serif;
+        background: #ffffff;
+        color: #000000;
+        width: 148mm;
+        height: 210mm;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .protest-poster {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        background: #ffffff;
+      }
+
+      /* Grunge background texture */
+      .poster-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+            circle at 20% 80%,
+            rgba(0, 0, 0, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(0, 0, 0, 0.1) 0%,
+            transparent 50%
+          );
+        z-index: -1;
+      }
+
+      /* Main protest slogan */
+      .main-slogan {
+        position: absolute;
+        top: 8mm;
+        left: 0;
+        right: 0;
+        text-align: center;
+        transform: rotate(-2deg);
+        z-index: 10;
+      }
+
+      .slogan-text {
+        font-size: 28pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: -0.5pt;
+        line-height: 0.9;
+        text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.3);
+        background: #ff0000;
+        color: #ffffff;
+        padding: 3mm 2mm;
+        display: inline-block;
+        border: 4px solid #000000;
+        box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Stencil-style organization name */
+      .org-name {
+        position: absolute;
+        top: 45mm;
+        left: 8mm;
+        right: 8mm;
+        text-align: center;
+        transform: rotate(1deg);
+      }
+
+      .stencil-text {
+        font-size: 18pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 2pt;
+        color: #000000;
+        background: #ffffff;
+        padding: 2mm;
+        border: 3px solid #000000;
+        display: inline-block;
+        position: relative;
+      }
+
+      .stencil-text::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #ffffff;
+        transform: translateY(-50%);
+      }
+
+      /* Problem statement */
+      .problem-banner {
+        position: absolute;
+        top: 70mm;
+        left: -5mm;
+        right: -5mm;
+        background: #000000;
+        color: #ffffff;
+        padding: 4mm 8mm;
+        transform: rotate(-1deg);
+        text-align: center;
+        border-top: 3px solid #ff0000;
+        border-bottom: 3px solid #ff0000;
+      }
+
+      .problem-text {
+        font-size: 16pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        line-height: 1.1;
+      }
+
+      /* Stats in spray-paint style */
+      .stats-graffiti {
+        position: absolute;
+        top: 95mm;
+        right: 12mm;
+        transform: rotate(5deg);
+        text-align: center;
+      }
+
+      .graffiti-number {
+        font-size: 48pt;
+        font-weight: 900;
+        color: #ff0000;
+        text-shadow: 2px 2px 0px #000000, 4px 4px 0px rgba(0, 0, 0, 0.3);
+        line-height: 0.8;
+      }
+
+      .graffiti-label {
+        font-size: 12pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: #000000;
+        margin-top: 1mm;
+        letter-spacing: 1pt;
+      }
+
+      /* Action call */
+      .action-banner {
+        position: absolute;
+        bottom: 35mm;
+        left: 0;
+        right: 0;
+        background: #ff0000;
+        color: #ffffff;
+        padding: 4mm;
+        text-align: center;
+        border-top: 4px solid #000000;
+        border-bottom: 4px solid #000000;
+      }
+
+      .action-text {
+        font-size: 20pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0pt;
+        text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+      }
+
+      /* QR code section */
+      .qr-section {
+        position: absolute;
+        bottom: 8mm;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+      }
+
+      .qr-placeholder {
+        width: 28mm;
+        height: 28mm;
+        background: #ffffff;
+        border: 4px solid #000000;
+        margin: 0 auto 2mm auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 8pt;
+        font-weight: 900;
+        color: #000000;
+        transform: rotate(-3deg);
+        box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
+      }
+
+      .website-stencil {
+        font-size: 11pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        background: #000000;
+        color: #ffffff;
+        padding: 1.5mm 3mm;
+        display: inline-block;
+        letter-spacing: 0.5pt;
+        transform: rotate(1deg);
+        margin-bottom: 1mm;
+      }
+
+      .contact-graffiti {
+        font-size: 8pt;
+        font-weight: 700;
+        color: #000000;
+        text-transform: uppercase;
+      }
+
+      /* Torn paper effects */
+      .tear-top {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3mm;
+        background: #ffffff;
+        clip-path: polygon(
+          0% 0%,
+          5% 100%,
+          10% 0%,
+          15% 100%,
+          20% 0%,
+          25% 100%,
+          30% 0%,
+          35% 100%,
+          40% 0%,
+          45% 100%,
+          50% 0%,
+          55% 100%,
+          60% 0%,
+          65% 100%,
+          70% 0%,
+          75% 100%,
+          80% 0%,
+          85% 100%,
+          90% 0%,
+          95% 100%,
+          100% 0%
+        );
+        z-index: 5;
+      }
+
+      .tear-bottom {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3mm;
+        background: #ffffff;
+        clip-path: polygon(
+          0% 100%,
+          5% 0%,
+          10% 100%,
+          15% 0%,
+          20% 100%,
+          25% 0%,
+          30% 100%,
+          35% 0%,
+          40% 100%,
+          45% 0%,
+          50% 100%,
+          55% 0%,
+          60% 100%,
+          65% 0%,
+          70% 100%,
+          75% 0%,
+          80% 100%,
+          85% 0%,
+          90% 100%,
+          95% 0%,
+          100% 100%
+        );
+        z-index: 5;
+      }
+
+      /* Spray paint splatters */
+      .splatter {
+        position: absolute;
+        background: rgba(255, 0, 0, 0.3);
+        border-radius: 50%;
+      }
+
+      .splatter-1 {
+        width: 8mm;
+        height: 6mm;
+        top: 25mm;
+        left: 15mm;
+        transform: rotate(45deg);
+      }
+
+      .splatter-2 {
+        width: 5mm;
+        height: 7mm;
+        bottom: 45mm;
+        right: 20mm;
+        transform: rotate(-30deg);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="protest-poster">
+      <div class="poster-bg"></div>
+      <div class="tear-top"></div>
+      <div class="tear-bottom"></div>
+
+      <!-- Splatters -->
+      <div class="splatter splatter-1"></div>
+      <div class="splatter splatter-2"></div>
+
+      <!-- Main slogan -->
+      <div class="main-slogan">
+        <div class="slogan-text">YOUR VOICE<br />MATTERS</div>
+      </div>
+
+      <!-- Organization name -->
+      <div class="org-name">
+        <div class="stencil-text">Swanage Traffic Alliance</div>
+      </div>
+
+      <!-- Problem statement -->
+      <div class="problem-banner">
+        <div class="problem-text">Enough Traffic Chaos<br />Time to Act</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-graffiti">
+        <div class="graffiti-number">416</div>
+        <div class="graffiti-label">United</div>
+      </div>
+
+      <!-- Action call -->
+      <div class="action-banner">
+        <div class="action-text">Join The Resistance</div>
+      </div>
+
+      <!-- QR and contact -->
+      <div class="qr-section">
+        <div class="qr-placeholder">SCAN<br />NOW</div>
+        <div class="website-stencil">swanagetraffic.org.uk</div>
+        <div class="contact-graffiti">Admin@swanagetraffic.org.uk</div>
+      </div>
+    </div>
+  </body>
+</html>

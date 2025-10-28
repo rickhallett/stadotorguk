@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swanage Traffic Alliance - High Impact Leaflet</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary-blue: #005bc5;
+        --highlight-green: #00a651;
+        --bold-yellow: #ffd700;
+        --soft-cream: #fff8dc;
+        --white: #ffffff;
+        --brutal-shadow: rgba(0, 91, 197, 0.3);
+      }
+
+      @media print {
+        @page {
+          size: A5;
+          margin: 0;
+        }
+
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
+      }
+
+      body {
+        font-family: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+        background: var(--white);
+        color: var(--primary-blue);
+        width: 148mm;
+        height: 210mm;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .leaflet-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 5mm;
+        background: var(--white);
+      }
+
+      /* Massive headline */
+      .hero-section {
+        background: var(--bold-yellow);
+        color: var(--primary-blue);
+        padding: 6mm 4mm;
+        margin-bottom: 3mm;
+        text-align: center;
+        border: 4px solid var(--primary-blue);
+        box-shadow: 4mm 4mm 0 var(--brutal-shadow);
+        position: relative;
+      }
+
+      .hero-section::before {
+        content: "";
+        position: absolute;
+        top: -4px;
+        left: -4px;
+        right: -4px;
+        height: 6px;
+        background: var(--highlight-green);
+      }
+
+      .hero-headline {
+        font-size: 22pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: -0.5pt;
+        line-height: 0.9;
+        margin-bottom: 2mm;
+      }
+
+      .hero-subtext {
+        font-size: 11pt;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      /* Problem statement */
+      .problem-section {
+        background: var(--primary-blue);
+        color: var(--white);
+        padding: 4mm;
+        margin-bottom: 3mm;
+        text-align: center;
+        border: 3px solid var(--primary-blue);
+      }
+
+      .problem-text {
+        font-size: 16pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        line-height: 1.1;
+      }
+
+      /* Stats block */
+      .stats-block {
+        display: flex;
+        gap: 2mm;
+        margin-bottom: 3mm;
+      }
+
+      .stat-item {
+        flex: 1;
+        background: var(--soft-cream);
+        border: 3px solid var(--highlight-green);
+        padding: 3mm;
+        text-align: center;
+      }
+
+      .stat-number {
+        font-size: 28pt;
+        font-weight: 900;
+        color: var(--primary-blue);
+        display: block;
+        line-height: 0.8;
+      }
+
+      .stat-label {
+        font-size: 8pt;
+        text-transform: uppercase;
+        letter-spacing: 0.3pt;
+        margin-top: 1mm;
+        font-weight: 700;
+        color: var(--primary-blue);
+      }
+
+      /* Solution */
+      .solution-section {
+        background: var(--highlight-green);
+        color: var(--white);
+        padding: 4mm;
+        margin-bottom: 4mm;
+        text-align: center;
+        border: 3px solid var(--primary-blue);
+        box-shadow: 3mm 3mm 0 var(--brutal-shadow);
+      }
+
+      .solution-text {
+        font-size: 14pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        line-height: 1.1;
+        margin-bottom: 2mm;
+      }
+
+      .solution-subtext {
+        font-size: 9pt;
+        font-weight: 600;
+        opacity: 0.9;
+      }
+
+      /* Massive QR section */
+      .action-section {
+        flex: 1;
+        background: var(--white);
+        border: 4px solid var(--primary-blue);
+        padding: 4mm;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 3mm 3mm 0 var(--brutal-shadow);
+        margin-bottom: 3mm;
+      }
+
+      .action-title {
+        font-size: 20pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        color: var(--primary-blue);
+        margin-bottom: 3mm;
+        letter-spacing: -0.3pt;
+      }
+
+      /* Huge QR Code */
+      .qr-placeholder {
+        width: 40mm;
+        height: 40mm;
+        background: var(--soft-cream);
+        border: 4px solid var(--primary-blue);
+        margin: 2mm auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10pt;
+        text-align: center;
+        color: var(--primary-blue);
+        font-weight: 900;
+        flex-direction: column;
+        gap: 1mm;
+        text-transform: uppercase;
+      }
+
+      .qr-placeholder::before {
+        content: "📱";
+        font-size: 20pt;
+        display: block;
+      }
+
+      .website-big {
+        font-size: 14pt;
+        font-weight: 900;
+        background: var(--bold-yellow);
+        color: var(--primary-blue);
+        padding: 2mm 4mm;
+        display: inline-block;
+        margin: 3mm 0 2mm 0;
+        border: 3px solid var(--primary-blue);
+        text-transform: uppercase;
+        letter-spacing: -0.2pt;
+      }
+
+      .contact-minimal {
+        font-size: 9pt;
+        color: var(--primary-blue);
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      /* Bold footer */
+      .footer {
+        background: var(--primary-blue);
+        color: var(--white);
+        padding: 3mm;
+        text-align: center;
+        border: 3px solid var(--primary-blue);
+        margin-top: auto;
+      }
+
+      .footer-quote {
+        font-size: 11pt;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.1pt;
+      }
+
+      /* Print optimization */
+      @media print {
+        .leaflet-container {
+          padding: 4mm;
+        }
+
+        .hero-section {
+          box-shadow: 3mm 3mm 0 var(--brutal-shadow);
+        }
+
+        .solution-section {
+          box-shadow: 2mm 2mm 0 var(--brutal-shadow);
+        }
+
+        .action-section {
+          box-shadow: 2mm 2mm 0 var(--brutal-shadow);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="leaflet-container">
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <div class="hero-headline">Your Voice<br />Matters</div>
+        <div class="hero-subtext">Swanage Traffic Alliance</div>
+      </div>
+
+      <!-- Problem -->
+      <div class="problem-section">
+        <div class="problem-text">Enough Traffic<br />Frustration</div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-block">
+        <div class="stat-item">
+          <span class="stat-number">416</span>
+          <div class="stat-label">Members</div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">1</span>
+          <div class="stat-label">Voice</div>
+        </div>
+      </div>
+
+      <!-- Solution -->
+      <div class="solution-section">
+        <div class="solution-text">We're Listening.<br />We're Acting.</div>
+        <div class="solution-subtext">Community-powered change</div>
+      </div>
+
+      <!-- Action/QR Section -->
+      <div class="action-section">
+        <div class="action-title">Join Us</div>
+
+        <div class="qr-placeholder">
+          <span>Scan Now</span>
+        </div>
+
+        <div class="website-big">swanagetraffic.org.uk</div>
+
+        <div class="contact-minimal">Admin@swanagetraffic.org.uk</div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <div class="footer-quote">Together We Hold Power To Account</div>
+      </div>
+    </div>
+  </body>
+</html>

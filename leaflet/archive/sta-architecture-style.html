@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swanage Traffic Alliance - Architecture Firm Style</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @media print {
+        @page {
+          size: A5;
+          margin: 0;
+        }
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
+      }
+
+      body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        background: #ffffff;
+        color: #2c2c2c;
+        width: 148mm;
+        height: 210mm;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .container {
+        width: 100%;
+        height: 100%;
+        padding: 20mm 15mm;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      /* Architectural header */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 15mm;
+        border-bottom: 0.5px solid #2c2c2c;
+        padding-bottom: 3mm;
+      }
+
+      .firm-name {
+        font-size: 7pt;
+        font-weight: 300;
+        letter-spacing: 2pt;
+        text-transform: uppercase;
+        color: #2c2c2c;
+      }
+
+      .project-number {
+        font-size: 7pt;
+        font-weight: 300;
+        color: #888;
+        letter-spacing: 1pt;
+      }
+
+      /* Monumental headline */
+      .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .project-title {
+        font-size: 48pt;
+        font-weight: 200;
+        line-height: 0.9;
+        letter-spacing: -2pt;
+        color: #2c2c2c;
+        margin-bottom: 12mm;
+        text-align: left;
+      }
+
+      /* Architectural specification block */
+      .specs-block {
+        background: #f8f8f8;
+        padding: 6mm;
+        margin: 8mm 0;
+        border-left: 2px solid #2c2c2c;
+      }
+
+      .spec-label {
+        font-size: 6pt;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #888;
+        margin-bottom: 2mm;
+      }
+
+      .spec-content {
+        font-size: 11pt;
+        font-weight: 300;
+        line-height: 1.5;
+        color: #2c2c2c;
+      }
+
+      /* Technical drawing style action area */
+      .action-area {
+        margin-top: 10mm;
+        position: relative;
+      }
+
+      .drawing-title {
+        font-size: 6pt;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #888;
+        margin-bottom: 4mm;
+        border-bottom: 0.5px solid #ddd;
+        padding-bottom: 1mm;
+      }
+
+      .qr-technical {
+        display: flex;
+        align-items: center;
+        gap: 6mm;
+        margin-bottom: 4mm;
+      }
+
+      .qr-placeholder {
+        width: 25mm;
+        height: 25mm;
+        border: 1px solid #2c2c2c;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 6pt;
+        font-weight: 300;
+        color: #888;
+        letter-spacing: 0.5pt;
+      }
+
+      .technical-specs {
+        flex: 1;
+      }
+
+      .spec-line {
+        font-size: 8pt;
+        font-weight: 300;
+        color: #2c2c2c;
+        margin-bottom: 1mm;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .spec-line .label {
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.5pt;
+      }
+
+      /* Footer with firm signature */
+      .footer {
+        margin-top: auto;
+        border-top: 0.5px solid #2c2c2c;
+        padding-top: 3mm;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .signature {
+        font-size: 7pt;
+        font-weight: 300;
+        color: #2c2c2c;
+        letter-spacing: 1pt;
+        text-transform: uppercase;
+      }
+
+      .date-stamp {
+        font-size: 6pt;
+        font-weight: 300;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="firm-name">Swanage Traffic Alliance</div>
+        <div class="project-number">STA—001</div>
+      </div>
+
+      <div class="main-content">
+        <h1 class="project-title">Your Voice<br />Matters</h1>
+
+        <div class="specs-block">
+          <div class="spec-label">Project Brief</div>
+          <div class="spec-content">
+            Community-powered group amplifying voices on traffic and council
+            accountability through organized advocacy and transparent
+            communication.
+          </div>
+        </div>
+
+        <div class="action-area">
+          <div class="drawing-title">Connection Details</div>
+
+          <div class="qr-technical">
+            <div class="qr-placeholder">QR<br />CODE</div>
+            <div class="technical-specs">
+              <div class="spec-line">
+                <span class="label">Primary Access:</span>
+                <span>swanagetraffic.org.uk</span>
+              </div>
+              <div class="spec-line">
+                <span class="label">Direct Contact:</span>
+                <span>Admin@swanagetraffic.org.uk</span>
+              </div>
+              <div class="spec-line">
+                <span class="label">Status:</span>
+                <span>Active</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="signature">Together We Hold Power To Account</div>
+        <div class="date-stamp">2024</div>
+      </div>
+    </div>
+  </body>
+</html>

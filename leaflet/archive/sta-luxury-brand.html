@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swanage Traffic Alliance - Luxury Brand Style</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @media print {
+        @page {
+          size: A5;
+          margin: 0;
+        }
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
+      }
+
+      body {
+        font-family: "Didot", "Times New Roman", serif;
+        background: #ffffff;
+        color: #1a1a1a;
+        width: 148mm;
+        height: 210mm;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .container {
+        width: 100%;
+        height: 100%;
+        padding: 25mm 20mm;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      /* Luxury brand header */
+      .brand-header {
+        text-align: center;
+        margin-bottom: 20mm;
+      }
+
+      .brand-mark {
+        font-size: 8pt;
+        font-weight: 300;
+        letter-spacing: 4pt;
+        text-transform: uppercase;
+        color: #1a1a1a;
+        position: relative;
+      }
+
+      .brand-mark::after {
+        content: "";
+        position: absolute;
+        bottom: -3mm;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20mm;
+        height: 0.5px;
+        background: #1a1a1a;
+      }
+
+      /* Aspirational headline */
+      .hero-content {
+        text-align: center;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .luxury-headline {
+        font-size: 52pt;
+        font-weight: 300;
+        line-height: 0.9;
+        letter-spacing: -2pt;
+        color: #1a1a1a;
+        margin-bottom: 15mm;
+        font-style: italic;
+      }
+
+      .headline-accent {
+        color: #005bc5;
+        font-weight: 400;
+      }
+
+      /* Elegant statement */
+      .brand-statement {
+        font-size: 14pt;
+        font-weight: 300;
+        line-height: 1.6;
+        color: #1a1a1a;
+        text-align: center;
+        max-width: 65mm;
+        margin: 0 auto 20mm auto;
+        font-style: italic;
+      }
+
+      /* Premium call-to-action */
+      .premium-cta {
+        text-align: center;
+        margin-top: 15mm;
+      }
+
+      .cta-pretext {
+        font-size: 8pt;
+        font-weight: 300;
+        letter-spacing: 2pt;
+        text-transform: uppercase;
+        color: #666;
+        margin-bottom: 6mm;
+      }
+
+      .qr-luxury {
+        margin-bottom: 8mm;
+      }
+
+      .qr-placeholder {
+        width: 32mm;
+        height: 32mm;
+        border: 1px solid #1a1a1a;
+        background: #ffffff;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 7pt;
+        font-weight: 300;
+        color: #666;
+        letter-spacing: 1pt;
+        position: relative;
+      }
+
+      .qr-placeholder::before {
+        content: "";
+        position: absolute;
+        top: -3mm;
+        left: -3mm;
+        right: -3mm;
+        bottom: -3mm;
+        border: 0.5px solid #1a1a1a;
+        opacity: 0.3;
+      }
+
+      .contact-elegant {
+        margin-bottom: 4mm;
+      }
+
+      .primary-contact {
+        font-size: 12pt;
+        font-weight: 300;
+        color: #1a1a1a;
+        margin-bottom: 2mm;
+        letter-spacing: 0.5pt;
+      }
+
+      .secondary-contact {
+        font-size: 8pt;
+        font-weight: 300;
+        color: #666;
+        letter-spacing: 0.3pt;
+      }
+
+      /* Luxury footer */
+      .brand-footer {
+        text-align: center;
+        border-top: 0.5px solid #1a1a1a;
+        padding-top: 6mm;
+        margin-top: auto;
+      }
+
+      .tagline-luxury {
+        font-size: 9pt;
+        font-weight: 300;
+        font-style: italic;
+        color: #1a1a1a;
+        letter-spacing: 0.5pt;
+        position: relative;
+      }
+
+      .tagline-luxury::before,
+      .tagline-luxury::after {
+        content: "—";
+        position: absolute;
+        color: #666;
+        font-style: normal;
+      }
+
+      .tagline-luxury::before {
+        left: -8mm;
+      }
+
+      .tagline-luxury::after {
+        right: -8mm;
+      }
+
+      .brand-year {
+        font-size: 6pt;
+        font-weight: 300;
+        color: #999;
+        margin-top: 3mm;
+        letter-spacing: 1pt;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="brand-header">
+        <div class="brand-mark">Swanage Traffic Alliance</div>
+      </div>
+
+      <div class="hero-content">
+        <h1 class="luxury-headline">
+          Your <span class="headline-accent">Voice</span><br />
+          Matters
+        </h1>
+
+        <div class="brand-statement">
+          Where community empowerment meets thoughtful advocacy for meaningful
+          change.
+        </div>
+
+        <div class="premium-cta">
+          <div class="cta-pretext">Join Our Community</div>
+
+          <div class="qr-luxury">
+            <div class="qr-placeholder">QR CODE</div>
+          </div>
+
+          <div class="contact-elegant">
+            <div class="primary-contact">swanagetraffic.org.uk</div>
+            <div class="secondary-contact">Admin@swanagetraffic.org.uk</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="brand-footer">
+        <div class="tagline-luxury">Together We Hold Power To Account</div>
+        <div class="brand-year">Est. 2024</div>
+      </div>
+    </div>
+  </body>
+</html>

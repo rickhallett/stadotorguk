@@ -1,0 +1,161 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="In Focus">
+  <!-- HERO SECTION -->
+  <section class="focus-hero">
+    <h1 class="brutal-headline" style="font-size: clamp(3rem, 8vw, 6rem);">
+      IN FOCUS
+    </h1>
+    <p class="brutal-subhead" style="font-size: clamp(1.2rem, 3vw, 2rem);">
+      TRACKING THE ISSUES THAT MATTER
+    </p>
+  </section>
+
+  <!-- TWO COLUMN FOCUS AREAS -->
+  <section class="focus-grid">
+    <div class="focus-column">
+      <h2 class="column-title">SHORE ROAD</h2>
+
+      <div class="focus-card">
+        <h3 class="card-title">Council Response Delayed</h3>
+        <p class="card-date">28 October 2025</p>
+        <div class="card-divider"></div>
+        <div class="focus-content">
+          <p>Local authorities postpone hearing on Shore Road infrastructure concerns for third consecutive month.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="focus-column">
+      <h2 class="column-title">NORTHBROOK ROAD AREA</h2>
+
+      <div class="focus-card">
+        <h3 class="card-title">Resident Safety Concerns Mount</h3>
+        <p class="card-date">27 October 2025</p>
+        <div class="card-divider"></div>
+        <div class="focus-content">
+          <p>Community members document near-miss incidents and accessibility challenges in the Northbrook Road corridor.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .focus-hero {
+    background: var(--brutal-black);
+    color: var(--brutal-white);
+    padding: 6rem 2rem;
+    text-align: center;
+    border-bottom: 8px solid var(--brutal-gray);
+  }
+
+  .focus-hero .brutal-headline {
+    margin-bottom: 1rem;
+  }
+
+  .focus-grid {
+    max-width: 1400px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4rem;
+  }
+
+  .focus-column {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .column-title {
+    font-family: "Arial Black", sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--brutal-black);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    padding: 1.5rem;
+    border: 8px solid var(--brutal-black);
+    box-shadow: 12px 12px 0 var(--brutal-shadow);
+  }
+
+  .focus-column:first-child .column-title {
+    background: #ffd700;
+  }
+
+  .focus-column:last-child .column-title {
+    background: #0066cc;
+    color: var(--brutal-white);
+  }
+
+  .focus-card {
+    background: var(--brutal-white);
+    border: 8px solid var(--brutal-black);
+    box-shadow: 15px 15px 0 var(--brutal-shadow);
+    padding: 2rem;
+    transition: transform 0.2s ease;
+  }
+
+  .focus-card:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 19px 19px 0 var(--brutal-shadow);
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--brutal-black);
+    margin-bottom: 0.5rem;
+  }
+
+  .card-date {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(0, 102, 204, 0.5);
+    margin-bottom: 1rem;
+  }
+
+  .card-divider {
+    height: 4px;
+    background: #0066cc;
+    margin-bottom: 1.5rem;
+  }
+
+  .focus-content {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: var(--brutal-black);
+  }
+
+  .focus-content p {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 768px) {
+    .focus-hero {
+      padding: 4rem 1rem;
+    }
+
+    .focus-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .focus-card {
+      padding: 2rem;
+    }
+  }
+</style>

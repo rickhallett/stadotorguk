@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Swanage Traffic Alliance - Aviation Manual Style</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      @media print {
+        @page {
+          size: A5;
+          margin: 0;
+        }
+        body {
+          -webkit-print-color-adjust: exact;
+          color-adjust: exact;
+        }
+      }
+
+      body {
+        font-family: "Courier New", "Consolas", monospace;
+        background: #f5f5f5;
+        color: #2c2c2c;
+        width: 148mm;
+        height: 210mm;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .technical-manual {
+        width: 100%;
+        height: 100%;
+        padding: 10mm;
+        background: #f5f5f5;
+        border: 2px solid #2c2c2c;
+        position: relative;
+      }
+
+      /* Technical header */
+      .manual-header {
+        background: #2c2c2c;
+        color: #ffffff;
+        padding: 3mm;
+        margin-bottom: 6mm;
+        font-family: "Arial", sans-serif;
+      }
+
+      .document-class {
+        font-size: 6pt;
+        font-weight: 400;
+        letter-spacing: 2pt;
+        text-transform: uppercase;
+        margin-bottom: 1mm;
+      }
+
+      .manual-title {
+        font-size: 12pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        margin-bottom: 1mm;
+      }
+
+      .revision-info {
+        font-size: 5pt;
+        font-weight: 400;
+        color: #ccc;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      /* Section numbering */
+      .section {
+        margin-bottom: 6mm;
+      }
+
+      .section-number {
+        font-size: 8pt;
+        font-weight: 700;
+        color: #2c2c2c;
+        background: #ffffff;
+        border: 1px solid #2c2c2c;
+        padding: 1mm 2mm;
+        display: inline-block;
+        margin-bottom: 2mm;
+        font-family: "Arial", sans-serif;
+      }
+
+      .section-title {
+        font-size: 16pt;
+        font-weight: 700;
+        color: #2c2c2c;
+        text-transform: uppercase;
+        letter-spacing: 0.5pt;
+        margin-bottom: 4mm;
+        font-family: "Arial", sans-serif;
+      }
+
+      /* Mission statement */
+      .mission-statement {
+        background: #ffffff;
+        border: 2px solid #005bc5;
+        padding: 4mm;
+        margin: 6mm 0;
+        position: relative;
+      }
+
+      .mission-statement::before {
+        content: "MISSION CRITICAL";
+        position: absolute;
+        top: -2mm;
+        left: 3mm;
+        background: #005bc5;
+        color: #ffffff;
+        font-size: 6pt;
+        font-weight: 700;
+        padding: 1mm 2mm;
+        letter-spacing: 1pt;
+        font-family: "Arial", sans-serif;
+      }
+
+      .mission-title {
+        font-size: 24pt;
+        font-weight: 700;
+        color: #2c2c2c;
+        text-transform: uppercase;
+        letter-spacing: -0.5pt;
+        margin-bottom: 3mm;
+        text-align: center;
+        font-family: "Arial", sans-serif;
+      }
+
+      .title-callsign {
+        color: #005bc5;
+      }
+
+      .mission-objective {
+        font-size: 10pt;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #2c2c2c;
+        text-align: justify;
+      }
+
+      /* Technical specifications */
+      .tech-specs {
+        background: #e8f4f8;
+        border: 1px solid #005bc5;
+        padding: 4mm;
+        margin: 6mm 0;
+      }
+
+      .spec-header {
+        font-size: 8pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #005bc5;
+        margin-bottom: 3mm;
+        text-align: center;
+        font-family: "Arial", sans-serif;
+      }
+
+      .spec-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3mm;
+      }
+
+      .spec-item {
+        background: #ffffff;
+        border: 1px solid #ddd;
+        padding: 2mm;
+        text-align: center;
+      }
+
+      .spec-value {
+        font-size: 14pt;
+        font-weight: 700;
+        color: #2c2c2c;
+        margin-bottom: 1mm;
+      }
+
+      .spec-label {
+        font-size: 6pt;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.5pt;
+        color: #666;
+      }
+
+      /* Operations manual section */
+      .operations-section {
+        margin: 8mm 0;
+      }
+
+      .ops-text {
+        font-size: 9pt;
+        font-weight: 400;
+        line-height: 1.6;
+        color: #2c2c2c;
+        text-align: justify;
+        margin-bottom: 4mm;
+      }
+
+      .procedure-list {
+        background: #ffffff;
+        border: 1px solid #2c2c2c;
+        padding: 3mm;
+        margin: 4mm 0;
+      }
+
+      .procedure-item {
+        font-size: 8pt;
+        font-weight: 400;
+        color: #2c2c2c;
+        margin-bottom: 2mm;
+        display: flex;
+        gap: 2mm;
+      }
+
+      .step-number {
+        background: #2c2c2c;
+        color: #ffffff;
+        width: 5mm;
+        height: 5mm;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 6pt;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+
+      /* Communication protocols */
+      .comms-section {
+        background: #fff8dc;
+        border: 2px solid #ffc107;
+        padding: 4mm;
+        margin: 6mm 0;
+      }
+
+      .comms-header {
+        font-size: 8pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1pt;
+        color: #d63384;
+        margin-bottom: 3mm;
+        text-align: center;
+        font-family: "Arial", sans-serif;
+      }
+
+      .qr-technical {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4mm;
+        margin-bottom: 3mm;
+      }
+
+      .qr-placeholder {
+        width: 22mm;
+        height: 22mm;
+        border: 2px solid #2c2c2c;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 6pt;
+        font-weight: 700;
+        color: #2c2c2c;
+        letter-spacing: 0.3pt;
+      }
+
+      .frequency-list {
+        flex: 1;
+      }
+
+      .frequency-item {
+        font-size: 7pt;
+        font-weight: 500;
+        color: #2c2c2c;
+        margin-bottom: 1mm;
+        display: flex;
+        justify-content: space-between;
+        font-family: "Courier New", monospace;
+      }
+
+      .freq-label {
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.3pt;
+      }
+
+      /* Manual footer */
+      .manual-footer {
+        margin-top: auto;
+        border-top: 2px solid #2c2c2c;
+        background: #2c2c2c;
+        color: #ffffff;
+        padding: 2mm;
+        text-align: center;
+        font-family: "Arial", sans-serif;
+      }
+
+      .footer-statement {
+        font-size: 7pt;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5pt;
+        margin-bottom: 1mm;
+      }
+
+      .manual-version {
+        font-size: 5pt;
+        font-weight: 400;
+        color: #ccc;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      /* Grid overlay */
+      .technical-manual::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: linear-gradient(
+            to right,
+            rgba(0, 0, 0, 0.03) 1px,
+            transparent 1px
+          ),
+          linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+        background-size: 5mm 5mm;
+        opacity: 0.5;
+        z-index: -1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="technical-manual">
+      <div class="manual-header">
+        <div class="document-class">Community Operations Manual</div>
+        <div class="manual-title">Swanage Traffic Alliance</div>
+        <div class="revision-info">
+          <span>Rev. 1.0</span>
+          <span>Effective: 2024</span>
+          <span>Classification: Public</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-number">1.0</div>
+        <div class="section-title">Mission Overview</div>
+
+        <div class="mission-statement">
+          <div class="mission-title">
+            Your <span class="title-callsign">Voice</span> Matters
+          </div>
+          <div class="mission-objective">
+            Primary objective: Establish and maintain effective community
+            communication channels for traffic and council accountability
+            advocacy through organized digital and physical engagement
+            protocols.
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-number">2.0</div>
+        <div class="tech-specs">
+          <div class="spec-header">System Specifications</div>
+          <div class="spec-grid">
+            <div class="spec-item">
+              <div class="spec-value">ACTIVE</div>
+              <div class="spec-label">System Status</div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-value">24/7</div>
+              <div class="spec-label">Availability</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-number">3.0</div>
+        <div class="operations-section">
+          <div class="ops-text">
+            Standard operating procedure for community engagement and advocacy
+            coordination through established digital communication networks and
+            local government liaison protocols.
+          </div>
+
+          <div class="procedure-list">
+            <div class="procedure-item">
+              <div class="step-number">1</div>
+              <div>
+                Access digital platform via provided communication frequencies
+              </div>
+            </div>
+            <div class="procedure-item">
+              <div class="step-number">2</div>
+              <div>Establish contact with community coordination network</div>
+            </div>
+            <div class="procedure-item">
+              <div class="step-number">3</div>
+              <div>
+                Participate in organized advocacy and accountability operations
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="comms-section">
+        <div class="comms-header">Communication Protocols</div>
+
+        <div class="qr-technical">
+          <div class="qr-placeholder">QR<br />CODE</div>
+          <div class="frequency-list">
+            <div class="frequency-item">
+              <span class="freq-label">Primary:</span>
+              <span>swanagetraffic.org.uk</span>
+            </div>
+            <div class="frequency-item">
+              <span class="freq-label">Direct:</span>
+              <span>Admin@swanagetraffic.org.uk</span>
+            </div>
+            <div class="frequency-item">
+              <span class="freq-label">Status:</span>
+              <span>Operational</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="manual-footer">
+        <div class="footer-statement">Together We Hold Power To Account</div>
+        <div class="manual-version">
+          <span>Doc: STA-OPS-001</span>
+          <span>Auth: Community</span>
+          <span>Date: 2024</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
