@@ -160,7 +160,7 @@ function calculateNGramSimilarity(
 function isCommentUnique(
   newComment: string,
   existingLeads: Lead[],
-  threshold: number = 20
+  threshold: number = 25
 ): boolean {
   for (const lead of existingLeads) {
     if (!lead.comments) continue;
@@ -179,21 +179,21 @@ function isCommentUnique(
 }
 
 function getRandomCommentLength(): { min: number; max: number; tokens: number } {
-  // Weighted distribution to favor shorter comments but allow longer ones
+  // Weighted distribution heavily favoring shorter comments for better uniqueness
   const rand = Math.random();
 
-  if (rand < 0.4) {
-    // 40% chance: short comment (10-40 words)
+  if (rand < 0.6) {
+    // 60% chance: short comment (10-40 words) - easiest to make unique
     return { min: 10, max: 40, tokens: 80 };
-  } else if (rand < 0.7) {
-    // 30% chance: medium comment (40-100 words)
-    return { min: 40, max: 100, tokens: 200 };
-  } else if (rand < 0.9) {
-    // 20% chance: long comment (100-150 words)
-    return { min: 100, max: 150, tokens: 300 };
+  } else if (rand < 0.85) {
+    // 25% chance: medium comment (40-80 words) - moderate uniqueness
+    return { min: 40, max: 80, tokens: 180 };
+  } else if (rand < 0.95) {
+    // 10% chance: long comment (80-120 words) - harder to be unique
+    return { min: 80, max: 120, tokens: 250 };
   } else {
-    // 10% chance: very long comment (150-200 words)
-    return { min: 150, max: 200, tokens: 400 };
+    // 5% chance: very long comment (120-150 words) - hardest to be unique
+    return { min: 120, max: 150, tokens: 320 };
   }
 }
 
@@ -224,17 +224,20 @@ ${exampleComments}
 
 Generate ONE new comment that:
 - Expresses similar concerns (traffic, congestion, tourism impacts, safety, quality of life)
-- Uses COMPLETELY DIFFERENT words and phrasing (must be lexically unique, <20% word overlap)
+- Uses COMPLETELY DIFFERENT words and phrasing (must be lexically unique, <25% word overlap)
 - Sounds natural and authentic like a real resident or visitor
 - Is ${lengthTarget.min}-${lengthTarget.max} words long (important: match this range)
 - Reflects genuine frustration or concern about traffic issues
 - Matches the tone and style of real community feedback
 - Varies in detail level: short comments are punchy, long comments include specific examples and reasoning
+- Uses varied vocabulary, sentence structures, and perspectives to maximize uniqueness
 
 CRITICAL:
 - Do NOT copy phrases or sentence structures from the examples
 - Create entirely new wording while maintaining thematic relevance
 - Respect the word count target (${lengthTarget.min}-${lengthTarget.max} words)
+- Use different vocabulary choices - if examples say "gridlock", use alternatives like "standstill", "crawling", "bottlenecked"
+- Vary sentence structure - mix short punchy sentences with longer flowing ones
 
 Respond with ONLY the comment text, no quotes, no preamble, no explanation.`;
 
