@@ -13,7 +13,7 @@ import Layout from "../layouts/Layout.astro";
     </p>
   </section>
 
-  <!-- TWO COLUMN FOCUS AREAS -->
+  <!-- THREE COLUMN FOCUS AREAS -->
   <section class="focus-grid">
     <div class="focus-column">
       <h2 class="column-title">SHORE ROAD</h2>
@@ -39,7 +39,19 @@ import Layout from "../layouts/Layout.astro";
           <p>Community members document near-miss incidents and accessibility challenges in the Northbrook Road corridor.</p>
         </div>
       </div>
+    </div>
 
+    <div class="focus-column">
+      <h2 class="column-title">DE MOULHAM ROAD</h2>
+
+      <div class="focus-card">
+        <h3 class="card-title">Development Plans Under Review</h3>
+        <p class="card-date">26 October 2025</p>
+        <div class="card-divider"></div>
+        <div class="focus-content">
+          <p>Residents raise questions about proposed changes to De Moulham Road and their impact on the local community.</p>
+        </div>
+      </div>
     </div>
   </section>
 </Layout>
@@ -58,12 +70,12 @@ import Layout from "../layouts/Layout.astro";
   }
 
   .focus-grid {
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 4rem auto;
     padding: 0 2rem;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 4rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
   }
 
   .focus-column {
@@ -86,12 +98,17 @@ import Layout from "../layouts/Layout.astro";
     box-shadow: 12px 12px 0 var(--brutal-shadow);
   }
 
-  .focus-column:first-child .column-title {
+  .focus-column:nth-child(1) .column-title {
     background: #ffd700;
   }
 
-  .focus-column:last-child .column-title {
+  .focus-column:nth-child(2) .column-title {
     background: #0066cc;
+    color: var(--brutal-white);
+  }
+
+  .focus-column:nth-child(3) .column-title {
+    background: #ff6b35;
     color: var(--brutal-white);
   }
 
@@ -140,6 +157,13 @@ import Layout from "../layouts/Layout.astro";
 
   .focus-content p {
     margin-bottom: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .focus-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
   }
 
   @media (max-width: 768px) {

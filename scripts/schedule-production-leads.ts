@@ -110,13 +110,15 @@ async function generateLead(retryCount: number = 0): Promise<boolean> {
     const data = await response.json();
 
     if (data.success) {
-      console.log(`✅ Successfully generated lead #${data.leadId}`);
+      console.log(`✅ Successfully generated reworded lead #${data.leadId}`);
       console.log(`   Name: ${data.lead.name}`);
       console.log(`   Type: ${data.lead.type}`);
-      console.log(`   Comment: ${data.lead.commentLength} chars`);
+      console.log(`   Original: "${data.lead.original}..."`);
+      console.log(`   Reworded: "${data.lead.reworded}..."`);
+      console.log(`   Length: ${data.lead.commentLength} chars`);
       return true;
     } else {
-      // Failed to generate unique lead
+      // Failed to generate reworded lead
       console.error(`❌ Generation failed:`, data.error);
 
       // Retry with exponential backoff
@@ -190,6 +192,8 @@ console.log("======================================================");
 console.log(`API URL: ${PRODUCTION_API_URL}`);
 console.log(`Active hours: ${DAYTIME_START}:00 - ${DAYTIME_END}:00`);
 console.log(`Interval range: ${MIN_INTERVAL_MINUTES} - ${MAX_INTERVAL_MINUTES} minutes`);
+console.log(`Strategy: Pick random real comment and reword with style variation`);
+console.log(`Styles: 7 variations (concise, emotional, calm, elderly, sarcastic, personal, factual)`);
 console.log("======================================================\n");
 
 scheduleNextGeneration();

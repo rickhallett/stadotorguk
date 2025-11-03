@@ -160,40 +160,114 @@ function calculateNGramSimilarity(
 function isCommentUnique(
   newComment: string,
   existingLeads: Lead[],
-  threshold: number = 25
-): boolean {
-  for (const lead of existingLeads) {
+  threshold: number = 35
+): { unique: boolean; maxSimilarity: number; closestMatch?: string } {
+  // Only check against recent leads (windowed approach) to reduce collision probability
+  const recentLeads = existingLeads.slice(-150);
+
+  let maxSimilarity = 0;
+  let closestMatch: string | undefined;
+
+  for (const lead of recentLeads) {
     if (!lead.comments) continue;
 
     const similarity = calculateNGramSimilarity(newComment, lead.comments);
+    if (similarity > maxSimilarity) {
+      maxSimilarity = similarity;
+      closestMatch = lead.comments;
+    }
+
     if (similarity > threshold) {
       console.log(
-        `❌ Comment too similar (${similarity.toFixed(
-          1
-        )}%) to existing: "${lead.comments.slice(0, 50)}..."`
+        `   ❌ REJECTION: ${similarity.toFixed(1)}% similar to: "${lead.comments.slice(0, 60)}..."`
       );
-      return false;
+      console.log(`   📝 Generated: "${newComment.slice(0, 60)}..."`);
+      return { unique: false, maxSimilarity: similarity, closestMatch: lead.comments };
     }
   }
-  return true;
+
+  console.log(`   ✅ PASSED: Max similarity ${maxSimilarity.toFixed(1)}% (threshold: ${threshold}%)`);
+  return { unique: true, maxSimilarity, closestMatch };
+}
+
+interface CommentStyle {
+  persona: string;
+  tone: string;
+  styleGuide: string;
+  temperature: number;
+}
+
+function getRandomCommentStyle(): CommentStyle {
+  const styles: CommentStyle[] = [
+    {
+      persona: "frustrated local resident",
+      tone: "exasperated, direct, lived experience",
+      styleGuide: "Short sentences. Personal impact. Raw emotion. Use 'I' and 'we'.",
+      temperature: 0.85,
+    },
+    {
+      persona: "concerned visitor",
+      tone: "disappointed, comparative, observational",
+      styleGuide: "Compare to other places. Express sadness about change. Use 'used to' and 'now'.",
+      temperature: 0.9,
+    },
+    {
+      persona: "business owner",
+      tone: "economic focus, practical, frustrated",
+      styleGuide: "Mention business impact. Lost customers. Practical concerns. Use numbers/specifics.",
+      temperature: 0.8,
+    },
+    {
+      persona: "parent/safety advocate",
+      tone: "worried, protective, specific incidents",
+      styleGuide: "Focus on children, safety, near-misses. Use emotional language about risk.",
+      temperature: 0.88,
+    },
+    {
+      persona: "elderly resident",
+      tone: "nostalgic, comparative to past, weary",
+      styleGuide: "Reference 'years ago'. Slower pace. Simpler language. Resignation mixed with anger.",
+      temperature: 0.82,
+    },
+    {
+      persona: "environmental advocate",
+      tone: "systemic critique, data-aware, urgent",
+      styleGuide: "Mention emissions, air quality, sustainability. Use terms like 'unsustainable'.",
+      temperature: 0.92,
+    },
+    {
+      persona: "casual observer",
+      tone: "matter-of-fact, brief, obvious frustration",
+      styleGuide: "State the obvious. Minimal elaboration. Dry humor or sarcasm welcome.",
+      temperature: 0.95,
+    },
+    {
+      persona: "tourist",
+      tone: "shocked, comparing expectations vs reality",
+      styleGuide: "Expected peaceful village, got traffic. Vacation ruined. Disappointed tone.",
+      temperature: 0.87,
+    },
+  ];
+
+  return getRandomElement(styles);
 }
 
 function getRandomCommentLength(): { min: number; max: number; tokens: number } {
-  // Weighted distribution heavily favoring shorter comments for better uniqueness
+  // Weighted distribution favoring shorter comments (40-300 chars) to simulate effort levels
   const rand = Math.random();
 
-  if (rand < 0.6) {
-    // 60% chance: short comment (10-40 words) - easiest to make unique
-    return { min: 10, max: 40, tokens: 80 };
-  } else if (rand < 0.85) {
-    // 25% chance: medium comment (40-80 words) - moderate uniqueness
-    return { min: 40, max: 80, tokens: 180 };
+  if (rand < 0.50) {
+    // 50% chance: minimal effort (40-80 chars) - quick reaction
+    return { min: 40, max: 80, tokens: 50 };
+  } else if (rand < 0.80) {
+    // 30% chance: moderate effort (80-150 chars) - brief concern
+    return { min: 80, max: 150, tokens: 100 };
   } else if (rand < 0.95) {
-    // 10% chance: long comment (80-120 words) - harder to be unique
-    return { min: 80, max: 120, tokens: 250 };
+    // 15% chance: higher effort (150-220 chars) - detailed feedback
+    return { min: 150, max: 220, tokens: 150 };
   } else {
-    // 5% chance: very long comment (120-150 words) - hardest to be unique
-    return { min: 120, max: 150, tokens: 320 };
+    // 5% chance: maximum effort (220-300 chars) - comprehensive statement
+    return { min: 220, max: 300, tokens: 200 };
   }
 }
 
@@ -209,42 +283,46 @@ async function generateCommentWithLLM(sampleLeads: Lead[]): Promise<string> {
     .filter((lead) => lead.comments)
     .map(
       (lead, idx) =>
-        `${idx + 1}. "${lead.comments}" (${lead.visitor_type || "Local"}, ${lead.comments!.split(' ').length} words)`
+        `${idx + 1}. "${lead.comments}" (${lead.visitor_type || "Local"}, ${lead.comments!.length} chars)`
     )
     .join("\n");
 
-  // Get random target length for this comment
+  // Get random target length and style for this comment
   const lengthTarget = getRandomCommentLength();
+  const style = getRandomCommentStyle();
 
   const prompt = `You are helping generate realistic community feedback for the Swanage Traffic Alliance website - a local activism group concerned about traffic congestion in Swanage, Dorset, UK.
 
-Here are some recent REAL comments from community members (with word counts):
+Here are some recent REAL comments from community members (with character counts):
 
 ${exampleComments}
 
-Generate ONE new comment that:
-- Expresses similar concerns (traffic, congestion, tourism impacts, safety, quality of life)
-- Uses COMPLETELY DIFFERENT words and phrasing (must be lexically unique, <25% word overlap)
-- Sounds natural and authentic like a real resident or visitor
-- Is ${lengthTarget.min}-${lengthTarget.max} words long (important: match this range)
-- Reflects genuine frustration or concern about traffic issues
-- Matches the tone and style of real community feedback
-- Varies in detail level: short comments are punchy, long comments include specific examples and reasoning
-- Uses varied vocabulary, sentence structures, and perspectives to maximize uniqueness
+PERSONA: Write as a ${style.persona}
+TONE: ${style.tone}
+STYLE GUIDE: ${style.styleGuide}
 
-CRITICAL:
+Generate ONE new comment that:
+- Expresses concerns about traffic, congestion, tourism impacts, safety, or quality of life
+- Uses COMPLETELY DIFFERENT words and phrasing from examples (must be lexically unique, <35% word overlap)
+- Sounds natural and authentic to your assigned persona
+- Is ${lengthTarget.min}-${lengthTarget.max} characters long (important: match this range)
+- Reflects the emotional state and perspective of your persona
+- Follows your specific style guide above
+
+CRITICAL UNIQUENESS REQUIREMENTS:
 - Do NOT copy phrases or sentence structures from the examples
 - Create entirely new wording while maintaining thematic relevance
-- Respect the word count target (${lengthTarget.min}-${lengthTarget.max} words)
-- Use different vocabulary choices - if examples say "gridlock", use alternatives like "standstill", "crawling", "bottlenecked"
-- Vary sentence structure - mix short punchy sentences with longer flowing ones
+- Respect the character count target (${lengthTarget.min}-${lengthTarget.max} characters)
+- Use different vocabulary - if examples say "gridlock", use alternatives like "standstill", "crawling", "bottlenecked", "jammed", "chaos"
+- Vary sentence structure based on persona (some use fragments, some full sentences, some questions)
+- Inject personality quirks: some people repeat words, some use ellipses, some use exclamation marks, some are measured
 
 Respond with ONLY the comment text, no quotes, no preamble, no explanation.`;
 
   const message = await anthropic.messages.create({
     model: "claude-haiku-4-5",
     max_tokens: lengthTarget.tokens,
-    temperature: 0.9,
+    temperature: style.temperature,
     messages: [
       {
         role: "user",
@@ -258,7 +336,19 @@ Respond with ONLY the comment text, no quotes, no preamble, no explanation.`;
     throw new Error("Unexpected response type from Claude");
   }
 
-  return content.text.trim().replace(/^["']|["']$/g, "");
+  let comment = content.text.trim().replace(/^["']|["']$/g, "");
+
+  // Enforce character limit by truncating if necessary
+  if (comment.length > lengthTarget.max) {
+    comment = comment.slice(0, lengthTarget.max).trim();
+    // Try to end at a word boundary
+    const lastSpace = comment.lastIndexOf(" ");
+    if (lastSpace > lengthTarget.max * 0.8) {
+      comment = comment.slice(0, lastSpace);
+    }
+  }
+
+  return comment;
 }
 
 export async function generateSyntheticLead(
@@ -303,26 +393,43 @@ export async function generateSyntheticLead(
     console.log("\n🧠 Generating unique comment with Claude Haiku 4.5...");
     let comment: string;
     let attempts = 0;
-    const maxAttempts = 3;
+    const maxAttempts = 5;
+    const attemptResults: Array<{ attempt: number; similarity: number; comment: string }> = [];
 
     do {
       attempts++;
-      console.log(`   Attempt ${attempts}/${maxAttempts}...`);
-      comment = await generateCommentWithLLM(selectedLeads);
+      console.log(`\n   🎯 Attempt ${attempts}/${maxAttempts}...`);
 
-      if (isCommentUnique(comment, leadsWithComments)) {
-        console.log(`✅ Generated unique comment (${comment.length} chars)`);
+      // Re-select random samples each attempt for fresh context
+      const freshSample = selectRandomLeads(leadsWithComments, sampleSize);
+      comment = await generateCommentWithLLM(freshSample);
+
+      const uniqueCheck = isCommentUnique(comment, leadsWithComments);
+      attemptResults.push({
+        attempt: attempts,
+        similarity: uniqueCheck.maxSimilarity,
+        comment: comment.slice(0, 80),
+      });
+
+      if (uniqueCheck.unique) {
+        console.log(`\n✅ SUCCESS after ${attempts} attempt(s)`);
+        console.log(`   Final comment: "${comment}"`);
+        console.log(`   Length: ${comment.length} chars`);
         break;
       }
 
       if (attempts >= maxAttempts) {
-        console.log(
-          `❌ Failed to generate unique comment after ${maxAttempts} attempts`
-        );
+        console.log(`\n❌ FAILURE: Could not generate unique comment after ${maxAttempts} attempts`);
+        console.log(`\n📊 Attempt Summary:`);
+        attemptResults.forEach((result) => {
+          console.log(`   ${result.attempt}. Similarity: ${result.similarity.toFixed(1)}% - "${result.comment}..."`);
+        });
+        console.log(`\n💡 Diagnostic: All attempts exceeded 35% similarity threshold`);
+        console.log(`   Database has ${leadsWithComments.length} leads (checking last 150)`);
         return null;
       }
 
-      console.log(`   Retrying with higher temperature...`);
+      console.log(`   🔄 Retrying with fresh random samples...`);
     } while (attempts < maxAttempts);
 
     // Generate realistic metadata
